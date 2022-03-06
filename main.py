@@ -45,7 +45,7 @@ def index():
     if dodavatel:
         excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], True, True, False, date, "", faktura_numbering, s) 
         #return render_template("index.html", status="Hotovo: "+excel.status)
-        output = excel.invoice.make_response()
+        output = make_response(excel.invoice)
         output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
         output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         return output
