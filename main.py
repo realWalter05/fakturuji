@@ -43,7 +43,7 @@ def index():
     print(dodavatel, odberatel)
 
     if dodavatel:
-        excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], True, True, False, date, "", faktura_numbering, s) 
+        excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], False, True, True, date, "", faktura_numbering, s) 
         #return render_template("index.html", status="Hotovo: "+excel.status)
         output = make_response(excel.invoice)
         output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
