@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Faktury</title>
+  	<link rel="stylesheet" href="../static/main.css">
+ 	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="grid">
+	<header>
+		<ul class="nav">
+			<li class="logo">Faktury</li>
+		</ul>
+	</header>
+ 	<main id="homework_main">
+		<form method="GET" class="keyboard_form">
+			<div>
+			  <input type="text" name="dodavatel" placeholder="Dodavatel"/>
+			  <input type="text" name="odberatel" placeholder="Odběratel"/>
+			  <input type="text" name="faktura_numbering" placeholder="Číslo faktury"/>
+			</div>	
+			<div>
+			  <input type="text" name="dodavka" placeholder="Dodávka:"/>
+			  <input type="number" name="dph" placeholder="DPH"/>
+			  <input type="number" name="count" placeholder="Počet"/>
+			  <input type="number" name="price" placeholder="Cena"/>
+			</div>		
+			<div>
+			  <input type="date" name="vystaveni_date" placeholder="Datum vystavení"/>
+			  <input type="date" name="zdanpl_date" placeholder="Datum zdanitelného plnění"/>
+			  <input type="date" name="splatnost_date" placeholder="Datum splatnost"/>
+			</div>	
+       		<button id="submit_btn">Submit
+  		    </button>				
+	    </form><br/>    	
+		{% if status %}
+		{{ status }}
+		{% endif %}		
+  	</main>
+	<footer>
+	</footer>
+</body>
+</html>
