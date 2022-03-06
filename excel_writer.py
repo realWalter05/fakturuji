@@ -677,7 +677,7 @@ class ExcelWriter:
 
     def __init__(self, odberatel, dodavatel, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, storage):
         try:
-            wb = openpyxl.load_workbook(storage.faktura_path)
+            wb = openpyxl.Workbook()
 
             odberatele = pd.read_csv(storage.odberatele_path)
             dodavatele = pd.read_csv(storage.dodavatele_path)
