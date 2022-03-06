@@ -5,6 +5,7 @@ import requests
 import math
 from openpyxl.styles import PatternFill, Alignment, Font
 from openpyxl.styles.borders import Border, Side, BORDER_THICK, BORDER_THIN
+from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.worksheet.pagebreak import Break
 from errno import EACCES, EPERM
 from storage_manager import StorageManager
@@ -751,7 +752,7 @@ class ExcelWriter:
                 self.sheet_index = wb.sheetnames.index(dodavatel)
                 self.sheet_print_start = self.sheet_print_start + 1
                 self.sheet_print_end = int(math.ceil(float(sheet.max_row / 41)))
-                wb.save(storage.faktura_path)
+                self.invoice = save_virtual_workbook(wb)
 
             except (IOError, OSError) as e:
                 # PermissionError

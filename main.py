@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response, send_file
+from flask import Flask, render_template, request, Response, send_file, make_response
 from storage_manager import StorageManager
 from excel_writer import ExcelWriter
 
@@ -8,8 +8,11 @@ s = StorageManager()
 @app.route('/download')
 def downloadFile ():
     #For windows you need to use drive name [ex: F:/Example.pdf]
-    path = s.faktura_path
-    return send_file("uctyy", attachment_filename=path, as_attachment=True)
+    excel = ""
+    output = excel.make_response()
+    output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
+    output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    return output
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
@@ -41,7 +44,11 @@ def index():
 
     if dodavatel:
         excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], True, True, False, date, "", faktura_numbering, s) 
-        return render_template("index.html", status="Hotovo: "+excel.status)
+        #return render_template("index.html", status="Hotovo: "+excel.status)
+        output = excel.invoice.make_response()
+        output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
+        output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        return output
 
     print("nope")
 
