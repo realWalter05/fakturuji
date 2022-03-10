@@ -8,17 +8,10 @@ s = StorageManager()
 
 @app.route('/download', methods=['GET', 'POST'])
 def download():    
-    print(app.root_path)
-    folders = os.listdir(app.root_path)
-    for f in folders:
-        print(f)
-    pdf_file = os.path.join(app.root_path, "tmp")
-    return send_from_directory(app.root_path, "faktura.pdf")
+    return send_from_directory(app.root_path, "faktura.pdf", as_attachment=True)
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    print("here")
-
     class Item():
         def __init__(self, dodavka, dph, count, price):
             self.delivery_name = dodavka
@@ -44,9 +37,7 @@ def index():
     print(dodavatel, odberatel)
 
     if dodavatel:
-        print("doing excel")
         excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], False, True, False, date, "", faktura_numbering, s) 
-        #return render_template("index.html", status="Hotovo: "+excel.status)
         output = make_response(excel.invoice)
         output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
         output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
