@@ -29,7 +29,8 @@
         </nav>
 	</header>
  	<main>
- 		<form method="GET" class="keyboard_form">
+ 		<form method="GET" class="keyboard_form w-25">
+			<h1 class="p-3">FakturujTo</h1>
 			<div>
 			  <input type="text" class="form-control" name="dodavatel" placeholder="Dodavatel"/>
 			  <input type="text" class="form-control" name="odberatel" placeholder="Odběratel"/>
@@ -46,7 +47,7 @@
 			  <input type="date" class="form-control" name="zdanpl_date" placeholder="Datum zdanitelného plnění"/>
 			  <input type="date" class="form-control" name="splatnost_date" placeholder="Datum splatnost"/>
 			</div>	
-       		<button id="submit_btn">Submit
+       		<button id="submit_btn" class="btn-dark btn form-control">Submit
   		    </button>				
 	    </form><br/>    	
 		{% if status %}

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import openpyxl
 import pandas as pd
@@ -9,6 +10,10 @@ from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.worksheet.pagebreak import Break
 from errno import EACCES, EPERM
 from storage_manager import StorageManager
+
+# Import module
+import groupdocs_conversion_cloud
+from shutil import copyfile
 
 
 def fill_out_dodavatele(sheet, dodavatel_df, start_row):
@@ -752,8 +757,29 @@ class ExcelWriter:
                 self.sheet_index = wb.sheetnames.index(dodavatel)
                 self.sheet_print_start = self.sheet_print_start + 1
                 self.sheet_print_end = int(math.ceil(float(sheet.max_row / 41)))
-                self.invoice = save_virtual_workbook(wb)
+                wb.save("example.xlsx")
 
+                # Get your client_id and client_key at https://dashboard.groupdocs.cloud (free registration is required).
+                client_id = "a02883ef-d6ad-470e-a01c-e4cb948ccf8f"
+                client_key = "b48f40d8a9d1ccf171de397a459cc89a"
+
+                # Create instance of the API
+                convert_api = groupdocs_conversion_cloud.ConvertApi.from_keys(client_id, client_key)
+                
+                try:
+                    # Prepare request
+                    request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "example.xlsx")
+                
+                    # Convert
+                    result = convert_api.convert_document_direct(request)       
+                    copyfile(result, 'faktura.pdf')
+                    print("Result {}".format(result))
+                        
+                except groupdocs_conversion_cloud.ApiException as e:
+                    print("Exception when calling get_supported_conversion_types: {0}".format(e.message))                
+
+                self.invoice = save_virtual_workbook(wb)
+    
             except (IOError, OSError) as e:
                 # PermissionError
                 if e.errno == EPERM or e.errno == EACCES:

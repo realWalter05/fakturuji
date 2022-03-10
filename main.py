@@ -43,6 +43,7 @@ def index():
     print(dodavatel, odberatel)
 
     if dodavatel:
+        print("doing excel")
         excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], False, True, False, date, "", faktura_numbering, s) 
         #return render_template("index.html", status="Hotovo: "+excel.status)
         output = make_response(excel.invoice)
@@ -50,6 +51,5 @@ def index():
         output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         return output
 
-    print("nope")
 
     return render_template("index.html", status="")
