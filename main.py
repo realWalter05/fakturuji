@@ -13,7 +13,7 @@ def download():
     for f in folders:
         print(f)
     pdf_file = os.path.join(app.root_path, "tmp")
-    return send_from_directory(pdf_file, "example.pdf")
+    return send_from_directory(app.root_path, "faktura.pdf")
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
