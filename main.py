@@ -9,6 +9,9 @@ s = StorageManager()
 @app.route('/download', methods=['GET', 'POST'])
 def download():    
     print(app.root_path)
+    folders = os.listdir(app.root_path)
+    for f in folders:
+        print(f)
     pdf_file = os.path.join(app.root_path, "tmp")
     return send_from_directory(pdf_file, "example.pdf")
 
