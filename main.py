@@ -6,7 +6,7 @@ app = Flask(__name__)
 s = StorageManager()
 
 @app.route('/download', methods=['GET', 'POST'])
-def download(filename):    
+def download():    
     return send_from_directory(directory='/temp', filename="example.pdf")
 
 @app.route("/", methods = ["GET", "POST"])
