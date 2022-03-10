@@ -5,14 +5,9 @@ from excel_writer import ExcelWriter
 app = Flask(__name__)
 s = StorageManager()
 
-@app.route('/download')
-def downloadFile ():
-    #For windows you need to use drive name [ex: F:/Example.pdf]
-    excel = ""
-    output = excel.make_response()
-    output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
-    output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    return output
+@app.route('/download', methods=['GET', 'POST'])
+def download(filename):    
+    return send_from_directory(directory='/temp', filename="example.pdf")
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
