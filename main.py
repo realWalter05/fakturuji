@@ -8,7 +8,7 @@ s = StorageManager()
 @app.route('/download', methods=['GET', 'POST'])
 def download():    
     pdf_file = os.path.join(current_app.root_path, app.config['TEMP_FOLDER'])
-    return send_from_directory(directory='/temp', filename="example.pdf")
+    return send_from_directory(directory=pdf_file, filename="example.pdf")
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
