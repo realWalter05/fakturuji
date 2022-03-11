@@ -40,6 +40,7 @@ def index():
     pdf = request.args.get("pdf")
 
     print(dodavatel, odberatel)
+    print(prenesena_dph, dodavatel_dph, qr_platba, pdf)
 
     if dodavatel:
         excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], prenesena_dph, dodavatel_dph, qr_platba, date, "", faktura_numbering, s, pdf) 
