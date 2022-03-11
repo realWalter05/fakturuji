@@ -681,7 +681,7 @@ def get_faktura_number(sheet):
 
 class ExcelWriter:
 
-    def __init__(self, odberatel, dodavatel, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, storage):
+    def __init__(self, odberatel, dodavatel, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, storage, pdf):
         try:
             wb = openpyxl.Workbook()
 
@@ -759,24 +759,25 @@ class ExcelWriter:
                 self.sheet_print_end = int(math.ceil(float(sheet.max_row / 41)))
                 wb.save("example.xlsx")
 
-                # Get your client_id and client_key at https://dashboard.groupdocs.cloud (free registration is required).
-                client_id = "a02883ef-d6ad-470e-a01c-e4cb948ccf8f"
-                client_key = "b48f40d8a9d1ccf171de397a459cc89a"
-
-                # Create instance of the API
-                convert_api = groupdocs_conversion_cloud.ConvertApi.from_keys(client_id, client_key)
-                
-                try:
-                    # Prepare request
-                    request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "example.xlsx")
-                
-                    # Convert
-                    result = convert_api.convert_document_direct(request)       
-                    copyfile(result, 'faktura.pdf')
-                    print("Result {}".format(result))
-                        
-                except groupdocs_conversion_cloud.ApiException as e:
-                    print("Exception when calling get_supported_conversion_types: {0}".format(e.message))                
+                if pdf:
+                    # Get your client_id and client_key at https://dashboard.groupdocs.cloud (free registration is required).
+                    client_id = "a02883ef-d6ad-470e-a01c-e4cb948ccf8f"
+                    client_key = "b48f40d8a9d1ccf171de397a459cc89a"
+    
+                    # Create instance of the API
+                    convert_api = groupdocs_conversion_cloud.ConvertApi.from_keys(client_id, client_key)
+                    
+                    try:
+                        # Prepare request
+                        request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "example.xlsx")
+                    
+                        # Convert
+                        result = convert_api.convert_document_direct(request)       
+                        copyfile(result, 'faktura.pdf')
+                        print("Result {}".format(result))
+                            
+                    except groupdocs_conversion_cloud.ApiException as e:
+                        print("Exception when calling get_supported_conversion_types: {0}".format(e.message))                
 
                 self.invoice = save_virtual_workbook(wb)
     

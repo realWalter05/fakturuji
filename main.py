@@ -34,10 +34,15 @@ def index():
     count = request.args.get("count")
     price = request.args.get("price")
 
+    prenesena_dph = request.args.get("prenesena_dph")
+    dodavatel_dph = request.args.get("dodavatel_dph")
+    qr_platba = request.args.get("qr_platba")
+    pdf = request.args.get("pdf")
+
     print(dodavatel, odberatel)
 
     if dodavatel:
-        excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], False, True, False, date, "", faktura_numbering, s) 
+        excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], prenesena_dph, dodavatel_dph, qr_platba, date, "", faktura_numbering, s, pdf) 
         output = make_response(excel.invoice)
         output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
         output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

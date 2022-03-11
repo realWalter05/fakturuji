@@ -29,30 +29,64 @@
         </nav>
 	</header>
  	<main>
- 		<form method="GET" class="keyboard_form w-25">
-			<h1 class="p-3">FakturujTo</h1>
-			<div>
-			  <input type="text" class="form-control" name="dodavatel" placeholder="Dodavatel"/>
-			  <input type="text" class="form-control" name="odberatel" placeholder="Odběratel"/>
-			  <input type="text" class="form-control" name="faktura_numbering" placeholder="Číslo faktury"/>
-			</div>	
-			<div>
-			  <input type="text" class="form-control" name="dodavka" placeholder="Dodávka:"/>
-			  <input type="number" class="form-control" name="dph" placeholder="DPH"/>
-			  <input type="number" class="form-control" name="count" placeholder="Počet"/>
-			  <input type="number" class="form-control" name="price" placeholder="Cena"/>
-			</div>		
-			<div>
-			  <input type="date" class="form-control" name="vystaveni_date" placeholder="Datum vystavení"/>
-			  <input type="date" class="form-control" name="zdanpl_date" placeholder="Datum zdanitelného plnění"/>
-			  <input type="date" class="form-control" name="splatnost_date" placeholder="Datum splatnost"/>
-			</div>	
-       		<button id="submit_btn" class="btn-dark btn form-control">Submit
-  		    </button>				
-	    </form><br/>    	
-		{% if status %}
-		{{ status }}
-		{% endif %}		
+ 		<div class="w-50 m-auto">
+			<form method="GET" class="keyboard_form">
+				<h1 class="p-3">FakturujTo</h1>
+				<div>
+				  <input type="text" class="form-control" name="dodavatel" placeholder="Dodavatel"/>
+				  <input type="text" class="form-control" name="odberatel" placeholder="Odběratel"/>
+				  <input type="text" class="form-control" name="faktura_numbering" placeholder="Číslo faktury"/>
+				</div>	
+				<div>
+				  <input type="text" class="form-control" name="dodavka" placeholder="Dodávka:"/>
+				  <input type="number" class="form-control" name="dph" placeholder="DPH"/>
+				  <input type="number" class="form-control" name="count" placeholder="Počet"/>
+				  <input type="number" class="form-control" name="price" placeholder="Cena"/>
+				</div>		
+				<div class="row">
+					<div class="col">
+						<input type="date" class="form-control" name="vystaveni_date" placeholder="Datum vystavení"/>
+					</div>
+					<div class="col">
+						 <input type="date" class="form-control" name="zdanpl_date" placeholder="Datum zdanitelného plnění"/>
+					</div>
+					<div class="col">
+						<input type="date" class="form-control" name="splatnost_date" placeholder="Datum splatnost"/>
+					</div>								
+				</div>	
+				<div class="row m-1">
+					<div class="form-check col">
+					  <input class="form-check-input" type="checkbox" name="prenesena_dph" value="" id="prenesena_dph">
+					  <label class="form-check-label" for="prenesena_dph">
+					    Přenesená DPH
+					  </label>
+					</div>				
+					<div class="form-check col">
+					  <input class="form-check-input" type="checkbox" name="dodavatel_dph" value="" id="dodavatel_dph">
+					  <label class="form-check-label" for="dodavatel_dph">
+					    Dodavatel DPH
+					  </label>
+					</div>
+					<div class="form-check col">
+					  <input class="form-check-input" type="checkbox" name="qr_platba" value="" id="qr_platba">
+					  <label class="form-check-label" for="qr_platba">
+					    QR platba
+					  </label>
+					</div>			
+					<div class="form-check col">
+					  <input class="form-check-input" type="checkbox" name="pdf" value="" id="pdf">
+					  <label class="form-check-label" for="pdf">
+					    Vytvořit PDF
+					  </label>
+					</div>						
+				</div>				
+				<button id="submit_btn" class="btn-dark btn form-control">Submit
+			    </button>				
+			</form><br/>    	
+			{% if status %}
+			{{ status }}
+			{% endif %}		
+		</div>
   	</main>
 	<footer>
 	</footer>
