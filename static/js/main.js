@@ -1,30 +1,45 @@
-function SetToLS(name, data) {
-    localStorage.setItem(name, data);
-}
+$("#dodavatel_get_data").click(function(){
+    var text = $("#dodavatel").val();
 
-function FillInputsFromLS() {
-    for (var i = 0; i < localStorage.length; i++){
-        let itemId = localStorage.key(i)
-        let itemValue = localStorage.getItem(localStorage.key(i));
+    $.ajax({
+      url: '/get_ico_data',
+      type: "get",
+      data: {jsdata: text},
+      datatype: "json",
+      contentType : 'application/json',
+      success: function(response) {
+        fill_ico_data("dodavatel", JSON.parse(response));
+      },
+      error: function(xhr) {
+        console.log(xhr);
+      }
+    });
+});
 
-        if (itemId == "seperator" || itemId == "mobile_keyboard" || itemId == "min_length_word" || itemId == "length") {
-            document.getElementById(itemId).value = itemValue;
-        } else {
-            // Checkbox
-            if (JSON.parse(itemValue)) {
-                document.getElementById(itemId).checked = true;
-            } else {
-                document.getElementById(itemId).checked = false;
-            }
-        }
-    }
-}
+$("#odberatel_get_data").click(function(){
+    var text = $("#odberatel").val();
 
-function copyToClipboard(text) {
-    const el = document.createElement('textarea');
-    el.value = text;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
+    $.ajax({
+      url: '/get_ico_data',
+      type: "get",
+      data: {jsdata: text},
+      datatype: "json",
+      contentType : 'application/json',
+      success: function(response) {
+        fill_ico_data("odberatel", JSON.parse(response));
+      },
+      error: function(xhr) {
+        console.log(xhr);
+      }
+    });
+});
+
+function fill_ico_data(title, data) {
+  console.log("#"+title+"_rejstrik");
+  document.querySelector("#"+title+"_street").value = data[1];
+  document.querySelector("#"+title+"_city").value = data[2];
+  document.querySelector("#"+title+"_country").value = data[3];
+  document.querySelector("#"+title+"_ico").value = data[4];
+  document.querySelector("#"+title+"_dic").value = data[5];
+  document.querySelector("#"+title+"_rejstrik").value = data[6];
 }

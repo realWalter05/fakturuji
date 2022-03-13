@@ -683,6 +683,7 @@ class ExcelWriter:
 
     def __init__(self, odberatel, dodavatel, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, storage, pdf):
         try:
+            print("in here")
             wb = openpyxl.Workbook()
 
             odberatele = pd.read_csv(storage.odberatele_path)
@@ -696,33 +697,18 @@ class ExcelWriter:
             self.sheet_print_start = 0
             self.sheet_print_end = 0
 
-            if dodavatel in wb:
-                # Dodavatel is already in excel
-                sheet = wb[dodavatel]
-                self.sheet_print_start = int(math.ceil(float(sheet.max_row / 41)))
+            dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
+            start_row = 1
 
-                dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
-                start_row = find_start_row(sheet)
+            # Creating a new dodavatel excel sheet
+            if not def_faktura_numbering:
+                self.status = "no_dodavatel_numbering"
+                return
 
-                self.faktura_numbering = get_faktura_number(sheet)
+            self.faktura_numbering = def_faktura_numbering
+            sheet = wb.create_sheet(dodavatel_df.iloc[0]["dodavatel"])
+            print(dodavatel_df.iloc[0])
 
-            else:
-                # Dodavatel isn't in excel
-                if not dodavatele[(dodavatele["dodavatel"] == dodavatel)].empty:
-                    dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
-                    start_row = 1
-
-                    # Creating a new dodavatel excel sheet
-                    if not def_faktura_numbering:
-                        self.status = "no_dodavatel_numbering"
-                        return
-
-                    self.faktura_numbering = def_faktura_numbering
-                    sheet = wb.create_sheet(dodavatel_df.iloc[0]["dodavatel"])
-
-                else:
-                    self.status = "no_dodavatel"
-                    return
             try:
                 # Create and fill out the faktura template
                 create_faktura(sheet, start_row, items, self.faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions)
