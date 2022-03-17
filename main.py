@@ -143,12 +143,24 @@ def index():
 
 @app.route("/faktura", methods = ["GET", "POST"])
 def faktura():
+    print("in faktura")
+    
+    items = []
     class Item():
-        def __init__(self, dodavka, dph, count, price):
-            self.delivery_name = dodavka
+        def __init__(self, polozka, dph, count, price):
+            self.delivery_name = polozka
             self.dph = dph
             self.count = count
             self.price = price
+
+    polozky = request.args.getlist("polozka")
+    count = request.args.getlist("count")
+    price = request.args.getlist("price")
+    dphs = request.args.getlist("dph")
+
+    for i in range(len(polozky)):
+        item = Item(polozky[i], count[i], price[i], dphs[i])
+        items.append(item)
 
     date = {
         "vystaveni_date": request.args.get("splatnost_date"),
@@ -160,7 +172,7 @@ def faktura():
     dodavatel = request.args.get("dodavatel")
     odberatel = request.args.get("odberatel")
     faktura_numbering = request.args.get("faktura_numbering")
-    dodavka = request.args.get("dodavka")
+    polozka = request.args.get("polozka")
     dph = request.args.get("dph")
     count = request.args.get("count")
     price = request.args.get("price")
@@ -170,10 +182,14 @@ def faktura():
     qr_platba = request.args.get("qr_platba")
     pdf = request.args.get("pdf")
 
+
+    print(items)
+
     print("Loading page :)")
 
     if dodavatel:
-        excel = ExcelWriter(odberatel, dodavatel, [Item(dodavka, dph, count, price)], prenesena_dph, dodavatel_dph, qr_platba, date, "", faktura_numbering, s, pdf) 
+        print(dodavatel)
+        excel = ExcelWriter(odberatel, dodavatel, items, prenesena_dph, dodavatel_dph, qr_platba, date, "", faktura_numbering, s, pdf) 
         output = make_response(excel.invoice)
         output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
         output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

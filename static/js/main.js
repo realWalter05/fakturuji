@@ -43,3 +43,35 @@ function fill_ico_data(title, data) {
   document.querySelector("#"+title+"_dic").value = data[5];
   document.querySelector("#"+title+"_rejstrik").value = data[6];
 }
+
+function CreateItemCol(type, class_text, name, placeholder) {
+  let input = document.createElement("input");
+  input.classList.add(class_text);
+  input.type = type;
+  input.name = name;
+  input.placeholder = placeholder;
+
+  let col = document.createElement("div");
+  col.classList.add("col");
+  col.appendChild(input);
+
+  return col    
+}
+
+function CreateItem() {
+  let container = document.getElementById("first_col_inputs");
+  
+  let row = document.createElement("div");
+  row.classList.add("row");
+  row.appendChild(CreateItemCol("number", "form-control", "count", "Počet"));
+  row.appendChild(CreateItemCol("number", "form-control", "price", "Cena"));
+
+  let rowSecond = document.createElement("div");
+  rowSecond.classList.add("row");
+  rowSecond.appendChild(CreateItemCol("text", "form-control", "polozka", "Položka"));
+  rowSecond.appendChild(CreateItemCol("number", "form-control", "dph", "DPH"));
+
+  // Append children
+  container.appendChild(rowSecond);
+  container.appendChild(row);
+}

@@ -37,9 +37,9 @@
 			<form method="GET" action="/faktura" class="keyboard_form">
 				<h1 class="p-3">FakturujTo</h1>
 				<div class="row">
-				  <div class="col">
+				  <div class="col" id="first_col_inputs">
 					<div class="dropdown">
-					 	<input class="form-control dropdown-toggle" id="dodavatel" autocomplete="false" autocomplete="off" placeholder="Dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					 	<input class="form-control dropdown-toggle" id="dodavatel" name="dodavatel" autocomplete="false" autocomplete="off" placeholder="Dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					 	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					 		<a class="dropdown-item" id="dodavatel_get_data">Vyplnit z Aresu</a>
 					 	</div>
@@ -49,11 +49,20 @@
 				  	<input type="text" class="form-control" name="dodavatel_street" id="dodavatel_street" placeholder="Ulice"/>
 				  	<input type="text" class="form-control" name="dodavatel_city" id="dodavatel_city" placeholder="Město"/>
 				  	<input type="text" class="form-control" name="dodavatel_country" id="dodavatel_country" placeholder="Země"/>
-				  	<input type="text" class="form-control" name="dodavatel_rejstrik" id="dodavatel_rejstrik" placeholder="Obchodní rejstřík"/>
+				  	<input type="text" class="form-control" name="dodavatel_rejstrik" id="dodavatel_rejstrik" placeholder="Obchodní rejstřík"/>				
+					<button type="button" class="form-control w-100 dark btn-dark" onclick="CreateItem();">Přidat položku</button>
+					<div class="row">
+				  		<div class="col"><input type="text" class="form-control" name="polozka" placeholder="Dodávka:"/></div>
+				  		<div class="col"><input type="number" class="form-control" name="dph" placeholder="DPH"/></div>				
+					</div>
+					<div class="row">
+				  		<div class="col"><input type="number" class="form-control" name="count" placeholder="Počet"/></div>
+				  		<div class="col"><input type="number" class="form-control" name="price" placeholder="Cena"/></div>	
+					</div>
 				  </div>
 				  <div class="col">
 					<div class="dropdown">
-					 	<input class="form-control dropdown-toggle" id="odberatel" autocomplete="false" autocomplete="off" placeholder="Odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					 	<input class="form-control dropdown-toggle" id="odberatel" name="odberatel" autocomplete="false" autocomplete="off" placeholder="Odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					 	<div class="dropdown-menu" aria-labelledby="odberatelMenuBtn">
 					 		<a class="dropdown-item" id="odberatel_get_data">Vyplnit z Aresu</a>
 					 	</div>
@@ -63,21 +72,17 @@
 				  	<input type="text" class="form-control" name="odberatel_street" id="odberatel_street" placeholder="Ulice"/>
 				  	<input type="text" class="form-control" name="odberatel_city" id="odberatel_city" placeholder="Město"/>
 				  	<input type="text" class="form-control" name="odberatel_country" id="odberatel_country" placeholder="Země"/>
-				  	<input type="text" class="form-control" name="odberatel_rejstrik" id="odberatel_rejstrik" placeholder="Obchodní rejstřík"/>			  	
+				  	<input type="text" class="form-control" name="odberatel_rejstrik" id="odberatel_rejstrik" placeholder="Obchodní rejstřík"/>		
+				  	<div class="row">	  	
+				  		<div class="col"><input type="text" class="form-control" name="konst_cislo" placeholder="Konst. symbol"/></div>
+				  		<div class="col"><input type="number" class="form-control" name="var_cislo" placeholder="Var. symbol"/></div>					  					  
+				  	</div>
+				  	<div class="row">
+				  		<div class="col"><input type="text" class="form-control" name="account_number" placeholder="Číslo účtu"/></div>
+				  		<div class="col"><input type="text" class="form-control" name="bank_number" placeholder="Banka"/></div>				  	
+				  	</div>
 				  </div>
-				</div>
-				<div class="row">
-				  <div class="col"><input type="text" class="form-control" name="dodavka" placeholder="Dodávka:"/></div>
-				  <div class="col"><input type="number" class="form-control" name="dph" placeholder="DPH"/></div>
-				  <div class="col"><input type="text" class="form-control" name="konst_cislo" placeholder="Konst. symbol"/></div>
-				  <div class="col"><input type="number" class="form-control" name="var_cislo" placeholder="Var. symbol"/></div>				
-				</div>		
-				<div class="row">
-				  <div class="col"><input type="number" class="form-control" name="count" placeholder="Počet"/></div>
-				  <div class="col"><input type="number" class="form-control" name="price" placeholder="Cena"/></div>					
-				  <div class="col"><input type="text" class="form-control" name="account_number" placeholder="Číslo účtu"/></div>
-				  <div class="col"><input type="text" class="form-control" name="bank_number" placeholder="Banka"/></div>
-				</div>
+				</div>				
 				<div class="row">
 				  	<div class="col">
 						<input type="date" class="form-control" name="vystaveni_date" placeholder="Datum vystavení"/>
