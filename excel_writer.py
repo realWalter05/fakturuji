@@ -9,7 +9,6 @@ from openpyxl.styles.borders import Border, Side, BORDER_THICK, BORDER_THIN
 from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.worksheet.pagebreak import Break
 from errno import EACCES, EPERM
-from storage_manager import StorageManager
 
 # Import module
 import groupdocs_conversion_cloud
@@ -137,7 +136,7 @@ def get_dph_rates(sheet, items, start_row, items_count, description):
 def fill_out_account_info(sheet, dodavatel_df, start_row, faktura_variable, column):
     # Fill out account values
     if not pd.isnull(dodavatel_df.iloc[0]["cislo_uctu"]) and not pd.isnull(dodavatel_df.iloc[0]["kod_banky"]):
-        sheet[column + str(start_row + 2)].value = str(int(dodavatel_df.iloc[0]["cislo_uctu"])) + "/" + str(int(dodavatel_df.iloc[0]["kod_banky"]))
+        sheet[column + str(start_row + 2)].value = dodavatel_df.iloc[0]["cislo_uctu"] + "/" + dodavatel_df.iloc[0]["kod_banky"]
     else:
         sheet[column + str(start_row + 2)].value = dodavatel_df.iloc[0]["cislo_uctu"]
     sheet[column + str(start_row + 3)].value = dodavatel_df.iloc[0]["swift"]
@@ -148,7 +147,7 @@ def fill_out_account_info(sheet, dodavatel_df, start_row, faktura_variable, colu
             sheet["G" + str(start_row + 2)].value = faktura_variable
     else:
         sheet["G" + str(start_row + 2)].value = dodavatel_df.iloc[0]["var_cislo"]
-    sheet["G" + str(start_row + 3)].value = dodavatel_df.iloc[0]["konst_cislo"]
+    sheet["G" + str(start_row + 3)].value = dodavatel_df.iloc[0]["konst_cislo"] 
 
 
 def write_qr_platba_code(sheet, start_row, account_number, bank_code, items, var_cislo, prenesena_dph):
@@ -186,31 +185,31 @@ def style_item(item_number, sheet):
 
     sheet.row_dimensions[item_number].height = 24
     sheet.merge_cells(start_row=item_number, start_column=1, end_row=item_number, end_column=4)
-    sheet["A" + str(item_number)].alignment = Alignment(vertical="center")
+    sheet["A" + str(item_number)].alignment = Alignment(vertical="center", shrinkToFit=True)
     sheet["A" + str(item_number)].fill = gray_fill
     sheet["A" + str(item_number)].border = white_bottom_border
     sheet["B" + str(item_number)].border = white_bottom_border
     sheet["C" + str(item_number)].border = white_bottom_border
     sheet["D" + str(item_number)].border = white_bottom_border
 
-    sheet["E" + str(item_number)].alignment = Alignment(vertical="center", horizontal="center")
+    sheet["E" + str(item_number)].alignment = Alignment(vertical="center", horizontal="center", shrinkToFit=True)
     sheet["E" + str(item_number)].fill = gray_fill
     sheet["E" + str(item_number)].border = white_bottom_border
 
     sheet.merge_cells(start_row=item_number, start_column=6, end_row=item_number, end_column=7)
-    sheet["F" + str(item_number)].alignment = Alignment(vertical="center", horizontal="right")
+    sheet["F" + str(item_number)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
     sheet["F" + str(item_number)].number_format = "#,##0.00 Kč"
     sheet["F" + str(item_number)].fill = gray_fill
     sheet["F" + str(item_number)].border = white_bottom_border
     sheet["G" + str(item_number)].border = white_bottom_border
 
-    sheet["H" + str(item_number)].alignment = Alignment(vertical="center")
+    sheet["H" + str(item_number)].alignment = Alignment(vertical="center", shrinkToFit=True)
     sheet["H" + str(item_number)].number_format = "#0\%"
     sheet["H" + str(item_number)].fill = gray_fill
     sheet["H" + str(item_number)].border = white_bottom_border
 
     sheet.merge_cells(start_row=item_number, start_column=9, end_row=item_number, end_column=10)
-    sheet["I" + str(item_number)].alignment = Alignment(vertical="center")
+    sheet["I" + str(item_number)].alignment = Alignment(vertical="center", shrinkToFit=True)
     sheet["I" + str(item_number)].number_format = "#,##0.00 Kč"
     sheet["I" + str(item_number)].value = "=IF(AND(E" + str(item_number) + "=\"\",F" +\
                                           str(item_number) + "=\"\"),\"\",E" + str(item_number) + "*F" + str(item_number) + ")"
@@ -219,7 +218,7 @@ def style_item(item_number, sheet):
     sheet["J" + str(item_number)].border = white_bottom_border
 
     sheet.merge_cells(start_row=item_number, start_column=11, end_row=item_number, end_column=12)
-    sheet["K" + str(item_number)].alignment = Alignment(vertical="center")
+    sheet["K" + str(item_number)].alignment = Alignment(vertical="center", shrinkToFit=True)
     sheet["K" + str(item_number)].number_format = "#,##0.00 Kč"
     sheet["K" + str(item_number)].value = "=IF(I" + str(item_number) + "=\"\", \"\", (I" + str(item_number) +\
                                           "+(I" + str(item_number) + "/100)*H" + str(item_number) + "))"
@@ -234,9 +233,10 @@ def style_items_faktura(sheet, start_row, description):
     sheet.row_dimensions[start_row + 19].height = 6
 
     if description:
-        sheet.row_dimensions[start_row + 20].height = 18.6
+        sheet.row_dimensions[start_row + 20].height = 24.6
         sheet.merge_cells(start_row=start_row + 20, start_column=1, end_row=start_row + 20, end_column=12)
-        sheet["A" + str(start_row + 20)].alignment = Alignment(vertical="center", horizontal="left")
+        sheet["A" + str(start_row + 20)].alignment = Alignment(vertical="bottom", horizontal="left", wrap_text=True)
+        sheet["A" + str(start_row + 20)].font = Font(size=10)
 
     loop = 0
     while loop < 8:
@@ -286,8 +286,8 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     # Changing the height of rows in the first section
     sheet.row_dimensions[start_row].height = 24.5
     sheet.row_dimensions[start_row + 1].height = 25.8
-    sheet.row_dimensions[start_row + 2].height = 14.4
-    sheet.row_dimensions[start_row + 3].height = 21.6
+    sheet.row_dimensions[start_row + 2].height = 12.4
+    sheet.row_dimensions[start_row + 3].height = 19.6
     sheet.row_dimensions[start_row + 4].height = 16.8
     sheet.row_dimensions[start_row + 5].height = 16.5
     sheet.row_dimensions[start_row + 6].height = 16.5
@@ -296,7 +296,7 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet.row_dimensions[start_row + 9].height = 16.5
     sheet.row_dimensions[start_row + 10].height = 16.8
     sheet.row_dimensions[start_row + 11].height = 13.8
-    sheet.row_dimensions[start_row + 12].height = 12.6
+    sheet.row_dimensions[start_row + 12].height = 11.6
     sheet.row_dimensions[start_row + 13].height = 16.5
     sheet.row_dimensions[start_row + 14].height = 16.5
     sheet.row_dimensions[start_row + 15].height = 16.5
@@ -310,8 +310,8 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet.column_dimensions['D'].width = 5.47
     sheet.column_dimensions['E'].width = 15.20
     sheet.column_dimensions['F'].width = 6.47
-    sheet.column_dimensions['G'].width = 5.91
-    sheet.column_dimensions['H'].width = 6.47
+    sheet.column_dimensions['G'].width = 6.58
+    sheet.column_dimensions['H'].width = 5.80
     sheet.column_dimensions['I'].width = 13.02
     sheet.column_dimensions['J'].width = 1.91
     sheet.column_dimensions['K'].width = 4.80
@@ -320,11 +320,11 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     # Merging columns in the first section
     sheet.merge_cells(start_row=start_row + 1, start_column=1, end_row=start_row + 1, end_column=5)
 
-    sheet.merge_cells(start_row=start_row + 3, start_column=1, end_row=start_row + 3, end_column=2)
-    sheet.merge_cells(start_row=start_row + 3, start_column=8, end_row=start_row + 3, end_column=9)
+    sheet.merge_cells(start_row=start_row + 3, start_column=1, end_row=start_row + 3, end_column=5)
+    sheet.merge_cells(start_row=start_row + 3, start_column=8, end_row=start_row + 3, end_column=12)
 
-    sheet.merge_cells(start_row=start_row + 4, start_column=1, end_row=start_row + 4, end_column=2)
-    sheet.merge_cells(start_row=start_row + 4, start_column=8, end_row=start_row + 4, end_column=9)
+    sheet.merge_cells(start_row=start_row + 4, start_column=1, end_row=start_row + 4, end_column=5)
+    sheet.merge_cells(start_row=start_row + 4, start_column=8, end_row=start_row + 4, end_column=12)
 
     sheet.merge_cells(start_row=start_row + 5, start_column=1, end_row=start_row + 5, end_column=2)
     sheet.merge_cells(start_row=start_row + 5, start_column=4, end_row=start_row + 5, end_column=5)
@@ -382,6 +382,7 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["H" + str(start_row + 8)].value = "IČ:"
     sheet["H" + str(start_row + 9)].value = "DIČ:"
     sheet["H" + str(start_row + 13)].value = "Způsob platby:"
+    sheet["K" + str(start_row + 13)].value = "převodem"
     sheet["H" + str(start_row + 14)].value = "Datum vystavení:"
     sheet["H" + str(start_row + 15)].value = "Datum zdan. plnění:"
     sheet["H" + str(start_row + 16)].value = "Datum splatnosti:"
@@ -391,21 +392,34 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     # Changing fonts and alignments
     sheet["A" + str(start_row + 1)].font = Font(size=14, bold=True)
     sheet["A" + str(start_row + 3)].font = Font(size=12, bold=True)
+    sheet["A" + str(start_row + 4)].alignment = Alignment(shrinkToFit=True)
+    sheet["A" + str(start_row + 5)].alignment = Alignment(shrinkToFit=True)
+    sheet["A" + str(start_row + 6)].alignment = Alignment(shrinkToFit=True)
+    sheet["A" + str(start_row + 7)].alignment = Alignment(shrinkToFit=True)
     sheet["A" + str(start_row + 10)].font = Font(size=9)
-    sheet["A" + str(start_row + 10)].alignment = Alignment(vertical="center", wrap_text=True)
+    sheet["A" + str(start_row + 10)].alignment = Alignment(vertical="center", wrap_text=True, shrinkToFit=True)
 
-    sheet["B" + str(start_row + 7)].alignment = Alignment(horizontal="left")
-    sheet["B" + str(start_row + 8)].alignment = Alignment(horizontal="left")
+    #sheet["B" + str(start_row + 7)].alignment = Alignment(horizontal="left")
+    sheet["B" + str(start_row + 8)].alignment = Alignment(horizontal="left", shrinkToFit=True)
+    sheet["A" + str(start_row + 9)].alignment = Alignment(horizontal="left", shrinkToFit=True)    
 
-    sheet["D" + str(start_row + 5)].alignment = Alignment(horizontal="right")
-    sheet["D" + str(start_row + 6)].alignment = Alignment(horizontal="right")
-    sheet["D" + str(start_row + 7)].alignment = Alignment(horizontal="right")
+    sheet["D" + str(start_row + 5)].alignment = Alignment(horizontal="right", shrinkToFit=True)
+    sheet["D" + str(start_row + 6)].alignment = Alignment(horizontal="right", shrinkToFit=True)
+    sheet["D" + str(start_row + 7)].alignment = Alignment(horizontal="right", shrinkToFit=True)
     sheet["D" + str(start_row + 9)].font = Font(size=10)
+    sheet["D" + str(start_row + 13)].alignment = Alignment(horizontal="right")
+    sheet["D" + str(start_row + 14)].alignment = Alignment(horizontal="right")
+    sheet["D" + str(start_row + 15)].alignment = Alignment(horizontal="right")
+    sheet["D" + str(start_row + 16)].alignment = Alignment(horizontal="right")    
 
-    sheet["I" + str(start_row + 7)].alignment = Alignment(horizontal="left")
-    sheet["I" + str(start_row + 8)].alignment = Alignment(horizontal="left")
+    sheet["I" + str(start_row + 8)].alignment = Alignment(horizontal="left", shrinkToFit=True)
+    sheet["I" + str(start_row + 9)].alignment = Alignment(horizontal="left", shrinkToFit=True)
 
     sheet["H" + str(start_row + 3)].font = Font(size=12, bold=True)
+    sheet["H" + str(start_row + 4)].alignment = Alignment(shrinkToFit=True)
+    sheet["H" + str(start_row + 5)].alignment = Alignment(shrinkToFit=True)
+    sheet["H" + str(start_row + 6)].alignment = Alignment(shrinkToFit=True)
+    sheet["H" + str(start_row + 7)].alignment = Alignment(shrinkToFit=True)    
     sheet["H" + str(start_row + 10)].font = Font(size=9, bold=True)
     sheet["H" + str(start_row + 10)].alignment = Alignment(vertical="center", wrap_text=True)
 
@@ -413,6 +427,7 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["K" + str(start_row + 6)].alignment = Alignment(horizontal="right")
     sheet["K" + str(start_row + 7)].alignment = Alignment(horizontal="right")
 
+    sheet["K" + str(start_row + 13)].alignment = Alignment(horizontal="right")
     sheet["K" + str(start_row + 14)].alignment = Alignment(horizontal="right")
     sheet["K" + str(start_row + 15)].alignment = Alignment(horizontal="right")
     sheet["K" + str(start_row + 16)].alignment = Alignment(horizontal="right")
@@ -435,9 +450,9 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["L" + str(start_row)].fill = PatternFill(start_color='001383DD', end_color='001383DD', fill_type='solid')
 
 
-def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, description, prenesena_dph):
+def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, description, prenesena_dph, vystavila_osoba):
     # Changing the height of rows in the second section
-    sheet.row_dimensions[start_row].height = 13.5
+    sheet.row_dimensions[start_row].height = 12.5
     sheet.row_dimensions[start_row + 1].height = 18.8
     sheet.row_dimensions[start_row + 2].height = 19.5
     sheet.row_dimensions[start_row + 3].height = 18
@@ -470,8 +485,12 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
         sheet["A" + str(start_row + 3)].alignment = Alignment(vertical="center")
         sheet["A" + str(start_row + 4)].alignment = Alignment(vertical="center")
 
+        sheet["D" + str(start_row + 2)].alignment = Alignment(shrinkToFit=True)
+        sheet["D" + str(start_row + 3)].alignment = Alignment(shrinkToFit=True)
+        sheet["D" + str(start_row + 4)].alignment = Alignment(shrinkToFit=True)        
+
         sheet["F" + str(start_row + 1)].alignment = Alignment(vertical="center")
-        sheet["F" + str(start_row + 2)].alignment = Alignment(vertical="center")
+        sheet["F" + str(start_row + 2)].alignment = Alignment(vertical="center")    
 
         sheet["A" + str(start_row + 1)].value = "Bankovní účet"
         sheet["A" + str(start_row + 2)].value = "Číslo účtu:"
@@ -497,10 +516,10 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
         sheet["C" + str(start_row + 1)].font = Font(size=10, bold=True)
         sheet["C" + str(start_row + 1)].alignment = Alignment(vertical="center")
 
-        sheet["E" + str(start_row + 2)].alignment = Alignment(horizontal="left")
+        sheet["E" + str(start_row + 2)].alignment = Alignment(horizontal="left", shrinkToFit=True)
         sheet["E" + str(start_row + 2)].font = Font(size=10)
-        sheet["E" + str(start_row + 3)].alignment = Alignment(horizontal="left")
-        sheet["E" + str(start_row + 4)].alignment = Alignment(horizontal="left")
+        sheet["E" + str(start_row + 3)].alignment = Alignment(horizontal="left", shrinkToFit=True)
+        sheet["E" + str(start_row + 4)].alignment = Alignment(horizontal="left", shrinkToFit=True)    
 
     # Merging columns in the second section
     sheet.merge_cells(start_row=start_row + 1, start_column=6, end_row=start_row + 1, end_column=8)
@@ -527,7 +546,7 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
 
     # Fill out default values
     sheet["A" + str(start_row + 10)].value = "Dovolujeme si vás upozornit, že v případě nedodržení data splatnosti Vám můžeme účtovat zákonný úrok z prodlení."
-    sheet["A" + str(start_row + 11)].value = "Vystavila: Jana Limpouchová - jednatelka společnosti"
+    sheet["A" + str(start_row + 11)].value = vystavila_osoba
     sheet["A" + str(start_row + 12)].value = "Převzal:"
 
     # Add page break
@@ -556,8 +575,8 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
     sheet["D" + str(start_row + 3)].alignment = Alignment(horizontal="left")
     sheet["D" + str(start_row + 4)].alignment = Alignment(horizontal="left")
 
-    sheet["G" + str(start_row + 2)].alignment = Alignment(horizontal="left")
-    sheet["G" + str(start_row + 3)].alignment = Alignment(horizontal="left")
+    sheet["G" + str(start_row + 2)].alignment = Alignment(horizontal="left", shrinkToFit=True)
+    sheet["G" + str(start_row + 3)].alignment = Alignment(horizontal="left", shrinkToFit=True)
 
     sheet["F" + str(start_row + 1)].font = Font(size=10, bold=True)
 
@@ -570,16 +589,16 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
     sheet["I" + str(start_row + 4)].font = Font(size=7, bold=True, color="00636363")
     sheet["I" + str(start_row + 4)].alignment = Alignment(vertical="center", horizontal="right")
 
-    sheet["K" + str(start_row + 1)].alignment = Alignment(vertical="center", horizontal="right")
+    sheet["K" + str(start_row + 1)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
     sheet["K" + str(start_row + 1)].number_format = "#,##0.00 Kč"
 
-    sheet["K" + str(start_row + 2)].alignment = Alignment(vertical="center", horizontal="right")
+    sheet["K" + str(start_row + 2)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
     sheet["K" + str(start_row + 2)].number_format = "#,##0.00 Kč"
 
-    sheet["K" + str(start_row + 3)].alignment = Alignment(vertical="center", horizontal="right")
+    sheet["K" + str(start_row + 3)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
     sheet["K" + str(start_row + 3)].number_format = "#,##0.00 Kč"
 
-    sheet["K" + str(start_row + 4)].alignment = Alignment(vertical="center", horizontal="right")
+    sheet["K" + str(start_row + 4)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
     sheet["K" + str(start_row + 4)].number_format = "#,##0.00 Kč"
     sheet["K" + str(start_row + 4)].value = "=SUM(I"+str(start_row - items_count + 2)+":I"+str(start_row)+")" if description else \
         "=SUM(I"+str(start_row - items_count + 1)+":I"+str(start_row-1)+")"
@@ -593,7 +612,7 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
     sheet["I" + str(start_row + 7)].alignment = Alignment(vertical="center", horizontal="right")
 
     sheet["I" + str(start_row + 8)].font = Font(size=15)
-    sheet["I" + str(start_row + 8)].alignment = Alignment(vertical="center", horizontal="right")
+    sheet["I" + str(start_row + 8)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
     sheet["I" + str(start_row + 8)].number_format = "#,##0.00 Kč"
     sheet["I" + str(start_row + 8)].value = "=K"+str(start_row + 4)+"+K"+str(start_row + 3)+"+K"+str(start_row + 2)+"+K"+str(start_row + 1)
 
@@ -626,7 +645,7 @@ def set_print_settings(sheet):
     sheet.page_margins.footer = 0.3
 
 
-def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions):
+def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba):
     set_print_settings(sheet)
     style_first_part_faktura(sheet, start_row, faktura_numbering)
     style_items_faktura(sheet, start_row, descriptions)
@@ -637,7 +656,7 @@ def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, qr_
     if len(items) > 8:
         second_start_row = len(items) + 1
 
-    style_second_part_faktura(sheet, second_start_row + start_row + 19, second_start_row, items, qr_platba, descriptions, prenesena_dph)
+    style_second_part_faktura(sheet, second_start_row + start_row + 19, second_start_row, items, qr_platba, descriptions, prenesena_dph, vystavila_osoba)
     c = "D"
     if qr_platba:
         c = "E"
@@ -681,13 +700,13 @@ def get_faktura_number(sheet):
 
 class ExcelWriter:
 
-    def __init__(self, odberatel, dodavatel, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, storage, pdf):
+    def __init__(self, odberatel, dodavatel, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, pdf, vystavila_osoba):
         try:
             print("in here")
             wb = openpyxl.Workbook()
 
-            odberatele = pd.read_csv(storage.odberatele_path)
-            dodavatele = pd.read_csv(storage.dodavatele_path)
+            odberatele = pd.DataFrame([odberatel_list], columns=["odberatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web"])
+            dodavatele = pd.DataFrame([dodavatel_list], columns=["dodavatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web","cislo_uctu","kod_banky","iban","swift","var_cislo","konst_cislo"])
 
             self.status = ""
             self.faktura_numbering = ""
@@ -707,13 +726,13 @@ class ExcelWriter:
 
             self.faktura_numbering = def_faktura_numbering
             sheet = wb.create_sheet(dodavatel_df.iloc[0]["dodavatel"])
-            print(dodavatel_df.iloc[0])
 
             try:
                 # Create and fill out the faktura template
-                create_faktura(sheet, start_row, items, self.faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions)
+                create_faktura(sheet, start_row, items, self.faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba)
             except Exception as e:
                 self.status = "errQrPlatba"
+                print("err qr platba")
                 return
 
             # Fill dodavatel if it exists
@@ -743,11 +762,12 @@ class ExcelWriter:
                 self.sheet_index = wb.sheetnames.index(dodavatel)
                 self.sheet_print_start = self.sheet_print_start + 1
                 self.sheet_print_end = int(math.ceil(float(sheet.max_row / 41)))
+                print("workbook")
                 self.invoice = save_virtual_workbook(wb)
 
 
                 if pdf:
-                    wb.save("example.xlsx")
+                    wb.save("faktura.xlsx")
                     # Get your client_id and client_key at https://dashboard.groupdocs.cloud (free registration is required).
                     client_id = "a02883ef-d6ad-470e-a01c-e4cb948ccf8f"
                     client_key = "b48f40d8a9d1ccf171de397a459cc89a"
@@ -757,7 +777,7 @@ class ExcelWriter:
                     
                     try:
                         # Prepare request
-                        request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "example.xlsx")
+                        request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "faktura.xlsx")
                     
                         # Convert
                         result = convert_api.convert_document_direct(request)       
