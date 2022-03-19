@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, Response, send_file, make_response, send_from_directory
+from flask import Flask, render_template, request, Response, send_file, make_response, send_from_directory, after_this_request, send_file
 from storage_manager import StorageManager
 from excel_writer import ExcelWriter
 import os
+import io
+import secrets
 
 import json
 import pandas as pd
@@ -132,43 +134,12 @@ def get_ico_data():
     print(s)
     return json.dumps(s)
 
-@app.route('/download', methods=['GET', 'POST'])
-def download():    
-    return send_from_directory(app.root_path, "faktura.pdf", as_attachment=True)
-
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/faktura", methods = ["GET", "POST"])
-def faktura():
-    print("in faktura")
-    
-    items = []
-    class Item():
-        def __init__(self, polozka, dph, count, price):
-            self.delivery_name = polozka
-            self.dph = dph
-            self.count = count
-            self.price = price
-
-    polozky = request.args.getlist("polozka")
-    count = request.args.getlist("count")
-    price = request.args.getlist("price")
-    dphs = request.args.getlist("dph")
-
-    for i in range(len(polozky)):
-        item = Item(polozky[i], count[i], price[i], dphs[i])
-        items.append(item)
-
-    date = {
-        "vystaveni_date": request.args.get("splatnost_date"),
-        "zdanpl_date": request.args.get("zdanpl_date"),
-        "splatnost_date": request.args.get("vystaveni_date"),
-    }
-
-
-    dodavatel = request.args.get("dodavatel")
+def get_dodavatel_list():
+    dodavatel = request.args.get("dodavatel_")
     dodavatel_ico = request.args.get("dodavatel_ico")
     dodavatel_dic = request.args.get("ododavatel_dic")
     dodavatel_street = request.args.get("dodavatel_street")
@@ -188,8 +159,10 @@ def faktura():
     
     dodavatel_list = [dodavatel, dodavatel_street, dodavatel_city, dodavatel_country, dodavatel_ico, dodavatel_dic, dodavatel_rejstrik, dodavatel_telefon, dodavatel_email, dodavatel_web, 
                       account_number, bank_number, iban, swift, konst_cislo, var_cislo]
+    return dodavatel_list
 
-    odberatel = request.args.get("odberatel")
+def get_odberatel_list():
+    odberatel = request.args.get("odberatel_")
     odberatel_ico = request.args.get("odberatel_ico")
     odberatel_dic = request.args.get("oodberatel_dic")
     odberatel_street = request.args.get("odberatel_street")
@@ -199,7 +172,41 @@ def faktura():
     odberatel_telefon = request.args.get("odberatel_telefon")
     odberatel_email = request.args.get("odberatel_email")
     odberatel_web = request.args.get("odberatel_web")
-    odberatel_list = [odberatel, odberatel_street, odberatel_city, odberatel_country, odberatel_ico, odberatel_dic, odberatel_rejstrik, odberatel_telefon, odberatel_email, odberatel_web]
+    odberatel_list = [odberatel, odberatel_street, odberatel_city, odberatel_country, odberatel_ico, odberatel_dic, odberatel_rejstrik, odberatel_telefon, odberatel_email, odberatel_web]    
+    return odberatel_list
+
+def get_items():
+    items = []
+    class Item():
+        def __init__(self, polozka, dph, count, price):
+            self.delivery_name = polozka
+            self.dph = dph
+            self.count = count
+            self.price = price
+
+    polozky = request.args.getlist("polozka")
+    count = request.args.getlist("count")
+    price = request.args.getlist("price")
+    dphs = request.args.getlist("dph")
+
+    for i in range(len(polozky)):
+        item = Item(polozky[i], count[i], price[i], dphs[i])
+        items.append(item)  
+
+    return items  
+
+@app.route("/faktura", methods = ["GET", "POST"])
+def faktura():
+    # Getting the form data
+    date = {
+        "vystaveni_date": request.args.get("splatnost_date"),
+        "zdanpl_date": request.args.get("zdanpl_date"),
+        "splatnost_date": request.args.get("vystaveni_date"),
+    }
+
+    items = get_items()
+    dodavatel_list = get_dodavatel_list()
+    odberatel_list = get_odberatel_list()
 
     faktura_numbering = request.args.get("faktura_numbering")
     polozka = request.args.get("polozka")
@@ -210,19 +217,28 @@ def faktura():
     prenesena_dph = request.args.get("prenesena_dph")
     dodavatel_dph = request.args.get("dodavatel_dph")
     qr_platba = request.args.get("qr_platba")
-    pdf = request.args.get("pdf")
+    pdf = request.args.get("pdf_button") 
     vystavila_osoba = request.args.get("vystavila_osoba")
-
-
-    print("Loading page :)")
-
-    if dodavatel:
-        print(dodavatel)
-        excel = ExcelWriter(odberatel, dodavatel, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, date, "", faktura_numbering, pdf, vystavila_osoba) 
+    
+    if request.args.get("excel_button"): 
+        # Faktura in excel
+        excel = ExcelWriter(dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, date, "", faktura_numbering, pdf, vystavila_osoba, "") 
         output = make_response(excel.invoice)
         output.headers["Content-Disposition"] = "attachment; filename=sheet.xlsx"
         output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         return output
 
+    # Faktura in PDF with unique string
+    random_string = secrets.token_hex(32)
+    excel = ExcelWriter(dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, date, "", faktura_numbering, pdf, vystavila_osoba, random_string) 
 
-    return render_template("index.html", status="")
+    # Store the file and upload the stored version
+    return_data = io.BytesIO()
+    with open("faktura" + random_string + ".pdf", 'rb') as fo:
+        return_data.write(fo.read())
+    return_data.seek(0)
+
+    # Delete the file
+    os.remove("faktura" + random_string + ".pdf")
+
+    return send_file(return_data, mimetype='application/pdf', attachment_filename='faktura.pdf', as_attachment=True)    

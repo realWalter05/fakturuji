@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+from datetime import date
 import openpyxl
 import pandas as pd
 import requests
@@ -700,56 +701,37 @@ def get_faktura_number(sheet):
 
 class ExcelWriter:
 
-    def __init__(self, odberatel, dodavatel, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, pdf, vystavila_osoba):
+    def __init__(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, pdf, vystavila_osoba, random_string):
+        # Creates the workbook
+        wb = openpyxl.Workbook()
+
+        dodavatel = dodavatel_list[0]
+        odberatel = odberatel_list[0]
+
+        odberatele = pd.DataFrame([odberatel_list], columns=["odberatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web"])
+        dodavatele = pd.DataFrame([dodavatel_list], columns=["dodavatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web","cislo_uctu","kod_banky","iban","swift","var_cislo","konst_cislo"])
+
+        self.status = ""
+        self.faktura_numbering = ""
+        self.default_sheetnames = wb.sheetnames
+        self.sheet_index = None
+        self.sheet_max_row = None
+        self.sheet_print_start = 0
+        self.sheet_print_end = 0
+
+        dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
+        start_row = 1
+
+        self.faktura_numbering = def_faktura_numbering if def_faktura_numbering else str(date.today().year)+"001"
+        sheet = wb.create_sheet(dodavatel_df.iloc[0]["dodavatel"])
+
         try:
-            print("in here")
-            wb = openpyxl.Workbook()
-
-            odberatele = pd.DataFrame([odberatel_list], columns=["odberatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web"])
-            dodavatele = pd.DataFrame([dodavatel_list], columns=["dodavatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web","cislo_uctu","kod_banky","iban","swift","var_cislo","konst_cislo"])
-
-            self.status = ""
-            self.faktura_numbering = ""
-            self.default_sheetnames = wb.sheetnames
-            self.sheet_index = None
-            self.sheet_max_row = None
-            self.sheet_print_start = 0
-            self.sheet_print_end = 0
-
-            dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
-            start_row = 1
-
-            # Creating a new dodavatel excel sheet
-            if not def_faktura_numbering:
-                self.status = "no_dodavatel_numbering"
-                return
-
-            self.faktura_numbering = def_faktura_numbering
-            sheet = wb.create_sheet(dodavatel_df.iloc[0]["dodavatel"])
-
-            try:
-                # Create and fill out the faktura template
-                create_faktura(sheet, start_row, items, self.faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba)
-            except Exception as e:
-                self.status = "errQrPlatba"
-                print("err qr platba")
-                return
-
-            # Fill dodavatel if it exists
-            if dodavatel_df is not None:
-                fill_out_dodavatele(sheet, dodavatel_df, start_row)
-
-            # Fill odberatel if it exists
-            if not odberatele[(odberatele["odberatel"] == odberatel)].empty:
-                odberatel_df = odberatele[(odberatele["odberatel"] == odberatel)]
-                fill_out_odberatele(sheet, odberatel_df, start_row)
-
-            else:
-                self.status = "no_odberatel"
-
-            # Fill out items
-            if len(items) > 0:
-                fill_out_items(sheet, items, start_row, descriptions)
+            # Create and fill out the faktura template
+            create_faktura(sheet, start_row, items, self.faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba)
+        except Exception as e:
+            self.status = "errQrPlatba"
+            print("err qr platba")
+            return
 
             # Deleting the default sheet if empty
             if self.default_sheetnames == ["Sheet"]:
@@ -757,45 +739,45 @@ class ExcelWriter:
                     if not len(list(wb["Sheet"].rows)) and not len(list(wb["Sheet"].columns)):
                         wb.remove(wb["Sheet"])
 
-            # Saving the new file
+        # Fill dodavatel
+        fill_out_dodavatele(sheet, dodavatel_df, start_row)
+
+        # Fills odberatel
+        odberatel_df = odberatele[(odberatele["odberatel"] == odberatel)]
+        fill_out_odberatele(sheet, odberatel_df, start_row)
+
+        # Fill out items
+        if len(items) > 0:
+            fill_out_items(sheet, items, start_row, descriptions)
+
+        # Saving the new file
+        if dodavatel:
+            self.sheet_index = wb.sheetnames.index(dodavatel)
+            self.sheet_print_start = self.sheet_print_start + 1
+            self.sheet_print_end = int(math.ceil(float(sheet.max_row / 41)))
+
+        if not pdf:
+            self.invoice = save_virtual_workbook(wb)
+        else:
+            print("saving" + random_string)
+            wb.save("faktura" + random_string + ".xlsx")
+            # Get your client_id and client_key at https://dashboard.groupdocs.cloud (free registration is required).
+            client_id = "a02883ef-d6ad-470e-a01c-e4cb948ccf8f"
+            client_key = "b48f40d8a9d1ccf171de397a459cc89a"
+    
+            # Create instance of the API
+            convert_api = groupdocs_conversion_cloud.ConvertApi.from_keys(client_id, client_key)
+            
             try:
-                self.sheet_index = wb.sheetnames.index(dodavatel)
-                self.sheet_print_start = self.sheet_print_start + 1
-                self.sheet_print_end = int(math.ceil(float(sheet.max_row / 41)))
-                print("workbook")
-                self.invoice = save_virtual_workbook(wb)
-
-
-                if pdf:
-                    wb.save("faktura.xlsx")
-                    # Get your client_id and client_key at https://dashboard.groupdocs.cloud (free registration is required).
-                    client_id = "a02883ef-d6ad-470e-a01c-e4cb948ccf8f"
-                    client_key = "b48f40d8a9d1ccf171de397a459cc89a"
-    
-                    # Create instance of the API
-                    convert_api = groupdocs_conversion_cloud.ConvertApi.from_keys(client_id, client_key)
+                # Prepare request
+                request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "faktura"+random_string+".xlsx")
+            
+                # Convert
+                result = convert_api.convert_document_direct(request)       
+                copyfile(result, 'faktura'+random_string+'.pdf')
+                print("Result {}".format(result))
                     
-                    try:
-                        # Prepare request
-                        request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "faktura.xlsx")
-                    
-                        # Convert
-                        result = convert_api.convert_document_direct(request)       
-                        copyfile(result, 'faktura.pdf')
-                        print("Result {}".format(result))
-                            
-                    except groupdocs_conversion_cloud.ApiException as e:
-                        print("Exception when calling get_supported_conversion_types: {0}".format(e.message))                
-    
-            except (IOError, OSError) as e:
-                # PermissionError
-                if e.errno == EPERM or e.errno == EACCES:
-                    self.status = "errPermission"
+            except groupdocs_conversion_cloud.ApiException as e:
+                print("Exception when calling get_supported_conversion_types: {0}".format(e.message))                
 
-        except OSError as e:
-            self.status = "errNotFound"
-            print(e)
-        except KeyError as e:
-            print(e)
-            self.status = "errCorruptedFile"
 
