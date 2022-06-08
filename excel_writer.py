@@ -382,8 +382,6 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["H" + str(start_row + 3)].value = "Odběratel"
     sheet["H" + str(start_row + 8)].value = "IČ:"
     sheet["H" + str(start_row + 9)].value = "DIČ:"
-    sheet["H" + str(start_row + 13)].value = "Způsob platby:"
-    sheet["K" + str(start_row + 13)].value = "převodem"
     sheet["H" + str(start_row + 14)].value = "Datum vystavení:"
     sheet["H" + str(start_row + 15)].value = "Datum zdan. plnění:"
     sheet["H" + str(start_row + 16)].value = "Datum splatnosti:"
