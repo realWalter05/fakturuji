@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="row m-0">
+  <div class="sidebar col">
+  <div class="d-flex flex-column flex-shrink-0 p-3 text-white text-center">
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="/settings" class="nav-link active" aria-current="page">
+         Všeobecné nastavení
+        </a>
+      </li>
+      <li>
+        <a href="/pridat_firmu" class="nav-link text-white">
+          Přidat firmu
+        </a>
+      </li>
+      <li>
+        <a href="/upravit_firmu" class="nav-link text-white">
+          Upravit firmu
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="mx-auto col-10">
+    <div class="mt-5 mb-5 px-5">
+      <h3 class="text-center">Všeobecné nastavení</h3>
+      <table class="table mt-5">
+        <thead>
+          <tr>  
+            <th scope="col">--</th>
+            <th scope="col">cislo_faktury	</th>
+            <th scope="col">dodavatel	</th>
+            <th scope="col">odberatel	</th>
+            <th scope="col">typ	</th>
+            <th scope="col">dodavatel_dph	</th>
+            <th scope="col">datum_vystaveni	</th>
+            <th scope="col">datum_zdanpl	</th>
+            <th scope="col">datum_splatnosti	</th>
+            <th scope="col">qr_platba	</th>
+            <th scope="col">vystaveno</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for faktura in faktury %}
+          <tr>
+            <td><a href="/get_faktura?id={{ faktura['id'] }}" style="width: 50px; height: 50px;">
+              <?xml version="1.0" encoding="iso-8859-1"?><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"viewBox="0 0 59 59" style="enable-background:new 0 0 59 59;" xml:space="preserve"><g></g><path d="M20.187,28.313c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l9.979,9.979C28.938,39.895,29.192,40,29.458,40c0.007,0,0.014-0.004,0.021-0.004c0.007,0,0.013,0.004,0.021,0.004c0.333,0,0.613-0.173,0.795-0.423l9.891-9.891c0.391-0.391,0.391-1.023,0-1.414s-1.023-0.391-1.414,0L30.5,36.544V1c0-0.553-0.447-1-1-1s-1,0.447-1,1v35.628L20.187,28.313z"/><path d="M36.5,16c-0.553,0-1,0.447-1,1s0.447,1,1,1h13v39h-40V18h13c0.553,0,1-0.447,1-1s-0.447-1-1-1h-15v43h44V16H36.5z"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+            </td>
+            <td>{{ faktura["cislo_faktury"]	}}</td>
+            <td>{{ faktura["dodavatel"]	}}</td>
+            <td>{{ faktura["odberatel"]	}}</td>
+            <td>{{ faktura["typ"]	}}</td>
+            <td>{{ faktura["dodavatel_dph"]	}}</td>
+            <td>{{ faktura["datum_vystaveni"]	}}</td>
+            <td>{{ faktura["datum_zdanpl"]	}}</td>
+            <td>{{ faktura["datum_splatnosti"]	}}</td>
+            <td>{{ faktura["qr_platba"]	}}</td>
+            <td>{{ faktura["vystaveno"] }}</td>
+          </tr>
+        {% endfor %}                    
+        </tbody>
+      </table>                            
+      <a href="/get_ucetnictvi"><button class="btn btn-dark w-25">Stáhnout celé účetnictví</button></a>
+  </div>
+</div>
+</div>
+{% endblock %}

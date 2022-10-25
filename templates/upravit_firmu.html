@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="row m-0">
+<div class="sidebar col">
+  <div class="d-flex flex-column flex-shrink-0 p-3 text-white text-center">
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="/settings" class="nav-link text-white">
+         Všeobecné nastavení
+        </a>
+      </li>
+      <li>
+        <a href="/pridat_firmu" class="nav-link text-white">
+          Přidat firmu
+        </a>
+      </li>
+      <li>
+        <a href="/upravit_firmu" class="nav-link active" aria-current="page">
+          Upravit firmu
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="mx-auto col-10">
+    <form method="GET" style="overflow: scroll; height: 85%;" class="" action="/add_firma">
+        <div class="mt-5 mb-5 px-5">
+            <div>
+            	<h3 class="text-center">Upravit firmu</h4>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">Název</th>
+                      <th scope="col">IČO</th>
+                      <th scope="col">DIČ</th>
+                      <th scope="col">Ulice</th>
+                      <th scope="col">č. p.</th>
+                      <th scope="col">Město</th>
+                      <th scope="col">PSČ</th>
+                      <th scope="col">Země</th>
+                      <th scope="col">Soudní rejstřík</th>
+                      <th scope="col">Soudní vložka</th>
+                      <th scope="col">Telefon</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Web</th>
+                      <th scope="col">Číslo účtu</th>
+                      <th scope="col">Číslo banky</th>
+                      <th scope="col">IBAN</th>
+                      <th scope="col">SWIFT</th>
+                      <th scope="col">Konst. symbol</th>
+                      <th scope="col">Var. symbol</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for firma in firmy %}
+                    <tr>
+                      <td><a href="/upravit_firmu"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16"><path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/></svg></a></td>
+                      <td>{{ firma["nazev"] }}</td>
+                      <td>{{ firma["ico"] }}</td>
+                      <td>{{ firma["dic"] }}</td>
+                      <td>{{ firma["ulice"] }}</td>
+                      <td>{{ firma["cislo_popisne"] }}</td>
+                      <td>{{ firma["mesto"] }}</td>
+                      <td>{{ firma["psc"] }}</td>
+                      <td>{{ firma["zeme"] }}</td>
+                      <td>{{ firma["soud_rejstrik"] }}</td>
+                      <td>{{ firma["soudni_vlozka"] }}</td>
+                      <td>{{ firma["telefon"] }}</td>
+                      <td>{{ firma["email"] }}</td>
+                      <td>{{ firma["web"] }}</td>
+                      <td>{{ firma["cislo_uctu"] }}</td>
+                      <td>{{ firma["cislo_banky"] }}</td>
+                      <td>{{ firma["iban"] }}</td>
+                      <td>{{ firma["swift"] }}</td>
+                      <td>{{ firma["konst_symbol"] }}</td>
+                      <td>{{ firma["var_symbol"] }}</td>
+                    </tr>
+                  {% endfor %}                    
+                  </tbody>
+                </table>                            
+            </div>              
+        </div>
+    </form>       	
+</div>
+</div>
+{% endblock %}

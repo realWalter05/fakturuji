@@ -10,7 +10,6 @@ from openpyxl.styles.borders import Border, Side, BORDER_THICK, BORDER_THIN
 from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl.worksheet.pagebreak import Break
 from errno import EACCES, EPERM
-import secrets
 
 # Import module
 import groupdocs_conversion_cloud
@@ -699,101 +698,102 @@ def get_faktura_number(sheet):
 
 class ExcelWriter:
 
-    def __init__(self):
+    def __init__(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, pdf, vystavila_osoba, random_string):
         # Creates the workbook
-        self.wb = openpyxl.Workbook()
-        self.delete_empty_sheet()
-        
-        self.dodavatel = None
-        self.odberatel = None
+        wb = openpyxl.Workbook()
 
-        self.odberatele = None
-        self.dodavatele = None
+        dodavatel = dodavatel_list[0]
+        odberatel = odberatel_list[0]
 
-        self.status = None
-        self.faktura_numbering = None
-        self.default_sheetnames = self.wb.sheetnames
+        odberatele = pd.DataFrame([odberatel_list], columns=["odberatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web"])
+        dodavatele = pd.DataFrame([dodavatel_list], columns=["dodavatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web","cislo_uctu","kod_banky","iban","swift","var_cislo","konst_cislo"])
+
+        self.status = ""
+        self.faktura_numbering = ""
+        self.default_sheetnames = wb.sheetnames
         self.sheet_index = None
         self.sheet_max_row = None
-        self.start_row = None
-        self.dodavatel_df = None
-        self.sheet = None
+        self.sheet_print_start = 0
+        self.sheet_print_end = 0
 
 
-    def create_faktura(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, vystavila_osoba):
-        # Get odberatel and dodavatel names
-        self.dodavatel = dodavatel_list[0]
-        self.odberatel = odberatel_list[0]
+        dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
+        start_row = 1
 
-        # Convert them to pandas
-        self.odberatele = pd.DataFrame([odberatel_list], columns=["odberatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web"])
-        self.dodavatele = pd.DataFrame([dodavatel_list], columns=["dodavatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web","cislo_uctu","kod_banky","iban","swift","var_cislo","konst_cislo"])
+        if dodavatel in wb:
+            # Dodavatel is already in excel
+            sheet = wb[dodavatel]
+            self.sheet_print_start = int(math.ceil(float(sheet.max_row / 41)))
 
-        # Set rows with dodavatel/odberatel in pandas dataframe
-        self.dodavatel_df = self.dodavatele[(self.dodavatele["dodavatel"] == self.dodavatel)]
-        self.odberatel_df = self.odberatele[(self.odberatele["odberatel"] == self.odberatel)]
+            dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
+            start_row = find_start_row(sheet)
 
-        self.set_start_row()
-        self.set_faktura_numbering(def_faktura_numbering)
-        self.set_sheet()
+            self.faktura_numbering = get_faktura_number(sheet)
+
+        dodavatel_df = dodavatele[(dodavatele["dodavatel"] == dodavatel)]
+        start_row = 1
+
+        self.faktura_numbering = def_faktura_numbering if def_faktura_numbering else str(date.today().year)+"001"
+        sheet = wb.create_sheet(dodavatel_df.iloc[0]["dodavatel"])
 
         try:
             # Create and fill out the faktura template
-            create_faktura(self.sheet, self.start_row, items, self.faktura_numbering, self.dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba)
+            create_faktura(sheet, start_row, items, self.faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba)
         except Exception as e:
             self.status = "errQrPlatba"
             print(f"err qr platba {e}")
-            return        
+            return
+
+        # Deleting the default sheet if empty
+        if self.default_sheetnames == ["Sheet"]:
+            if wb["Sheet"]:
+                if not len(list(wb["Sheet"].rows)) and not len(list(wb["Sheet"].columns)):
+                    wb.remove(wb["Sheet"])
 
         # Fill dodavatel
-        fill_out_dodavatele(self.sheet, self.dodavatel_df, self.start_row)
+        fill_out_dodavatele(sheet, dodavatel_df, start_row)
 
         # Fills odberatel
-        fill_out_odberatele(self.sheet, self.odberatel_df, self.start_row)
+        odberatel_df = odberatele[(odberatele["odberatel"] == odberatel)]
+        fill_out_odberatele(sheet, odberatel_df, start_row)
 
         # Fill out items
         if len(items) > 0:
-            fill_out_items(self.sheet, items, self.start_row, descriptions)
+            fill_out_items(sheet, items, start_row, descriptions)
 
-    def set_start_row(self):
-        self.start_row = 1
-        if self.dodavatel in self.wb:
-            # Dodavatel is already in excel
-            self.start_row = find_start_row(self.sheet)
+        # Saving the new file
+        if dodavatel:
+            self.sheet_index = wb.sheetnames.index(dodavatel)
+            self.sheet_print_start = self.sheet_print_start + 1
+            self.sheet_print_end = int(math.ceil(float(sheet.max_row / 41)))
 
+        print("saving" + random_string)
+        wb.save("faktura" + random_string + ".xlsx")
+        return
 
-    def set_faktura_numbering(self, faktura_numbering):
-        if faktura_numbering:
-            # Set by user
-            self.faktura_numbering = faktura_numbering
-        
-        elif self.dodavatel in self.wb:
-            # Already existing
-            self.faktura_numbering = get_faktura_number(self.sheet) 
-
-        else:
-            # Setting default by us
-            self.faktura_numbering = str(date.today().year)+"001"
-        
-
-    def set_sheet(self):
-        if self.dodavatel in self.wb:
-            self.sheet = self.wb[self.dodavatel]
-            return
-        self.sheet = self.wb.create_sheet(self.dodavatel_df.iloc[0]["dodavatel"])
-
-
-    def delete_empty_sheet(self):
-        # Deleting the default sheet if empty
-        if self.wb["Sheet"]:
-            if not len(list(self.wb["Sheet"].rows)) and not len(list(self.wb["Sheet"].columns)):
-                self.wb.remove(self.wb["Sheet"])
-
+        if not pdf:
+            print("NOT PDF")
+            self.invoice = save_virtual_workbook(wb)
+        elif (0):
+            print("saving" + random_string)
+            wb.save("faktura" + random_string + ".xlsx")
+            # Get your client_id and client_key at https://dashboard.groupdocs.cloud (free registration is required).
+            client_id = "a02883ef-d6ad-470e-a01c-e4cb948ccf8f"
+            client_key = "b48f40d8a9d1ccf171de397a459cc89a"
     
-    def save_faktura_in_excel(self):
-        # Saving the new faktura
-        self.wb.save("faktura" + secrets.token_hex(4) + ".xlsx")
+            # Create instance of the API
+            convert_api = groupdocs_conversion_cloud.ConvertApi.from_keys(client_id, client_key)
+            
+            try:
+                # Prepare request
+                request = groupdocs_conversion_cloud.ConvertDocumentDirectRequest("pdf", "faktura"+random_string+".xlsx")
+            
+                # Convert
+                result = convert_api.convert_document_direct(request)       
+                copyfile(result, 'faktura'+random_string+'.pdf')
+                print("Result {}".format(result))
+                    
+            except groupdocs_conversion_cloud.ApiException as e:
+                print("Exception when calling get_supported_conversion_types: {0}".format(e.message))                
 
 
-    def get_virtual_save(self):
-        return save_virtual_workbook(self.wb)

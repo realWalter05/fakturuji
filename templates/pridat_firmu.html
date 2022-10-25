@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="row m-0">
+  <div class="sidebar col">
+  <div class="d-flex flex-column flex-shrink-0 p-3 text-white text-center">
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="/settings" class="nav-link text-white">
+         Všeobecné nastavení
+        </a>
+      </li>
+      <li>
+        <a href="/pridat_firmu" class="nav-link active" aria-current="page">
+          Přidat firmu
+        </a>
+      </li>
+      <li>
+        <a href="/upravit_firmu" class="nav-link text-white">
+          Upravit firmu
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="mx-auto col-10">
+    <form method="GET" class="p-4" action="/add_firma">
+        <div class="mt-5 mb-5 px-5">
+            <div id="dodavatel-col">
+            	<h3 class="text-center">Přidejte firmu</h4>
+                    {% if msg == "success" %}
+                        <p class="text-success text-center">Přidání firmy proběhlo úspěšně.</p>
+                    {% elif msg == "error" %}
+                        <p class="text-danger text-center">Omlouváme se nastala nějaká chyba. Zkuste to prosím později.</p>
+                    {% endif %}                
+                    <div class="dropdown">
+                      <input class="form-control dropdown-toggle form-nazev" oninput="SetDropdownAresTest('dodavatel-get-data', this); 
+                      GetHintFirmy(this.value, this.parentElement.parentElement, 1, 1);" autocomplete="off" name="dodavatel_" placeholder="Dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" id="dodavatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
+                      </div>
+                  </div>
+                <input type="text" class="form-control form-ico" name="dodavatel_ico" placeholder="IČO"/>
+                <input type="text" class="form-control form-dic" name="dodavatel_dic" placeholder="DIČ"/>
+                <div class="row form-row-padding">
+                    <input type="text" class="form-control col form-street" name="dodavatel_street" placeholder="Ulice"/>
+                    <input type="text" class="form-control col form-cislo-popisne" name="dodavatel_cislo_popisne" placeholder="Číslo popisné"/>
+                </div>
+                <div class="row form-row-padding">
+                    <input type="text" class="form-control col form-city" name="dodavatel_city" placeholder="Město"/>
+                    <input type="text" class="form-control col form-psc" name="dodavatel_psc" placeholder="PSČ"/>
+                </div>                
+    
+                <input type="text" class="form-control form-rejstrik" name="dodavatel_rejstrik" placeholder="Obchodní rejstřík"/>
+                <div class="row form-row-padding">
+                    <input type="text" class="form-control col form-country" name="dodavatel_country" placeholder="Země"/>	
+                    <input type="text" class="form-control col form-vlozka" name="dodavatel_vlozka" placeholder="Soudní vložka"/>
+                </div>                     
+            
+                <input type="tel" class="form-control form-telefon" name="dodavatel_telefon" placeholder="Telefonní číslo"/>
+                <input type="text" class="form-control form-email" name="dodavatel_email" placeholder="Email"/>
+                <input type="text" class="form-control form-web" name="dodavatel_web" placeholder="Web"/>	
+            </div>
+            <div class="mt-4">
+                <h4>Bankovní údaje</h3>
+                <div class="row form-row-padding">
+                    <input type="text" class="form-control col" name="cislo_uctu" placeholder="*Číslo účtu"/>
+                    <input type="text" class="form-control col" name="cislo_banky" placeholder="*Číslo banky"/>		
+                    <input type="number" class="form-control col" name="iban" placeholder="IBAN"/>					  					  
+                </div>                                	
+                <div class="row form-row-padding">	  	
+                    <input type="text" class="form-control col" name="konst_symbol" placeholder="Konst. symbol"/>
+                    <input type="number" class="form-control col" name="var_symbol" placeholder="Var. symbol"/>					  					  
+                    <input type="text" class="form-control col" name="swift" placeholder="SWIFT"/>				  	
+                </div>
+              </div>            
+              <div class="row px-3 py-2">
+                <div class="col">
+                    <input type="checkbox" name="dodavatel_je_dodavatel" id="only_dodavatel_check" checked>
+                    <label for="only_dodavatel_check">Zařadit firmu k dodavatelům</label>
+                </div>    
+                <div class="col">
+                    <input type="checkbox" name="dodavatel_je_odberatel" id="only_odberatel_check" checked>
+                    <label for="only_odberatel_check">Zařadit firmu k odběratelům</label>
+                </div>
+                <div class="col">
+                  <input type="checkbox" name="dodavatel_sifrovat" id="sifrovat_check">
+                  <label for="sifrovat_check">Šifrovat</label>
+              </div>                                    
+            </div>              
+            <button class="btn-dark btn w-25 mt-4 col">Přidat</button>
+        </div>
+    </form>       	
+</div>
+</div>
+{% endblock %}

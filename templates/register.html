@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block main %}
+<section class="form" class="m-5">
+    <form action="/register_user" method="POST">
+    <h1 class="text-center h1 mt-5 mb-2">Registrace</h1>
+    {% if msg == "success" %}
+        <p class="text-success text-center">Registrace proběhla úspěšně.</p>
+    {% elif msg == "data_error" %}
+        <p class="text-danger text-center">Vyplňte prosím všechny data.</p>
+    {% elif msg == "username_taken" %}
+        <p class="text-danger text-center">Vyberte si prosím jiné uživatelské jméno.</p>
+    {% elif msg == "error" %}
+        <p class="text-danger text-center">Při zpracovávání požadavku nastalo nějaká chyba. Zkuste to prosím později.</p>
+    {% endif %}            
+    <div class="form-group mb-2">
+        <label for="register-username">Uživatelské jméno/email</label>
+        <input type="text" class="form-control" name="username" id="register-username">
+      </div>	
+    <div class="form-group mb-2">
+        <label for="register-pwd">Heslo</label>
+        <input type="password" class="form-control" name="password" id="register-pwd">
+    </div>		
+    <button class="btn-dark btn w-100">Zaregistrovat se</button>
+    </form>
+</section>	
+
+
+{% endblock %}

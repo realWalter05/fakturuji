@@ -1,2 +1,54 @@
-body {
+.form {
+    width: 40vw;
+    margin: auto;
+}
+
+.form-row-padding {
+    padding: 0 0.75rem 0 0.75rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.sidebar {
+    height: 100vh;
+    min-height: 100vh;
+    width: 280px;
+    background: rgb(38, 42, 48);
+}
+
+#background-image {
+    background: url("/static/img/background.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 89.3vh;
+}
+
+#background-image-second {
+    background: url("/static/img/bg.png") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 89.3vh;
+}
+
+.index-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.8em;
+}
+
+.logo-icon {
+    height: 25rem;
+    transition: ease .3s;
+}
+
+.logo-icon:hover {
+    transform: scale(1.1);
 }
