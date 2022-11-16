@@ -24,18 +24,20 @@
                         <ul class="navbar-nav nav navbar-right">
                             {% if session["user_data"] %}
                                 <li class="nav-item p-3">
-                                    <a href="/" class="nav-link">Faktura</a>
+                                    <a href="/" class="nav-link">Přehled</a>
                                 </li>
-                                
                                 <li class="nav-item p-3">
-                                    <a href="/settings" class="nav-link">Nastavení</a>
+                                    <a href="/fakturujto" class="nav-link">Faktura</a>
+                                </li>                                
+                                <li class="nav-item p-3">
+                                    <a href="/settings" class="nav-link">Adresář</a>
                                 </li>
                                 <li class="nav-item p-3">
                                     <a href="/account" class="nav-link">{{ session["user_data"]["name"] }}</a>
                                 </li>                        
                             {% else %}
                                 <li class="nav-item p-3">
-                                    <a href="/" class="nav-link">Faktura</a>
+                                    <a href="/" class="nav-link">Jednorázová faktura</a>
                                 </li>
                                 <li class="nav-item p-3">
                                     <a href="/register" class="nav-link">Zaregistrujte se</a>

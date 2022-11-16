@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/faktura.css">
+    <title>Faktura</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+</head>
+<body>
+    <table border="0">
+        <colgroup>
+            <col style="width:1.8rem">
+            <col style="width:6.1rem">
+            <col style="width:0.8rem">
+            <col style="width:1.8rem">
+            <col style="width:7.8rem">
+            <col style="width:2.8rem">
+            <col style="width:2.8rem">
+            <col style="width:2.8rem">
+            <col style="width:6.8rem">
+            <col style="width:0.8rem">
+            <col style="width:2.8rem">
+            <col style="width:5.8rem">
+          </colgroup>  
+        <tr id="header"><td colspan="12"></td></tr>
+        <tr id="faktura_row">
+            <td colspan="10">Faktura - daňový doklad</td>
+            <td colspan="2" id="faktura_numbering">2022001</td>
+        </tr>
+        <tr style="height: 1rem"></tr>        
+        <tr class="title_row">
+            <td colspan="5">Dodavatel</td>
+            <td colspan="2"></td>
+            <td colspan="5">Odběratel</td>
+        </tr>
+        <tr>
+            <td colspan="5">Coca-Cola Česká Republika s.r.o.</td>
+            <td colspan="2"></td>
+            <td colspan="5">DORSIMA s.r.o.</td>
+        </tr>
+        <tr>
+            <td colspan="2">Táborská 496</td>
+            <td></td>
+            <td colspan="2" class="right">703340508</td>
+            <td colspan="2"></td>
+            <td colspan="2">Českobrodská 1329</td>
+            <td></td>
+            <td colspan="2" class="right">135456845</td>            
+        </tr>        
+        <tr>
+            <td colspan="2">Písek 39701</td>
+            <td></td>
+            <td colspan="2" class="right">vasikzika@seznam.cz</td>
+            <td colspan="2"></td>
+            <td colspan="2">Českobrodská 1329</td>
+            <td></td>
+            <td colspan="2" class="right">sdfasf@seznam.cz</td>            
+        </tr>    
+        <tr>
+            <td colspan="2">Česká republika</td>
+            <td></td>
+            <td colspan="2" class="right">www.vaclavzika.cz</td>
+            <td colspan="2"></td>
+            <td colspan="2">Českobrodská 1329</td>
+            <td></td>
+            <td colspan="2" class="right">www.asdfdsfa.cz</td>            
+        </tr>   
+        <tr>
+            <td>IČ:</td>
+            <td>04501616</td>
+            <td colspan="5"></td>
+            <td>IČ:</td>
+            <td>04501616</td>  
+            <td colspan="3"></td>    
+        </tr>
+        <tr>
+            <td>DIČ:</td>
+            <td>CZ04501616</td>
+            <td></td>
+            <td colspan="2">Dodavatel je plátce DPH</td>
+            <td colspan="2"></td>
+            <td>DIČ:</td>
+            <td>CZ04501616</td>
+            <td></td>
+            <td colspan="2">Dodavatel je plátce DPH</td>
+            <td colspan="2"></td>
+        </tr>     
+        <tr class="big_row">
+            <td colspan="5">Krajský soud v Českých Budějovicích C 24195</td>
+            <td colspan="2"></td>
+            <td colspan="5"></td>
+        </tr>    
+        <tr style="height: 1rem"></tr>        
+        <tr>
+            <td colspan="2">Dodací list:</td>
+            <td></td>
+            <td colspan="2" class="right"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="2" class="right"></td>            
+        </tr>             
+        <tr>
+            <td colspan="2">Způsob dopravy:</td>
+            <td></td>
+            <td colspan="2" class="right"></td>
+            <td colspan="2"></td>
+            <td colspan="2">Datum vystavení:</td>
+            <td></td>
+            <td colspan="2" class="right">10. 11. 2022</td>            
+        </tr>               
+        <tr>
+            <td colspan="2">Místo určení:</td>
+            <td></td>
+            <td colspan="2" class="right"></td>
+            <td colspan="2"></td>
+            <td colspan="2">Datum vystavení:</td>
+            <td></td>
+            <td colspan="2" class="right">17. 11. 2022</td>            
+        </tr>  
+        <tr>
+            <td colspan="2">Objednávky:</td>
+            <td></td>
+            <td colspan="2" class="right"></td>
+            <td colspan="2"></td>
+            <td colspan="2">Datum splatnosti:</td>
+            <td></td>
+            <td colspan="2" class="right">17. 11. 2022</td>            
+        </tr>            
+        <tr style="height: 0.4rem"></tr>          
+        <tr class="items_header">
+            <td colspan="4">Označení dodávky</td>
+            <td>Množství</td>
+            <td colspan="2">Za kus</td>
+            <td>DPH</td>
+            <td colspan="3">Bez DPH</td>
+            <td>S DPH</td>
+        </tr>          
+        <tr style="height: 0.35rem"></tr>       
+        <tr class="items">
+            <td colspan="4">Popelnice</td>
+            <td>4</td>
+            <td colspan="2">150 Kč</td>
+            <td>21 %</td>
+            <td colspan="3">40 000 Kč</td>
+            <td>32 568 Kč</td>
+        </tr>   
+        <tr style="height: 0.15rem"></tr>
+        <tr class="items">
+            <td colspan="4"></td>
+            <td></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 0.15rem"></tr>     
+        <tr class="items">
+            <td colspan="4"></td>
+            <td></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 0.15rem"></tr>    
+        <tr class="items">
+            <td colspan="4"></td>
+            <td></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 0.15rem"></tr>    
+        <tr class="items">
+            <td colspan="4"></td>
+            <td></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 0.15rem"></tr>    
+        <tr class="items">
+            <td colspan="4"></td>
+            <td></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 0.15rem"></tr>    
+        <tr class="items">
+            <td colspan="4"></td>
+            <td></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 0.15rem"></tr>
+        <tr class="items">
+            <td colspan="4"></td>
+            <td></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 1rem"></tr>                                                                      
+        <tr class="bank_title cambria">
+            <td colspan="5">Bankovní účet</td>
+            <td colspan="3">Symbol:</td>
+            <td class="dph_td cambria"></td>
+            <td></td>
+            <td colspan="2" class="right"></td>
+        </tr>  
+        <tr>
+            <td colspan="2">Číslo účtu:</td>
+            <td></td>
+            <td colspan="2">2001587386/2010</td>
+            <td>var:</td>
+            <td colspan="2">654</td>
+            <td class="dph_td cambria"></td>
+            <td></td>
+            <td colspan="2" class="right"></td>            
+        </tr>      
+        <tr>
+            <td colspan="2">SWIFT:</td>
+            <td></td>
+            <td colspan="2">7894564154</td>
+            <td>konst:</td>
+            <td colspan="2">123</td>
+            <td class="dph_td cambria">DPH 21 %</td>
+            <td></td>
+            <td colspan="2" class="right">19,970.28 Kč</td>            
+        </tr> 
+        <tr>
+            <td colspan="2">IBAN:</td>
+            <td></td>
+            <td colspan="5">123456789</td>
+            <td class="dph_td cambria">BEZ DPH</td>
+            <td></td>
+            <td colspan="2" class="right">16,236.00 Kč</td>            
+        </tr>                           
+        <tr>
+            <td colspan="8"></td>
+            <td colspan="4" class="underlined"></td>
+        </tr>      
+        <tr style="height: 0.5rem"></tr>
+        <tr>
+            <td colspan="8"></td>
+            <td colspan="4" class="celkem_s_dph cambria">CELKEM S DPH</td>
+        </tr>
+        <tr>
+            <td colspan="8"></td>
+            <td colspan="4" class="full_price cambria">36,206.28 Kč</td>
+        </tr>
+        <tr style="height: 0.5rem"></tr>
+        <tr>
+            <td colspan="11" class="dodatek">Dovolujeme si vás upozornit, že v případě nedodržení data splatnosti Vám můžeme účtovat zákonný úrok z prodlení.</td>
+        </tr>   
+        <tr class="name">
+            <td colspan="11" class="cambria">Zíka Václav</td>
+        </tr>
+        <tr class="prevzal">
+            <td colspan="2" >Převzal</td>
+            <td colspan="2"></td>
+            <td >Dne</td>
+        </tr>                                    
+    </table>
+    <button onclick="openWin();">OLOL</button>
+</body>
+<script type="text/javascript">
+    function openWin(){
+    var content = document.body.innerHTML+`
+<style>
+body {
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    width: 45rem;
+    margin: 2.4rem 0 0 2rem;
+    table-layout: fixed;
+    font-style:normal;
+    font-family: Cambria;
+    font-size: 9.5pt;    
+    border-collapse:collapse; 
+}
+
+table tr {
+    height: 1.35rem;
+}
+
+table td {
+    padding: 0;
+    margin: 0;
+}
+
+#header {
+    background: rgb(21, 128, 220);
+    height: 2.2rem;
+}
+
+#faktura_row {
+    height: 2.4rem;
+    font-size: 14pt;
+    font-family: Cambria;
+    color:#000000
+}
+
+#faktura_row td:first-child {
+    font-style:normal;
+    font-weight:bold;
+}
+
+#faktura_numbering {
+    text-align: right;
+}
+
+.title_row {
+    height: 1.8rem;
+}
+
+.title_row td {
+    font-weight: bold;
+    font-style:normal;
+    font-family: Cambria;
+    font-size: 12pt;
+}
+
+.big_row {
+    height: 2.3rem;
+    font-size: 8.5pt;
+}
+
+.items_header {
+    background: rgb(21, 128, 220);
+    color: #fff;
+    font-weight: 600;
+    font-family: Cambria;
+    text-align: center;
+    font-size: 9pt;
+}
+
+.items {
+    background: rgb(243, 243, 243);
+    text-align: center;
+    font-size: 9pt;
+    height: 1.5rem;
+
+}
+
+.items td:first-child {
+    text-align: left;
+}
+
+.bank_title {
+    font-weight: bold;
+
+}
+
+.dph_td {
+    font-weight: 600;
+    text-align: right;
+    font-size: 7pt;
+    color: gray;    
+}
+
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.underlined {
+    border-bottom: #000000 1px solid;
+}
+
+.celkem_s_dph {
+    font-weight: 600;
+    font-size: 9pt;
+    text-align: right;
+}
+
+.cambria {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.full_price {
+    font-size: 15pt;
+    text-align: right;    
+}
+
+.dodatek {
+    font-size: 9pt;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.name {
+    height: 2.2rem;
+}
+
+.prevzal {
+    height: 2.2rem;
+}
+</style>
+`;
+        var myWindow = window.open('','','width=1920,height=1080');
+        myWindow.document.write(content);
+      
+        myWindow.document.close();
+        myWindow.focus();
+        myWindow.print();
+        myWindow.close();
+      
+    }
+  </script>
+</html>

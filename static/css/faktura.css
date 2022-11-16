@@ -1,0 +1,134 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    width: 45rem;
+    margin: 2.4rem 0 0 2rem;
+    table-layout: fixed;
+    font-style:normal;
+    font-family: Cambria;
+    font-size: 9.5pt;    
+    border-collapse:collapse; 
+}
+
+table tr {
+    height: 1.35rem;
+}
+
+table td {
+    padding: 0;
+    margin: 0;
+}
+
+#header {
+    background: rgb(21, 128, 220);
+    height: 2.2rem;
+}
+
+#faktura_row {
+    height: 2.4rem;
+    font-size: 14pt;
+    font-family: Cambria;
+    color:#000000
+}
+
+#faktura_row td:first-child {
+    font-style:normal;
+    font-weight:bold;
+}
+
+#faktura_numbering {
+    text-align: right;
+}
+
+.title_row {
+    height: 1.8rem;
+}
+
+.title_row td {
+    font-weight: bold;
+    font-style:normal;
+    font-family: Cambria;
+    font-size: 12pt;
+}
+
+.big_row {
+    height: 2.3rem;
+    font-size: 8.5pt;
+}
+
+.items_header {
+    background: rgb(21, 128, 220);
+    color: #fff;
+    font-weight: 600;
+    font-family: Cambria;
+    text-align: center;
+    font-size: 9pt;
+}
+
+.items {
+    background: rgb(243, 243, 243);
+    text-align: center;
+    font-size: 9pt;
+    height: 1.5rem;
+
+}
+
+.items td:first-child {
+    text-align: left;
+}
+
+.bank_title {
+    font-weight: bold;
+
+}
+
+.dph_td {
+    font-weight: 600;
+    text-align: right;
+    font-size: 7pt;
+    color: gray;    
+}
+
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.underlined {
+    border-bottom: #000000 1px solid;
+}
+
+.celkem_s_dph {
+    font-weight: 600;
+    font-size: 9pt;
+    text-align: right;
+}
+
+.cambria {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.full_price {
+    font-size: 15pt;
+    text-align: right;    
+}
+
+.dodatek {
+    font-size: 9pt;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.name {
+    height: 2.2rem;
+}
+
+.prevzal {
+    height: 2.2rem;
+}

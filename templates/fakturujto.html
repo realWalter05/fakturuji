@@ -7,9 +7,10 @@
             <div class="carousel-inner mt-5">
         <div class="carousel-item active"><div class="row ">
                 <div class="col w-50" id="dodavatel_col">
-            		<h3 class="text-center">Dodavatel</h4>
+            		<h3 class="text-center display-5">Dodavatel</h4>
                     <div class="dropdown">
-                        <input class="form-control dropdown-toggle form-nazev" oninput="SetDropdownAresTest('dodavatel-get-data', this); 
+                        <input class="form-control dropdown-toggle form-nazev" onclick="SetDropdownAresTest('dodavatel-get-data', this); 
+                        GetHintFirmy(this.value, this.parentElement.parentElement, 1, 0);" oninput="SetDropdownAresTest('dodavatel-get-data', this); 
                         GetHintFirmy(this.value, this.parentElement.parentElement, 1, 0);" autocomplete="off" name="dodavatel_" placeholder="Dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" id="dodavatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
@@ -38,9 +39,10 @@
                     <input type="text" class="form-control form-web" name="dodavatel_web" placeholder="Web"/>		 
                 </div>
                 <div class="col w-50" id="odberatel_col">
-            		<h3 class="text-center">Odběratel</h4>
+            		<h3 class="text-center display-5">Odběratel</h4>
                     <div class="dropdown">
-                        <input class="form-control dropdown-toggle form-nazev" oninput="SetDropdownAresTest('odberatel-get-data', this); 
+                        <input class="form-control dropdown-toggle form-nazev" onclick="SetDropdownAresTest('odberatel-get-data', this); 
+                        GetHintFirmy(this.value, this.parentElement.parentElement, 0, 1);" oninput="SetDropdownAresTest('odberatel-get-data', this); 
                         GetHintFirmy(this.value, this.parentElement.parentElement, 0, 1);" autocomplete="off" name="odberatel_" placeholder="Odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" id="odberatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
@@ -69,7 +71,7 @@
                     <input type="text" class="form-control form-web" name="odberatel_web" placeholder="Web"/>		 
                 </div>  
                 <div class="p-4">
-                    <h4 class="text-center">Bankovní údaje</h3>
+                    <h4 class="text-center display-5">Bankovní údaje</h3>
                     <div class="row">
                         <input type="text" class="form-control col" name="account_number" placeholder="*Číslo účtu"/>
                         <input type="text" class="form-control col" name="bank_number" placeholder="*Číslo banky"/>				  	
@@ -82,36 +84,50 @@
                     </div>
                   </div>                
         </div></div>
-        <div class="carousel-item"><div id="polozky">
-        	<button type="button" class="form-control w-100 dark btn-dark" onclick="CreateItem();">Přidat položku</button>                           		
-        	<div class="polozka_item">	
-        		<div class="row">
-        		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
-        		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
-        		</div>
-        	</div>
-        	<div class="polozka_item">	
-        		<div class="row">
-        		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
-        		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
-        		</div>
-        	</div>
-        	<div class="polozka_item">	
-        		<div class="row">
-        		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
-        		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
-        		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
-        		</div>
-        	</div>                    	                    	
-        </div></div>                       
+        <div class="carousel-item">
+            <div id="polozky">
+            	<button type="button" class="form-control w-100 dark btn-dark" onclick="CreateItem();">Přidat položku</button>                           		
+            	<div class="polozka_item">	
+            		<div class="row">
+            		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
+            		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
+            		</div>
+            	</div>
+            	<div class="polozka_item">	
+            		<div class="row">
+            		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
+            		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
+            		</div>
+            	</div>
+            	<div class="polozka_item">	
+            		<div class="row">
+            		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
+            		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
+            		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
+            		</div>
+            	</div>                    	                    	
+            </div>
+            <div class="mt-5">	
+                <h3 class="display-5">Popisek nad položky</h3>
+                <div class="dropdown" style="height: auto;">
+                    <input class="form-control dropdown-toggle" oninput="
+                    GetPopisky(this.value, this.parentElement.parentElement, 0, 1);" autocomplete="off" placeholder="Vyberte si popisek již z vašich vybraných" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
+                    </div>
+                </div> 
+                <input class="form-control" name="description" placeholder="Popisek">                
+                <input type="hidden" name="description_id" placeholder="Popisek"/>                
+                <div class="m-5"><br><br><br><br><br><br><br></div>               
+            </div>               
+        </div>                       
         <div class="carousel-item"><div>
                 <div class="row">
                     <div class="col">

@@ -53,6 +53,21 @@ set_date("splatnost_date")
 set_date("zdanpl_date")
 set_date("vystaveni_date")
 
+function GetPopisky(text, parent) {
+  $.ajax({
+    url: '/get_popisky',
+    type: "get",
+    data: {search_text: text},
+    datatype: "json",
+    contentType : 'application/json',
+    success: function(response) {
+      HintPopisek(JSON.parse(response), parent);
+    },
+    error: function(xhr) {
+      console.log(xhr);
+    }
+  });
+}
 
 function GetHintFirmy(text, parent, je_dodavatel, je_odberatel) {
   $.ajax({
@@ -67,6 +82,32 @@ function GetHintFirmy(text, parent, je_dodavatel, je_odberatel) {
     error: function(xhr) {
       console.log(xhr);
     }
+  });
+}
+
+
+function SetPopisek(value) {
+  document.querySelector('input[name=\"description\"]').value = value["popisek"];
+  document.querySelector('input[name=\"description_id\"]').value = value["id"];
+}
+
+
+function HintPopisek(popisky, parent) {
+  let hints = parent.querySelectorAll(".hint-element");
+  if (hints) {
+    hints.forEach(function DeleteIt(hint) {
+      hint.remove();
+    });
+  }
+
+  let hintMenu = parent.querySelector("#hint-menu");
+  popisky.forEach(function AddToHintTable(value) {
+    let a = document.createElement("a");
+    a.classList.add("dropdown-item");
+    a.classList.add("hint-element");
+    a.setAttribute("onclick", SetPopisek(value)); 
+    a.textContent = value["nazev"];
+    hintMenu.appendChild(a);
   });
 }
 

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="row m-0">
+  <div class="sidebar col">
+  <div class="d-flex flex-column flex-shrink-0 p-3 text-white text-center">
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="/settings" class="nav-link text-white">
+         Všeobecné nastavení
+        </a>
+      </li>
+      <li>
+        <a href="/pridat_firmu" class="nav-link text-white">
+          Přidat firmu
+        </a>
+      </li>
+      <li>
+        <a href="/upravit_firmu" class="nav-link text-white">
+          Upravit firmu
+        </a>
+      </li>
+      <li>
+        <a href="/popisky" class="nav-link active" aria-current="page">
+          Popisky
+        </a>
+      </li>         
+    </ul>
+  </div>
+</div>
+<div class="mx-auto col-10">
+    <form method="GET" class="" action="/add_popisek">
+      <div class="mt-5 mb-5 px-5">
+        <h3 class="text-center">Přidejte popisek</h4>
+        {% if popisky %}              
+          {% for popisek in popisky %}
+            <div class="row form-row-padding">
+              <input type="text" class="form-control col-3 w-25 form-street" name="nazev" readonly value="{{ popisek['nazev'] }}"/>
+              <input type="text" class="form-control col w-75 form-cislo-popisne" name="popisek" readonly value="{{ popisek['popisek'] }}"/>
+            </div>        
+          {% endfor %}              
+        {% endif %}
+        <div class="row form-row-padding mt-2">
+            <input type="text" class="form-control col-3 w-25 form-street" name="nazev" placeholder="Název"/>
+            <input type="text" class="form-control col w-75 form-cislo-popisne" name="popisek" placeholder="Popisek"/>
+        </div>                
+        <div class="row px-3 py-2">
+          <div class="col">
+            <input type="checkbox" name="je_sifrovano" id="sifrovat_check">
+            <label for="sifrovat_check">Šifrovat</label>
+          </div>                                    
+        </div>              
+        <button class="btn-dark btn w-25 mt-4 col">Přidat</button>
+      </div>
+    </form>       	
+</div>
+</div>
+{% endblock %}

@@ -1,4 +1,7 @@
 from __future__ import print_function
+from xlsx2html import xlsx2html
+from PIL import Image
+from io import BytesIO
 import os
 from datetime import date
 import openpyxl
@@ -168,11 +171,7 @@ def write_qr_platba_code(sheet, start_row, account_number, bank_code, items, var
     # Writing the qr platba code
     response = requests.get("https://api.paylibo.com/paylibo/generator/czech/image?accountNumber="+str(int(account_number))+
                             "&bankCode="+str(int(bank_code))+"&amount="+str(ammount)+"&currency=CZK&vs="+str(var_cislo)+"&size=200")
-    file = open("qr_platba.png", "wb")
-    file.write(response.content)
-    file.close()
-
-    img = openpyxl.drawing.image.Image('qr_platba.png')
+    img = openpyxl.drawing.image.Image(Image.open(BytesIO(response.content)))
     img.width = 120
     img.height = 120
     img.anchor = 'A' + str(start_row + 1)
@@ -722,6 +721,7 @@ class ExcelWriter:
 
     def create_faktura(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, vystavila_osoba):
         # Get odberatel and dodavatel names
+        print(descriptions)
         self.dodavatel = dodavatel_list[0]
         self.odberatel = odberatel_list[0]
 
@@ -797,3 +797,9 @@ class ExcelWriter:
 
     def get_virtual_save(self):
         return save_virtual_workbook(self.wb)
+
+    
+    def get_html_table(self):
+        out_stream = xlsx2html(workbook=self.wb)
+        out_stream.seek(0)
+        return out_stream.read()  

@@ -1,9 +1,10 @@
 import mysql.connector
 from user_handler import *
-import time
+from datetime import date
 
 
 def select_data_prepared_query(sql, data):
+    conn = None
     try:
         conn = mysql.connector.connect(
           host="localhost",
@@ -24,18 +25,16 @@ def select_data_prepared_query(sql, data):
         return
 
     finally:
-        if conn.is_connected():
+        if conn:
             cursor.close()
-            conn.close()
-            print("MySQL connection is closed")
+            conn.close()            
                  
-
 
 def decrypt_mysql_dict(data_key, result):
     encryptor = Encryptor(data_key)
     decrypted_result = []   
 
-    for listed_dict in result:
+    for  listed_dict in result:
         if listed_dict["je_sifrovano"]:
             dict_result = encryptor.decrypt_dict(listed_dict)
             decrypted_result.append(dict_result)
@@ -54,6 +53,7 @@ def get_mysql_data_dict(rows, column_names):
 
 
 def database_add_firma(user_data, firma):
+    conn = None
     try:
         conn = mysql.connector.connect(
           host="localhost",
@@ -99,10 +99,9 @@ def database_add_firma(user_data, firma):
         print(error)
         return "error"
     finally:
-        if conn.is_connected():
+        if conn:
             cursor.close()
-            conn.close()
-            print("MySQL connection is closed")    
+            conn.close()                
 
 
 def get_firma_data_from_id(user_data, id):
@@ -136,7 +135,6 @@ def get_firma_data_from_id(user_data, id):
     return result
 
 
-
 def get_user_firmy(user_data):
     sql = "SELECT * FROM firmy WHERE user_id=%s;"
     data = (user_data["id"],)
@@ -146,6 +144,56 @@ def get_user_firmy(user_data):
     return result
 
 
+def database_add_popisek(user_data, popisek):
+    conn = None
+    try:
+        conn = mysql.connector.connect(
+          host="localhost",
+          user="root",
+          password="",
+          database="faktury"
+        )        
+        cursor = conn.cursor(prepared=True)
+
+        # Add firma
+        sql_insert_query = "INSERT INTO popisky (user_id,nazev,popisek,je_sifrovano) VALUES (%s,%s,%s,%s)"
+
+        if popisek["je_sifrovano"]:
+            encryptor = Encryptor(user_data["data_key"])
+            # Handling data which we dont encrypt
+            temp_dict = {
+                "je_sifrovano": popisek["je_sifrovano"],
+            }
+            del popisek["je_sifrovano"]
+            popisek = encryptor.encrypt_dict(popisek)
+            popisek = {**popisek, **temp_dict}
+            print(popisek)
+        
+
+        # Encrypt the data
+        data = (user_data["id"], popisek["nazev"], popisek["popisek"], popisek["je_sifrovano"])
+        cursor.execute(sql_insert_query, data)
+        conn.commit()
+        return "success"
+
+    except mysql.connector.Error as error:
+        print(error)
+        return "error"
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()                
+
+
+def get_user_popisky(user_data):
+    sql = "SELECT * FROM popisky WHERE user_id=%s;"
+    data = (user_data["id"],)
+    result = select_data_prepared_query(sql, data)
+    if result:
+        return decrypt_mysql_dict(user_data["data_key"], result)      
+    return result    
+
+
 def get_user_faktury(user_data):
     sql = "SELECT * FROM faktury WHERE user_id=%s;"
     data = (user_data["id"],)
@@ -153,28 +201,64 @@ def get_user_faktury(user_data):
     return result 
 
 
-def get_user_firmy_names(user_data, search_text, je_dodavatel, je_odberatel):
+def filter_user_firmy(result, search_text):
+    # Filter_decrypted_data
+    filtered_result = []
+    for resulted in result:
+        if search_text.lower() in resulted["nazev"].lower():
+            filtered_result.append(resulted)    
+
+    return filtered_result   
+
+def get_user_firmy_names(user_data, je_dodavatel, je_odberatel):
     sql = "SELECT id,nazev,je_sifrovano FROM firmy WHERE user_id=%s AND (je_dodavatel=%s OR je_odberatel=%s);"
     data = (user_data["id"], je_dodavatel, je_odberatel)
-    result = select_data_prepared_query(sql, data)
-    
+    result = select_data_prepared_query(sql, data)      
     if result:
-        decrypted_result = decrypt_mysql_dict(user_data["data_key"], result)   
+        result = decrypt_mysql_dict(user_data["data_key"], result)   
+    return result          
+
+
+def get_database_popisky(user_data, search_text):
+    sql = "SELECT id,nazev,popisek,je_sifrovano FROM popisky WHERE user_id=%s;"
+    data = (user_data["id"],)
+    result = select_data_prepared_query(sql, data)
+
+    if result:
+        decrypted_result = decrypt_mysql_dict(user_data["data_key"], result)
         # Filter_decrypted_data
         filtered_result = []
         for result in decrypted_result:
             if search_text.lower() in result["nazev"].lower():
                 filtered_result.append(result)    
-
         return filtered_result           
-    return result          
+    return result       
+
+
+def get_cislo_faktury(user_data):
+    # Get last number from database
+    sql = "SELECT MAX(cislo_faktury) FROM `faktury` WHERE user_id=%s"
+    data = (user_data["id"],)
+    last_cislo_faktury = select_data_prepared_query(sql, data)[0]["MAX(cislo_faktury)"]
+    
+    # Set default number
+    cislo_faktury = str(date.today().year)+"001"
+    if last_cislo_faktury and type(last_cislo_faktury) != int:
+        try:
+            # Try to convert to int
+            cislo_int = int(last_cislo_faktury)
+            cislo_faktury = cislo_int + 1
+        except ValueError:
+            pass
+
+    return cislo_faktury
 
 
 def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano):
     print("posting to faktura table")
     dodavatel_id = args.get("dodavatel_id")
     odberatel_id = args.get("odberatel_id")
-    faktura_numbering = args.get("faktura_numbering")
+    faktura_numbering = args.get("faktura_numbering") if args.get("faktura_numbering") else get_cislo_faktury(user_data)
 
     # Checkboxes
     qr_platba = 1 if args.get("qr_platba") == "on" else 0
@@ -185,16 +269,28 @@ def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano):
     vystaveni_date = args.get("splatnost_date")
     zdanpl_date = args.get("zdanpl_date")
     splatnost_date = args.get("vystaveni_date")
+    description_id = args.get("description_id")
 
-    # Add firma
-    sql_insert_query = """INSERT INTO faktury 
-                            (user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,
-                            datum_vystaveni,datum_zdanpl,datum_splatnosti,qr_platba,vystaveno, je_sifrovano)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+    if description_id == "":
+        # Add firma
+        sql_insert_query = """INSERT INTO faktury  
+                                (user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,
+                                datum_vystaveni,datum_zdanpl,datum_splatnosti,qr_platba,vystaveno,je_sifrovano)
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
-    # Encrypt the data
-    data = (user_data["id"], faktura_numbering, dodavatel_id, odberatel_id, typ_faktury, dodavatel_dph,
-            vystaveni_date, zdanpl_date, splatnost_date, qr_platba, vystavila_osoba, je_sifrovano)
+        # Encrypt the data
+        data = (user_data["id"], faktura_numbering, dodavatel_id, odberatel_id, typ_faktury, dodavatel_dph,
+                vystaveni_date, zdanpl_date, splatnost_date, qr_platba, vystavila_osoba, je_sifrovano)
+    if description_id:
+        # Add firma
+        sql_insert_query = """INSERT INTO faktury  
+                                (user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,
+                                datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,qr_platba,vystaveno,je_sifrovano)
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+
+        # Encrypt the data
+        data = (user_data["id"], faktura_numbering, dodavatel_id, odberatel_id, typ_faktury, dodavatel_dph,
+                vystaveni_date, zdanpl_date, splatnost_date, description_id, qr_platba, vystavila_osoba, je_sifrovano)
     cursor.execute(sql_insert_query, data)
     conn.commit()
     return "success"
@@ -244,6 +340,7 @@ def post_to_items_table(user_data, args, cursor, conn, last_row, je_sifrovano):
 
 def post_faktura(user_data, args):
     print("posting faktura")
+    conn = None
     try:
         conn = mysql.connector.connect(
           host="localhost",
@@ -262,16 +359,16 @@ def post_faktura(user_data, args):
         return "error"
     
     finally:
-        if conn.is_connected():
+        if conn:
             cursor.close()
-            conn.close()
-            print("MySQL connection is closed")        
+            conn.close()                    
 
 
 def register_user(username, password):
     if not username or not password:
         return "data_error"
 
+    conn = None
     try:
         conn = mysql.connector.connect(
           host="localhost",
@@ -305,16 +402,16 @@ def register_user(username, password):
     except mysql.connector.Error as error:
         return "error"
     finally:
-        if conn.is_connected():
+        if conn:
             cursor.close()
-            conn.close()
-            print("MySQL connection is closed")    
+            conn.close()                
 
 
 def login_user(username, password):
     if not username or not password:
         return "data_error"
 
+    conn = None
     try:
         conn = mysql.connector.connect(
           host="localhost",
@@ -340,10 +437,9 @@ def login_user(username, password):
     except mysql.connector.Error as error:
         return "error"
     finally:
-        if conn.is_connected():
+        if conn:
             cursor.close()
-            conn.close()
-            print("MySQL connection is closed")  
+            conn.close()              
 
 
 def get_faktury_by_user(user_data):
@@ -353,6 +449,7 @@ def get_faktury_by_user(user_data):
 
 
 def get_polozky_by_faktura_id(user_data, faktury):
+    conn = None
     try:
         # Get conn
         conn = mysql.connector.connect(
@@ -400,13 +497,21 @@ def get_polozky_by_faktura_id(user_data, faktury):
         return "error"
 
     finally:
-        if conn.is_connected():
+        if conn:
             cursor.close()
-            conn.close()
-            print("MySQL connection is closed")  
+            conn.close()              
 
 
 def get_faktury_by_id(user_data, faktura_id):
     sql = "SELECT * FROM faktury WHERE user_id=%s and id=%s;"
     data = (user_data["id"], faktura_id)
     return select_data_prepared_query(sql, data)
+
+
+def get_popisek_by_id(user_data, popisek_id):
+    sql = "SELECT * FROM popisky WHERE user_id=%s and id=%s;"
+    data = (user_data["id"], popisek_id)
+    result = select_data_prepared_query(sql, data)
+    if result:
+        return decrypt_mysql_dict(user_data["data_key"], result)      
+    return result  

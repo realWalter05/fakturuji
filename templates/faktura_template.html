@@ -1,0 +1,435 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<style>table {border-collapse: collapse;} table td {padding: 0px}</style>
+<body id="content">
+    <img style="position:absolute;top:0.82in;left:0.76in;width:7.45in;height:4.54in" src="/static/img/vi_1.png" />
+    <img style="position:absolute;top:5.44in;left:0.76in;width:7.45in;height:2.79in" src="/static/img/vi_2.png" />
+    <img style="position:absolute;top:8.23in;left:0.76in;width:7.45in;height:1.99in" src="/static/img/vi_3.png" />
+    <img style="position:absolute;top:5.77in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_4.png" />
+    <img style="position:absolute;top:6.12in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_5.png" />
+    <img style="position:absolute;top:6.47in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_6.png" />
+    <img style="position:absolute;top:6.82in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_7.png" />
+    <img style="position:absolute;top:7.17in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_8.png" />
+    <img style="position:absolute;top:7.52in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_9.png" />
+    <img style="position:absolute;top:7.87in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_10.png" />
+    <img style="position:absolute;top:8.21in;left:0.75in;width:7.49in;height:0.04in" src="/static/img/vi_11.png" />
+    <img style="position:absolute;top:9.62in;left:5.41in;width:2.82in;height:0.01in" src="/static/img/vi_12.png" />
+    <div style="position:absolute;top:1.28in;left:0.78in;width:2.33in;line-height:0.24in;">
+        <span
+            style="font-style:normal;font-weight:bold;font-size:13pt;font-family:Cambria;color:#000000">Faktura - daňový doklad</span><span
+            style="font-style:normal;font-weight:bold;font-size:13pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:1.28in;left:7.41in;width:0.83in;line-height:0.24in;"><span
+            style="font-style:normal;font-weight:normal;font-size:13pt;font-family:Cambria;color:#000000">2022001</span><span
+            style="font-style:normal;font-weight:normal;font-size:13pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:1.78in;left:0.78in;width:0.85in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:bold;font-size:11pt;font-family:Cambria;color:#000000">Dodavatel</span><span
+            style="font-style:normal;font-weight:bold;font-size:11pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:1.78in;left:4.96in;width:0.84in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:bold;font-size:11pt;font-family:Cambria;color:#000000">Odběratel</span><span
+            style="font-style:normal;font-weight:bold;font-size:11pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.03in;left:0.78in;width:4.03in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">{{ dodavatel[0] }}
+            </span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.03in;left:4.96in;width:3.2in;;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">{{ odberatel[0] }}</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.27in;left:0.78in;width:0.91in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Táborská
+            496</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.27in;left:4.96in;width:0.92in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Příkladná
+            123</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.27in;left:7.03in;width:1.21in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">+420 506 652 123</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.51in;left:0.78in;width:0.81in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Písek 39701</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.51in;left:4.96in;width:0.86in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Praha 12345</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.51in;left:6.64in;width:1.60in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">proƟpriklad@seznam.cz</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.75in;left:0.78in;width:1.06in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000" id="zeme">Česká
+            republika</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.75in;left:4.96in;width:0.42in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Česko</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.75in;left:7.27in;width:0.97in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">proƟpriklad.cz</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.99in;left:0.78in;width:0.20in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">IČ:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.99in;left:1.15in;width:0.69in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">04501616</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.99in;left:4.96in;width:0.21in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">IČ:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:2.99in;left:5.43in;width:0.69in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">98765432</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:3.23in;left:0.78in;width:1.22in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">DIČ:
+        </span></SPAN><br /></div>
+    <div style="position:absolute;top:3.23in;left:0.78in;width:1.22in;line-height:0.20in;">
+        <DIV style="position:relative; left:0.37in;"><span
+                style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">CZ04501616</span><span
+                style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+            </span><br /></SPAN></DIV>
+    </div>
+    <div style="position:absolute;top:3.23in;left:4.96in;width:0.30in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">DIČ:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:3.23in;left:5.43in;width:0.69in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">13456789</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:3.58in;left:0.78in;width:0.45in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">Krajsky</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:3.58in;left:1.20in;width:0.54in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́ soud v
+            C</span><span style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:3.58in;left:1.70in;width:0.30in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">ƽ</span></SPAN><br />
+    </div>
+    <div style="position:absolute;top:3.58in;left:1.96in;width:0.49in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́</span></SPAN><br />
+    </div>
+    <div style="position:absolute;top:3.58in;left:2.41in;width:0.34in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̌</span></SPAN><br />
+    </div>
+    <div style="position:absolute;top:3.58in;left:2.71in;width:0.66in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́</span></SPAN><br />
+    </div>
+    <div style="position:absolute;top:3.58in;left:2.71in;width:0.66in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">ch C
+            24195</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.07in;left:0.78in;width:0.75in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Dodací
+            list:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.31in;left:0.78in;width:1.12in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Způsob
+            dopravy:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.31in;left:4.96in;width:1.16in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Datum
+            vystavení:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.31in;left:7.45in;width:0.79in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">2022-10-24</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.55in;left:0.78in;width:0.89in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Místo
+            určení:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.55in;left:4.96in;width:1.34in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Datum zdan.
+            plnění:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.55in;left:7.45in;width:0.79in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">2022-10-24</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.79in;left:0.78in;width:0.85in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Objednávky:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.79in;left:4.96in;width:1.18in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Datum splatnosti:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:4.79in;left:7.45in;width:0.79in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">2022-10-24</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.15in;left:1.10in;width:1.26in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">Označení
+            dodávky</span><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.15in;left:2.98in;width:0.64in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">Množství</span><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.15in;left:4.20in;width:0.46in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">Za
+            kus</span><span style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.15in;left:5.03in;width:0.33in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">DPH</span><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.15in;left:5.92in;width:0.60in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">Bez
+            DPH</span><span style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.15in;left:7.41in;width:0.44in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">S DPH</span><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#ffffff">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.50in;left:0.78in;width:0.48in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">asddas</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.50in;left:3.16in;width:0.28in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">100</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.50in;left:4.38in;width:0.59in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">21.00
+            Kč</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.50in;left:5.20in;width:0.23in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">1%</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.50in;left:5.84in;width:0.79in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">2,100.00
+            Kč</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:5.50in;left:7.44in;width:0.79in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">2,121.00
+            Kč</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:8.46in;left:2.09in;width:0.99in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#000000">Bankovní
+            účet</span><span style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:8.49in;left:3.91in;width:0.57in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#000000">Symbol:</span><span
+            style="font-style:normal;font-weight:bold;font-size:9pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:8.75in;left:2.09in;width:0.38in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Účet:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:8.78in;left:2.68in;width:1.51in;line-height:0.17in;"><span
+            style="font-style:normal;font-weight:normal;font-size:9pt;font-family:Cambria;color:#000000">2001587383/2010
+        </span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">var:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:8.75in;left:4.43in;width:0.28in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">654</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.01in;left:2.09in;width:0.48in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">SWIFT:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.01in;left:2.68in;width:1.05in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">789asd4564ads</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.01in;left:3.91in;width:0.43in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">konst:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.01in;left:4.43in;width:0.28in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">123</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.03in;left:6.06in;width:0.41in;line-height:0.12in;"><span
+            style="font-style:normal;font-weight:bold;font-size:6pt;font-family:Cambria;color:#636363">DPH
+            1%</span><span style="font-style:normal;font-weight:bold;font-size:6pt;font-family:Cambria;color:#636363">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:8.98in;left:7.65in;width:0.59in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">21.00
+            Kč</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.29in;left:2.09in;width:0.40in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">IBAN:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.29in;left:2.68in;width:0.77in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">123456789</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.30in;left:6.04in;width:0.43in;line-height:0.12in;"><span
+            style="font-style:normal;font-weight:bold;font-size:6pt;font-family:Cambria;color:#636363">BEZ
+            DPH</span><span style="font-style:normal;font-weight:bold;font-size:6pt;font-family:Cambria;color:#636363">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.25in;left:7.44in;width:0.79in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">2,100.00
+            Kč</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.77in;left:7.31in;width:0.92in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:bold;font-size:8pt;font-family:Cambria;color:#636363">CELKEM S
+            DPH</span><span style="font-style:normal;font-weight:bold;font-size:8pt;font-family:Cambria;color:#636363">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.95in;left:7.11in;width:1.14in;line-height:0.26in;"><span
+            style="font-style:normal;font-weight:normal;font-size:14pt;font-family:Cambria;color:#000000">2,121.00
+            Kc</span><span
+            style="font-style:normal;font-weight:normal;font-size:14pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:9.95in;left:8.19in;width:0.05in;line-height:0.26in;"><span
+            style="font-style:normal;font-weight:normal;font-size:14pt;font-family:Cambria;color:#000000">̌</span><span
+            style="font-style:normal;font-weight:normal;font-size:14pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:0.78in;width:0.98in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">Dovolujeme si
+            va</span><span style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:1.73in;width:0.80in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́ s upozornit,
+            z</span><span style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:2.48in;width:0.35in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̌ e v
+            pr</span><span style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:2.80in;width:0.35in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̌
+            ı́pade</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:3.10in;width:0.54in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̌</span></SPAN><br />
+    </div>
+    <div style="position:absolute;top:10.31in;left:3.60in;width:1.24in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̌ enı́ data
+            splatnosti Va</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:4.80in;width:0.36in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́ m
+            mu</span><span style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:5.12in;width:0.11in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̊ z</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:5.18in;width:0.38in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̌ eme
+            u</span><span style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:5.51in;width:0.10in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́ c</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:5.57in;width:0.47in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">̌</span></SPAN><br />
+    </div>
+    <div style="position:absolute;top:10.31in;left:5.57in;width:0.47in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">tovat
+            za</span><span style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:6.01in;width:0.39in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́
+            konny</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:6.36in;width:0.14in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́ u</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:6.46in;width:0.86in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">́ rok z
+            prodlenı́.</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.57in;left:0.78in;width:0.75in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Zíka
+            Václav</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:11.01in;left:0.78in;width:0.55in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">Převzal:</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:11.01in;left:2.68in;width:0.28in;line-height:0.20in;"><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">dne</span><span
+            style="font-style:normal;font-weight:normal;font-size:10pt;font-family:Calibri;color:#000000">
+        </span><br /></SPAN></div>
+    <img style="position:absolute;top:8.41in;left:0.76in;width:1.31in;height:1.31in" src="/static/img/ri_1.png" />
+    <div style="position:absolute;top:3.58in;left:2.41in;width:0.34in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+            jovicı</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:3.58in;left:1.70in;width:0.30in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+            esky</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:3.58in;left:1.96in;width:0.49in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000"> ch
+            Bude</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    <div style="position:absolute;top:10.31in;left:3.10in;width:0.54in;line-height:0.15in;"><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+            nedodrz</span><span
+            style="font-style:normal;font-weight:normal;font-size:8pt;font-family:Cambria;color:#000000">
+        </span><br /></SPAN></div>
+    </body>
+<script>
+    var doc = new jsPDF();
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+
+    $('#cmd').click(function () {
+        doc.fromHTML($('#content').html(), 0, 0, {
+            'width':  ,
+                'elementHandlers': specialElementHandlers
+        },
+            function(bla){doc.save('saveInCallback.pdf');});
+    });
+
+    // This code is collected but useful, click below to jsfiddle link.
+</script>
+</html>

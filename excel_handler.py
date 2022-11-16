@@ -2,31 +2,7 @@ import requests
 import xml.etree.ElementTree as ET
 import mysql.connector, io, string, random
 from excel_writer import ExcelWriter
-from database_handler import get_firma_data_from_id
-
-
-def get_dodavatel_list(args):
-    dodavatel = args.get("dodavatel_")
-    dodavatel_ico = args.get("dodavatel_ico")
-    dodavatel_dic = args.get("ododavatel_dic")
-    dodavatel_street = args.get("dodavatel_street")
-    dodavatel_city = args.get("dodavatel_city")
-    dodavatel_country = args.get("dodavatel_country")
-    dodavatel_rejstrik = args.get("dodavatel_rejstrik")
-    dodavatel_telefon = args.get("dodavatel_telefon")
-    dodavatel_email = args.get("dodavatel_email")
-    dodavatel_web = args.get("dodavatel_web")
-
-    account_number = args.get("account_number")
-    bank_number = args.get("bank_number")
-    konst_cislo = args.get("konst_cislo")
-    var_cislo = args.get("var_cislo")
-    iban = args.get("iban")
-    swift = args.get("swift")
-    
-    dodavatel_list = [dodavatel, dodavatel_street, dodavatel_city, dodavatel_country, dodavatel_ico, dodavatel_dic, dodavatel_rejstrik, dodavatel_telefon, dodavatel_email, dodavatel_web, 
-                      account_number, bank_number, iban, swift, konst_cislo, var_cislo]
-    return dodavatel_list
+from database_handler import get_firma_data_from_id, get_popisek_by_id
 
 
 def get_firma_dict(args):
@@ -70,21 +46,6 @@ def get_firma_dict(args):
     }   
 
 
-def get_odberatel_list(args):
-    odberatel = args.get("odberatel_")
-    odberatel_ico = args.get("odberatel_ico")
-    odberatel_dic = args.get("oodberatel_dic")
-    odberatel_street = args.get("odberatel_street")
-    odberatel_city = args.get("odberatel_city")
-    odberatel_country = args.get("odberatel_country")
-    odberatel_rejstrik = args.get("odberatel_rejstrik")
-    odberatel_telefon = args.get("odberatel_telefon")
-    odberatel_email = args.get("odberatel_email")
-    odberatel_web = args.get("odberatel_web")
-    odberatel_list = [odberatel, odberatel_street, odberatel_city, odberatel_country, odberatel_ico, odberatel_dic,
-                      odberatel_rejstrik, odberatel_telefon, odberatel_email, odberatel_web]    
-    return odberatel_list
-
 def get_items(args):
     items = []
     class Item():
@@ -105,7 +66,7 @@ def get_items(args):
         item = Item(polozky[i], count[i], price[i], dphs[i], currencies[i])
         items.append(item)  
 
-    return items  
+    return items
 
 
 def create_faktura_excel(excel, user_data, faktura_data, items):
@@ -128,9 +89,15 @@ def create_faktura_excel(excel, user_data, faktura_data, items):
                     odberatel[2], f"{odberatel[8]} {odberatel[9]}", odberatel[10],
                      odberatel[11], odberatel[12]]
     
+    description = ""
+    if faktura_data["description_id"] != "":
+        popisek_id = get_popisek_by_id(user_data, faktura_data["description_id"])
+        if popisek_id:
+            description = popisek_id[0]["popisek"]
+
     # Faktura in excel
     excel.create_faktura(dodavatel_list, odberatel_list, items, 1 if faktura_data["typ"] == 1 else 0, 
-                        faktura_data["dodavatel_dph"], faktura_data["qr_platba"], date, "", faktura_data["cislo_faktury"],
+                        faktura_data["dodavatel_dph"], faktura_data["qr_platba"], date, description, faktura_data["cislo_faktury"],
                         faktura_data["vystaveno"])                                              
     print("done")  
 
