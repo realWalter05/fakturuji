@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, send_file, make_response, session, send_file, abort, Response, render_template_string
+import pdfkit
 from excel_writer import ExcelWriter
 from excel_handler import *
 from database_handler import *
 from user_handler import *
 import json
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "I\x99\x1a\x88o\x95\xcdIr\xbe\xed\xa8\xbav\x82G1\x98\x17\xb5\x7f\rJ~"
@@ -91,36 +94,63 @@ def get_faktura():
 	return output
 
 
-@app.route("/print_faktura")
+@app.route("/get_faktura_html")
 @login_required
-def print_faktura(): 	
+def get_faktura_html(): 	
 	faktura_id = request.args.get('id')
-	dodavatel = get_firma_data_from_id(session["user_data"], faktura_id)
-	odberatel = get_firma_data_from_id(session["user_data"], faktura_id)
-	return render_template("faktura_templatee.html", dodavatel=dodavatel, odberatel=odberatel)	
+	faktura_data = get_faktura_by_id(session["user_data"], faktura_id)
+	dodavatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["dodavatel"])
+	odberatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["odberatel"])
+	polozky = get_polozky_by_faktura_id(session["user_data"], faktura_data)[0]
+	polozky = get_prices_polozky(polozky)
+	
+	faktura_data[0]["total_bez_dph"] = 0
+	faktura_data[0]["total_s_dph"] = 0
+	for polozka in polozky:
+		faktura_data[0]["total_bez_dph"] += polozka["bez_dph"]
+		faktura_data[0]["total_s_dph"] += polozka["s_dph"]
+
+	faktura_data[0]["datum_vystaveni"] = faktura_data[0]["datum_vystaveni"].strftime("%d.%m.%Y")
+	faktura_data[0]["datum_zdanpl"] = faktura_data[0]["datum_zdanpl"].strftime("%d.%m.%Y")
+	faktura_data[0]["datum_splatnosti"] = faktura_data[0]["datum_splatnosti"].strftime("%d.%m.%Y")
+	return render_template("faktura_template.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky)
+
 
 
 @app.route('/get_faktura_pdf')
 @login_required
 def get_faktura_pdf():
-	import pdfkit
 	path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
 	config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-	options = {
-	    'page-height': '210mm', 
-	    'page-width': '148mm',
-	}
+	options = {'page-height': '210mm', 'page-width': '148mm'}
 
-	resp = Response(pdfkit.from_file('./templates/faktura_templatee.html', options=options, configuration=config), mimetype="application/pdf",
-					headers={"Content-Disposition":"attachment;filename=outfile.pdf"})	
-	print(render_template_string('./templates/faktura_templatee.html'))
-	return resp
+	faktura_id = request.args.get('id')
+	faktura_data = get_faktura_by_id(session["user_data"], faktura_id)
+	dodavatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["dodavatel"])
+	odberatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["odberatel"])
+	polozky = get_polozky_by_faktura_id(session["user_data"], faktura_data)[0]
+	polozky = get_prices_polozky(polozky)
+	
+	faktura_data[0]["total_bez_dph"] = 0
+	faktura_data[0]["total_s_dph"] = 0
+	for polozka in polozky:
+		faktura_data[0]["total_bez_dph"] += polozka["bez_dph"]
+		faktura_data[0]["total_s_dph"] += polozka["s_dph"]
+
+	faktura_data[0]["datum_vystaveni"] = faktura_data[0]["datum_vystaveni"].strftime("%d.%m.%Y")
+	faktura_data[0]["datum_zdanpl"] = faktura_data[0]["datum_zdanpl"].strftime("%d.%m.%Y")
+	faktura_data[0]["datum_splatnosti"] = faktura_data[0]["datum_splatnosti"].strftime("%d.%m.%Y")
+
+	print(f"{faktura_data[0]} polozky")
+	rendered = render_template("faktura_template.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky)
+	pdf = pdfkit.from_string(rendered, options=options, configuration=config)
+	return Response(pdf, mimetype="application/pdf",headers={"Content-Disposition":"attachment;filename=faktura.pdf"})	
 
 
 @app.route("/")
 def index():
 	if "user_data" in session:
-		faktury = get_user_faktury(session["user_data"])[0:3]
+		faktury = get_user_faktury(session["user_data"])[-3:]
 		for faktura in faktury:
 			dodavatel_id = int(faktura["dodavatel"])
 			odberatel_id = int(faktura["odberatel"])
@@ -159,7 +189,6 @@ def pridat_firmu():
 @login_required
 def upravit_firmu():
 	firmy = get_user_firmy(session["user_data"])
-	print(firmy)
 	return render_template("upravit_firmu.html", firmy=firmy)
 
 

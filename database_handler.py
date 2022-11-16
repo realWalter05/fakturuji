@@ -135,6 +135,15 @@ def get_firma_data_from_id(user_data, id):
     return result
 
 
+def get_faktura_by_id(user_data, faktura_id):
+    sql = "SELECT * FROM faktury WHERE user_id=%s AND id=%s;"
+    data = (user_data["id"], faktura_id)
+    result = select_data_prepared_query(sql, data)
+    if result:
+        return decrypt_mysql_dict(user_data["data_key"], result)
+    return result
+
+
 def get_user_firmy(user_data):
     sql = "SELECT * FROM firmy WHERE user_id=%s;"
     data = (user_data["id"],)

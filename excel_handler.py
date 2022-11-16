@@ -109,6 +109,18 @@ def get_all_faktury(user_data, faktury, polozky):
     return excel
 
 
+def get_prices_polozky(polozky):
+    for polozka in polozky:
+        polozka["bez_dph"] = round(int(polozka["pocet"]) * int(polozka["cena"]), 2)
+        polozka["s_dph"] = round(polozka["bez_dph"] + (polozka["bez_dph"] / 100) * int(polozka["dph"]), 2)
+    return polozky
+
+
+def change_date_format(date):
+    splitted =  reversed(date.split("-"))
+    return splitted[1] + ". " + splitted[2] + ". " + splitted[3]
+
+
 def auto_fill(user_input, title):
    # Request to ares
    if user_input:

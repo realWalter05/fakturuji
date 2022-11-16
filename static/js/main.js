@@ -1,4 +1,28 @@
 
+function PrintFaktura(faktura_id) {
+  $.ajax({
+    url: '/get_faktura_html',
+    type: "get",
+    data: {id: faktura_id},
+    datatype: "text",
+    contentType : 'application/json',
+    success: function(content) {
+      var myWindow = window.open('','','width=1200,height=600');
+      myWindow.document.write(content);
+    
+      myWindow.document.close();
+      myWindow.print();
+      myWindow.onafterprint = function(){
+        myWindow.close();
+     }
+    },
+    error: function(xhr) {
+      console.log(xhr);
+    }
+  });   
+}
+
+
 function GetFirmaData(parent) {
   console.log(parent);
   let text = parent.querySelector(".form-nazev").value;

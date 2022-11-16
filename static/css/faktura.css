@@ -39,6 +39,10 @@ table td {
     font-weight:bold;
 }
 
+#faktura_row td:nth-child(2) {
+    text-align: right;
+}
+
 #faktura_numbering {
     text-align: right;
 }
