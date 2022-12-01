@@ -1,5 +1,4 @@
 from __future__ import print_function
-from xlsx2html import xlsx2html
 from PIL import Image
 from io import BytesIO
 import os
@@ -151,7 +150,7 @@ def fill_out_account_info(sheet, dodavatel_df, start_row, faktura_variable, colu
             sheet["G" + str(start_row + 2)].value = faktura_variable
     else:
         sheet["G" + str(start_row + 2)].value = dodavatel_df.iloc[0]["var_cislo"]
-    sheet["G" + str(start_row + 3)].value = dodavatel_df.iloc[0]["konst_cislo"] 
+    sheet["G" + str(start_row + 3)].value = dodavatel_df.iloc[0]["konst_cislo"]
 
 
 def write_qr_platba_code(sheet, start_row, account_number, bank_code, items, var_cislo, prenesena_dph):
@@ -399,7 +398,7 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
 
     #sheet["B" + str(start_row + 7)].alignment = Alignment(horizontal="left")
     sheet["B" + str(start_row + 8)].alignment = Alignment(horizontal="left", shrinkToFit=True)
-    sheet["A" + str(start_row + 9)].alignment = Alignment(horizontal="left", shrinkToFit=True)    
+    sheet["A" + str(start_row + 9)].alignment = Alignment(horizontal="left", shrinkToFit=True)
 
     sheet["D" + str(start_row + 5)].alignment = Alignment(horizontal="right", shrinkToFit=True)
     sheet["D" + str(start_row + 6)].alignment = Alignment(horizontal="right", shrinkToFit=True)
@@ -408,7 +407,7 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["D" + str(start_row + 13)].alignment = Alignment(horizontal="right")
     sheet["D" + str(start_row + 14)].alignment = Alignment(horizontal="right")
     sheet["D" + str(start_row + 15)].alignment = Alignment(horizontal="right")
-    sheet["D" + str(start_row + 16)].alignment = Alignment(horizontal="right")    
+    sheet["D" + str(start_row + 16)].alignment = Alignment(horizontal="right")
 
     sheet["I" + str(start_row + 8)].alignment = Alignment(horizontal="left", shrinkToFit=True)
     sheet["I" + str(start_row + 9)].alignment = Alignment(horizontal="left", shrinkToFit=True)
@@ -417,7 +416,7 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["H" + str(start_row + 4)].alignment = Alignment(shrinkToFit=True)
     sheet["H" + str(start_row + 5)].alignment = Alignment(shrinkToFit=True)
     sheet["H" + str(start_row + 6)].alignment = Alignment(shrinkToFit=True)
-    sheet["H" + str(start_row + 7)].alignment = Alignment(shrinkToFit=True)    
+    sheet["H" + str(start_row + 7)].alignment = Alignment(shrinkToFit=True)
     sheet["H" + str(start_row + 10)].font = Font(size=9, bold=True)
     sheet["H" + str(start_row + 10)].alignment = Alignment(vertical="center", wrap_text=True)
 
@@ -485,10 +484,10 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
 
         sheet["D" + str(start_row + 2)].alignment = Alignment(shrinkToFit=True)
         sheet["D" + str(start_row + 3)].alignment = Alignment(shrinkToFit=True)
-        sheet["D" + str(start_row + 4)].alignment = Alignment(shrinkToFit=True)        
+        sheet["D" + str(start_row + 4)].alignment = Alignment(shrinkToFit=True)
 
         sheet["F" + str(start_row + 1)].alignment = Alignment(vertical="center")
-        sheet["F" + str(start_row + 2)].alignment = Alignment(vertical="center")    
+        sheet["F" + str(start_row + 2)].alignment = Alignment(vertical="center")
 
         sheet["A" + str(start_row + 1)].value = "Bankovní účet"
         sheet["A" + str(start_row + 2)].value = "Číslo účtu:"
@@ -517,7 +516,7 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
         sheet["E" + str(start_row + 2)].alignment = Alignment(horizontal="left", shrinkToFit=True)
         sheet["E" + str(start_row + 2)].font = Font(size=10)
         sheet["E" + str(start_row + 3)].alignment = Alignment(horizontal="left", shrinkToFit=True)
-        sheet["E" + str(start_row + 4)].alignment = Alignment(horizontal="left", shrinkToFit=True)    
+        sheet["E" + str(start_row + 4)].alignment = Alignment(horizontal="left", shrinkToFit=True)
 
     # Merging columns in the second section
     sheet.merge_cells(start_row=start_row + 1, start_column=6, end_row=start_row + 1, end_column=8)
@@ -702,7 +701,7 @@ class ExcelWriter:
         # Creates the workbook
         self.wb = openpyxl.Workbook()
         self.delete_empty_sheet()
-        
+
         self.dodavatel = None
         self.odberatel = None
 
@@ -722,16 +721,23 @@ class ExcelWriter:
     def create_faktura(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, vystavila_osoba):
         # Get odberatel and dodavatel names
         print(descriptions)
-        self.dodavatel = dodavatel_list[0]
-        self.odberatel = odberatel_list[0]
+        if dodavatel_list:
+            self.dodavatel = dodavatel_list[0]
 
-        # Convert them to pandas
-        self.odberatele = pd.DataFrame([odberatel_list], columns=["odberatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web"])
-        self.dodavatele = pd.DataFrame([dodavatel_list], columns=["dodavatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web","cislo_uctu","kod_banky","iban","swift","var_cislo","konst_cislo"])
+            # Convert them to pandas
+            self.dodavatele = pd.DataFrame([dodavatel_list], columns=["dodavatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web","cislo_uctu","kod_banky","iban","swift","var_cislo","konst_cislo"])
 
-        # Set rows with dodavatel/odberatel in pandas dataframe
-        self.dodavatel_df = self.dodavatele[(self.dodavatele["dodavatel"] == self.dodavatel)]
-        self.odberatel_df = self.odberatele[(self.odberatele["odberatel"] == self.odberatel)]
+            # Set rows with dodavatel/odberatel in pandas dataframe
+            self.dodavatel_df = self.dodavatele[(self.dodavatele["dodavatel"] == self.dodavatel)]
+
+        if odberatel_list:
+            self.odberatel = odberatel_list[0]
+
+            # Convert them to pandas
+            self.odberatele = pd.DataFrame([odberatel_list], columns=["odberatel","ulice","mesto","zeme","ico","dic","zapis_rejstrik","telefon","email","web"])
+
+            # Set rows with dodavatel/odberatel in pandas dataframe
+            self.odberatel_df = self.odberatele[(self.odberatele["odberatel"] == self.odberatel)]
 
         self.set_start_row()
         self.set_faktura_numbering(def_faktura_numbering)
@@ -743,7 +749,7 @@ class ExcelWriter:
         except Exception as e:
             self.status = "errQrPlatba"
             print(f"err qr platba {e}")
-            return        
+            return
 
         # Fill dodavatel
         fill_out_dodavatele(self.sheet, self.dodavatel_df, self.start_row)
@@ -766,15 +772,15 @@ class ExcelWriter:
         if faktura_numbering:
             # Set by user
             self.faktura_numbering = faktura_numbering
-        
+
         elif self.dodavatel in self.wb:
             # Already existing
-            self.faktura_numbering = get_faktura_number(self.sheet) 
+            self.faktura_numbering = get_faktura_number(self.sheet)
 
         else:
             # Setting default by us
             self.faktura_numbering = str(date.today().year)+"001"
-        
+
 
     def set_sheet(self):
         if self.dodavatel in self.wb:
@@ -789,7 +795,7 @@ class ExcelWriter:
             if not len(list(self.wb["Sheet"].rows)) and not len(list(self.wb["Sheet"].columns)):
                 self.wb.remove(self.wb["Sheet"])
 
-    
+
     def save_faktura_in_excel(self):
         # Saving the new faktura
         self.wb.save("faktura" + secrets.token_hex(4) + ".xlsx")
@@ -797,9 +803,3 @@ class ExcelWriter:
 
     def get_virtual_save(self):
         return save_virtual_workbook(self.wb)
-
-    
-    def get_html_table(self):
-        out_stream = xlsx2html(workbook=self.wb)
-        out_stream.seek(0)
-        return out_stream.read()  

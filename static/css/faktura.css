@@ -1,69 +1,64 @@
-body {
-    padding: 0;
-    margin: 0;
-}
-
-table {
+#faktura_template {
     width: 45rem;
     margin: 2.4rem 0 0 2rem;
     table-layout: fixed;
     font-style:normal;
     font-family: Cambria;
-    font-size: 9.5pt;    
-    border-collapse:collapse; 
+    font-size: 9.5pt;
+    border-collapse:collapse;
 }
 
-table tr {
+#faktura_template tr {
     height: 1.35rem;
 }
 
-table td {
+#faktura_template td {
     padding: 0;
     margin: 0;
 }
 
-#header {
+#faktura_template #header {
     background: rgb(21, 128, 220);
     height: 2.2rem;
 }
 
-#faktura_row {
+#faktura_template #faktura_row {
     height: 2.4rem;
     font-size: 14pt;
     font-family: Cambria;
     color:#000000
 }
 
-#faktura_row td:first-child {
+#faktura_template #faktura_row td:first-child {
     font-style:normal;
     font-weight:bold;
 }
 
-#faktura_row td:nth-child(2) {
+#faktura_template #faktura_row td:nth-child(2) {
     text-align: right;
 }
 
-#faktura_numbering {
+#faktura_template #faktura_numbering {
     text-align: right;
 }
 
-.title_row {
+#faktura_template .title_row {
     height: 1.8rem;
 }
 
-.title_row td {
+#faktura_template .title_row td {
     font-weight: bold;
     font-style:normal;
     font-family: Cambria;
     font-size: 12pt;
 }
 
-.big_row {
+#faktura_template .big_row {
     height: 2.3rem;
     font-size: 8.5pt;
 }
 
-.items_header {
+#faktura_template .items_header {
     background: rgb(21, 128, 220);
     color: #fff;
     font-weight: 600;
@@ -72,7 +67,7 @@ table td {
     font-size: 9pt;
 }
 
-.items {
+#faktura_template .items {
     background: rgb(243, 243, 243);
     text-align: center;
     font-size: 9pt;
@@ -80,59 +75,59 @@ table td {
 
 }
 
-.items td:first-child {
+#faktura_template .items td:first-child {
     text-align: left;
 }
 
-.bank_title {
+#faktura_template .bank_title {
     font-weight: bold;
 
 }
 
-.dph_td {
+#faktura_template .dph_td {
     font-weight: 600;
     text-align: right;
     font-size: 7pt;
-    color: gray;    
+    color: gray;
 }
 
 
-.left {
+#faktura_template .left {
     text-align: left;
 }
 
-.right {
+#faktura_template .right {
     text-align: right;
 }
 
-.underlined {
+#faktura_template .underlined {
     border-bottom: #000000 1px solid;
 }
 
-.celkem_s_dph {
+#faktura_template .celkem_s_dph {
     font-weight: 600;
     font-size: 9pt;
     text-align: right;
 }
 
-.cambria {
+#faktura_template .cambria {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
-.full_price {
+#faktura_template .full_price {
     font-size: 15pt;
-    text-align: right;    
+    text-align: right;
 }
 
-.dodatek {
+#faktura_template .dodatek {
     font-size: 9pt;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
-.name {
+#faktura_template .name {
     height: 2.2rem;
 }
 
-.prevzal {
+#faktura_template .prevzal {
     height: 2.2rem;
 }

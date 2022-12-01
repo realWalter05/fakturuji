@@ -2,7 +2,8 @@
 
 {% block main %}
 <div class="w-100" id="background-image-second">
-    <form method="GET" class="p-4 w-75 m-auto" action="/process_faktura">
+    <form method="GET" class="p-4 w-75 m-auto" action="/process_upravit_fakturu">
+        <input type="hidden" name="faktura_id" id="faktura_id" value="{{ faktura_data['id'] if faktura_data else '' }}"/>
         <div id="carouselExampleControls" class="carousel" data-bs-ride="carousel" data-bs-interval="false">
             <div class="carousel-inner mt-5">
         <div class="carousel-item active"><div class="row ">
@@ -21,7 +22,7 @@
                     <input type="text" class="form-control form-dic" name="dodavatel_dic" placeholder="DIČ" value="{{ dodavatel[2] if dodavatel else '' }}"/>
                     <div class="row form-row-padding">
                         <input type="text" class="form-control col form-street" name="dodavatel_street" placeholder="Ulice" value="{{ dodavatel[3] if dodavatel else '' }}"/>
-                        <input type="text" class="form-control col form-cislo-popisne" name="dodavatel_cislo_popisne" placeholder="Číslo popisné" value="{{ dodavatel[4] if dodavatel else '' }}"/>
+                        <input type="text" clas0="1orm-control col form-cislo-popisne" name="dodavatel_cislo_popisne" placeholder="Číslo popisné" value="{{ dodavatel[4] if dodavatel else '' }}"/>
                     </div>
                     <div class="row form-row-padding">
                         <input type="text" class="form-control col form-city" name="dodavatel_city" placeholder="Město" value="{{ dodavatel[5] if dodavatel else '' }}"/>
@@ -152,7 +153,7 @@
                         </div>
                         <div class="row">
                         	<label class="col" for="zdanpl_date">Zdanitelné plnění</label>
-                        	<input type="date" class="col form-control" name="zdanpl_date" id="zdanpl_date" value="{{ faktura_data['datum_zdanpl']  if faktura_data else '' }}"/>
+                        	<input type="date" class="col form-control" name="zdanpl_date" id="zdanpl_date" value="{{ faktura_data['datum_zdanpl'] }}"/>
                         </div>
                         <div class="row">
                         	<label class="col" for="splatnost_date">Datum splatnosti</label>
@@ -178,7 +179,7 @@
                                 </label>
                             </div>
                     		<div class="form-check col">
-                    		    <input class="form-check-input" type="checkbox"  value="{{ (1 if faktura_data['dodavatel_dph'] else 0) if faktura_data else '' }}" name="dodavatel_dph" id="dodavatel_dph">
+                    		    <input class="form-check-input" type="checkbox"  value="{{ 1 if faktura_data['dodavatel_dph'] else 0 }}" name="dodavatel_dph" id="dodavatel_dph">
                     		    <label class="form-check-label" for="dodavatel_dph">
                     		    Dodavatel je plátcem DPH
                     		    </label>
@@ -186,13 +187,13 @@
                         </div>
                         <div class="row m-1 mb-5">
                             <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="qr_platba" id="qr_platba" value="{{ (1 if faktura_data['dodavatel_dph'] else 0) if faktura_data else '' }}">
+                                <input class="form-check-input" type="checkbox" name="qr_platba" id="qr_platba" value="{{ 1 if faktura_data['dodavatel_dph'] else 0 }}">
                                 <label class="form-check-label" for="qr_platba">
                                 QR platba
                                 </label>
                             </div>
                             <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="je_sifrovano" id="je_sifrovano" value="{{ (1 if faktura_data['je_sifrovano'] else 0) if faktura_data else '' }}">
+                                <input class="form-check-input" type="checkbox" name="je_sifrovano" id="je_sifrovano" value="{{ 1 if faktura_data['je_sifrovano'] else 0 }}">
                                 <label class="form-check-label" for="je_sifrovano">
                                 Je šifrováno
                                 </label>

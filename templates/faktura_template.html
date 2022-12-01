@@ -8,8 +8,8 @@
     <title>Faktura</title>
 
 </head>
-<body>
-    <table border="0">
+<body style="margin: 0; padding: 0;">
+    <table border="0" id="faktura_template">
         <colgroup>
             <col style="width:1.8rem">
             <col style="width:6.1rem">
@@ -23,13 +23,13 @@
             <col style="width:0.8rem">
             <col style="width:2.8rem">
             <col style="width:5.8rem">
-          </colgroup>  
+          </colgroup>
         <tr id="header"><td colspan="12"></td></tr>
         <tr id="faktura_row">
             <td colspan="10">Faktura - daňový doklad</td>
             <td colspan="2">{{ faktura_data["cislo_faktury"] }}</td>
         </tr>
-        <tr style="height: 1rem"></tr>        
+        <tr style="height: 1rem"></tr>
         <tr class="title_row">
             <td colspan="5">Dodavatel</td>
             <td colspan="2"></td>
@@ -47,8 +47,8 @@
             <td colspan="2"></td>
             <td colspan="2">{{ odberatel[3] }} {{ odberatel[4] }}</td>
             <td></td>
-            <td colspan="2" class="right">{{ odberatel[10] }}</td>            
-        </tr>        
+            <td colspan="2" class="right">{{ odberatel[10] }}</td>
+        </tr>
         <tr>
             <td colspan="2">{{ dodavatel[5] }} {{ dodavatel[6] }}</td>
             <td></td>
@@ -56,8 +56,8 @@
             <td colspan="2"></td>
             <td colspan="2">{{ odberatel[5] }} {{ odberatel[6] }}</td>
             <td></td>
-            <td colspan="2" class="right">{{ odberatel[12] }}</td>            
-        </tr>    
+            <td colspan="2" class="right">{{ odberatel[12] }}</td>
+        </tr>
         <tr>
             <td colspan="2">{{ dodavatel[7] }}</td>
             <td></td>
@@ -65,15 +65,15 @@
             <td colspan="2"></td>
             <td colspan="2">{{ odberatel[7] }}</td>
             <td></td>
-            <td colspan="2" class="right">{{ odberatel[13] }}</td>            
-        </tr>   
+            <td colspan="2" class="right">{{ odberatel[13] }}</td>
+        </tr>
         <tr>
             <td>IČ:</td>
             <td>{{ dodavatel[1] }}</td>
             <td colspan="5"></td>
             <td>IČ:</td>
-            <td>{{ odberatel[1] }}</td>  
-            <td colspan="3"></td>    
+            <td>{{ odberatel[1] }}</td>
+            <td colspan="3"></td>
         </tr>
         <tr>
             <td>DIČ:</td>
@@ -90,13 +90,13 @@
             <td></td>
             <td colspan="2"></td>
             <td colspan="2"></td>
-        </tr>     
+        </tr>
         <tr class="big_row">
             <td colspan="5">Vedeno v: {{ dodavatel[8] }} {{ dodavatel[9] }}</td>
             <td colspan="2"></td>
             <td colspan="5"></td>
-        </tr>    
-        <tr style="height: 1rem"></tr>        
+        </tr>
+        <tr style="height: 1rem"></tr>
         <tr>
             <td colspan="2">Dodací list:</td>
             <td></td>
@@ -104,8 +104,8 @@
             <td colspan="2"></td>
             <td colspan="2"></td>
             <td></td>
-            <td colspan="2" class="right"></td>            
-        </tr>             
+            <td colspan="2" class="right"></td>
+        </tr>
         <tr>
             <td colspan="2">Způsob dopravy:</td>
             <td></td>
@@ -113,8 +113,8 @@
             <td colspan="2"></td>
             <td colspan="2">Datum vystavení:</td>
             <td></td>
-            <td colspan="2" class="right">{{ faktura_data["datum_vystaveni"] }}</td>            
-        </tr>               
+            <td colspan="2" class="right">{{ faktura_data["datum_vystaveni"] }}</td>
+        </tr>
         <tr>
             <td colspan="2">Místo určení:</td>
             <td></td>
@@ -122,8 +122,8 @@
             <td colspan="2"></td>
             <td colspan="2">Datum zdan. plnění:</td>
             <td></td>
-            <td colspan="2" class="right">{{ faktura_data["datum_zdanpl"] }}</td>            
-        </tr>  
+            <td colspan="2" class="right">{{ faktura_data["datum_zdanpl"] }}</td>
+        </tr>
         <tr>
             <td colspan="2">Objednávky:</td>
             <td></td>
@@ -131,9 +131,9 @@
             <td colspan="2"></td>
             <td colspan="2">Datum splatnosti:</td>
             <td></td>
-            <td colspan="2" class="right">{{ faktura_data["datum_splatnosti"] }}</td>            
-        </tr>            
-        <tr style="height: 0.4rem"></tr>          
+            <td colspan="2" class="right">{{ faktura_data["datum_splatnosti"] }}</td>
+        </tr>
+        <tr style="height: 0.4rem"></tr>
         <tr class="items_header">
             <td colspan="4">Označení dodávky</td>
             <td>Množství</td>
@@ -141,9 +141,9 @@
             <td>DPH</td>
             <td colspan="3">Bez DPH</td>
             <td>S DPH</td>
-        </tr>          
+        </tr>
         {% for polozka in polozky %}
-        <tr style="height: 0.35rem"></tr>       
+        <tr style="height: 0.35rem"></tr>
         <tr class="items">
             <td colspan="4">{{ polozka["dodavka"] }}</td>
             <td>{{ polozka["pocet"] }}</td>
@@ -151,7 +151,7 @@
             <td>{{ polozka["dph"] }} %</td>
             <td colspan="3">{{ polozka["bez_dph"] }} {{ polozka["mena"] }}</td>
             <td>{{ polozka["s_dph"] }} {{ polozka["mena"] }}</td>
-        </tr>   
+        </tr>
         {% endfor %}
         {% for n in range(8-polozky|length) %}
         <tr style="height: 0.35rem"></tr>
@@ -163,15 +163,15 @@
             <td colspan="3"></td>
             <td></td>
         </tr>
-        {% endfor %}        
-        <tr style="height: 1rem"></tr>                                                                      
+        {% endfor %}
+        <tr style="height: 1rem"></tr>
         <tr class="bank_title cambria">
             <td colspan="5">Bankovní účet</td>
             <td colspan="3">Symbol:</td>
             <td class="dph_td cambria"></td>
             <td></td>
             <td colspan="2" class="right"></td>
-        </tr>  
+        </tr>
         <tr>
             <td colspan="2">Číslo účtu:</td>
             <td></td>
@@ -180,8 +180,8 @@
             <td colspan="2">{{ dodavatel[17] }}</td>
             <td class="dph_td cambria"></td>
             <td></td>
-            <td colspan="2" class="right"></td>            
-        </tr>      
+            <td colspan="2" class="right"></td>
+        </tr>
         <tr>
             <td colspan="2">SWIFT:</td>
             <td></td>
@@ -190,20 +190,20 @@
             <td colspan="2">{{ dodavatel[18] }}</td>
             <td class="dph_td cambria">DPH ** %</td>
             <td></td>
-            <td colspan="2" class="right">******</td>            
-        </tr> 
+            <td colspan="2" class="right">******</td>
+        </tr>
         <tr>
             <td colspan="2">IBAN:</td>
             <td></td>
             <td colspan="5">{{ dodavatel[15] }}</td>
             <td class="dph_td cambria">BEZ DPH</td>
             <td></td>
-            <td colspan="2" class="right">{{ faktura_data["total_bez_dph"] }} Kč</td>            
-        </tr>                           
+            <td colspan="2" class="right">{{ faktura_data["total_bez_dph"] }} Kč</td>
+        </tr>
         <tr>
             <td colspan="8"></td>
             <td colspan="4" class="underlined"></td>
-        </tr>      
+        </tr>
         <tr style="height: 0.5rem"></tr>
         <tr>
             <td colspan="8"></td>
@@ -216,7 +216,7 @@
         <tr style="height: 0.5rem"></tr>
         <tr>
             <td colspan="11" class="dodatek">Dovolujeme si vás upozornit, že v případě nedodržení data splatnosti Vám můžeme účtovat zákonný úrok z prodlení.</td>
-        </tr>   
+        </tr>
         <tr class="name">
             <td colspan="11" class="cambria">{{ faktura_data["vystaveno"] }}</td>
         </tr>
@@ -224,7 +224,7 @@
             <td colspan="2" >Převzal</td>
             <td colspan="2"></td>
             <td >Dne</td>
-        </tr>                                    
+        </tr>
     </table>
 </body>
 </html>

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block main %}
-<div class="row m-0">
-  <div class="sidebar col">
+<div class="row m-0" style="height: 100vh;">
+  <div class="sidebar col" style="height: 100vh;">
   <div class="d-flex flex-column flex-shrink-0 p-3 text-white text-center">
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="/" class="nav-link active" aria-current="page">
+        <a href="/" class="nav-link text-white">
           Přehled
         </a>
         </li>
@@ -26,29 +26,29 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/sablony" class="nav-link text-white">
+          <a href="/sablony" class="nav-link active" aria-current="page">
            Šablony faktur
           </a>
         </li>
     </ul>
   </div>
 </div>
-<div class="mx-auto col-10 d-flex flex-column justify-content-around" style="height: 92.67vh">
-  <div class="card mt-5 mx-5 mb-2 p-5 shadow-lg">
-      <h2 class="display-3 text-center mb-5">Poslední faktury</h2>
+<div class="mx-auto col-10 row">
+  <div class="w-50 p-5 col shadow-lg">
+      <h2 class="display-3 text-center mb-3">Seznam šablon</h2>
       <table class="table">
               <tr>
                 <th scope="col" style="width: 40px;"></th>
                 <th scope="col" style="width: 40px;"></th>
                 <th scope="col" style="width: 40px;"></th>
+                <th scope="col">Název šablony</th>
                 <th scope="col">cislo_faktury	</th>
                 <th scope="col">Dodavatel</th>
                 <th scope="col">Odběratel</th>
-                <th scope="col">Datum vystavení</th>
-                <th scope="col">Vystavil</th>
+                <th scope="col" style="width: 40px;"></th>
               </tr>
               {% for faktura in faktury %}
-              <tr>
+              <tr onclick="ShowFakturaPreview({{ faktura['id'] }}, this); ModifySablonaButton({{ faktura['id'] }});">
                 <td style="width: 50px; height: 50px;"><a href="/get_faktura?id={{ faktura['id'] }}">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="#FFF" stroke-miterlimit="10" stroke-width="2"> <path stroke="#979593" d="M67.1716,7H27c-1.1046,0-2,0.8954-2,2v78 c0,1.1046,0.8954,2,2,2h58c1.1046,0,2-0.8954,2-2V26.8284c0-0.5304-0.2107-1.0391-0.5858-1.4142L68.5858,7.5858 C68.2107,7.2107,67.702,7,67.1716,7z"/> <path fill="none" stroke="#979593" d="M67,7v18c0,1.1046,0.8954,2,2,2h18"/> <path fill="#C8C6C4" d="M51 61H41v-2h10c.5523 0 1 .4477 1 1l0 0C52 60.5523 51.5523 61 51 61zM51 55H41v-2h10c.5523 0 1 .4477 1 1l0 0C52 54.5523 51.5523 55 51 55zM51 49H41v-2h10c.5523 0 1 .4477 1 1l0 0C52 48.5523 51.5523 49 51 49zM51 43H41v-2h10c.5523 0 1 .4477 1 1l0 0C52 42.5523 51.5523 43 51 43zM51 67H41v-2h10c.5523 0 1 .4477 1 1l0 0C52 66.5523 51.5523 67 51 67zM79 61H69c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C80 60.5523 79.5523 61 79 61zM79 67H69c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C80 66.5523 79.5523 67 79 67zM79 55H69c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C80 54.5523 79.5523 55 79 55zM79 49H69c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C80 48.5523 79.5523 49 79 49zM79 43H69c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C80 42.5523 79.5523 43 79 43zM65 61H55c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C66 60.5523 65.5523 61 65 61zM65 67H55c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C66 66.5523 65.5523 67 65 67zM65 55H55c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C66 54.5523 65.5523 55 65 55zM65 49H55c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C66 48.5523 65.5523 49 65 49zM65 43H55c-.5523 0-1-.4477-1-1l0 0c0-.5523.4477-1 1-1h10c.5523 0 1 .4477 1 1l0 0C66 42.5523 65.5523 43 65 43z"/> <path fill="#107C41" d="M12,74h32c2.2091,0,4-1.7909,4-4V38c0-2.2091-1.7909-4-4-4H12c-2.2091,0-4,1.7909-4,4v32 C8,72.2091,9.7909,74,12,74z"/> <path d="M16.9492,66l7.8848-12.0337L17.6123,42h5.8115l3.9424,7.6486c0.3623,0.7252,0.6113,1.2668,0.7471,1.6236 h0.0508c0.2617-0.58,0.5332-1.1436,0.8164-1.69L33.1943,42h5.335l-7.4082,11.9L38.7168,66H33.041l-4.5537-8.4017 c-0.1924-0.3116-0.374-0.6858-0.5439-1.1215H27.876c-0.0791,0.2684-0.2549,0.631-0.5264,1.0878L22.6592,66H16.9492z"/> </svg>
                 </a></td>
@@ -58,41 +58,22 @@
                 <td style="width: 50px; height: 50px; cursor: pointer;" onclick="PrintFaktura({{ faktura['id'] }})";>
                   <svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" enable-background="new 0 0 48 48"> <rect x="9" y="11" fill="#424242" width="30" height="3"/> <path fill="#616161" d="M4,25h40v-7c0-2.2-1.8-4-4-4H8c-2.2,0-4,1.8-4,4V25z"/> <path fill="#424242" d="M8,36h32c2.2,0,4-1.8,4-4v-8H4v8C4,34.2,5.8,36,8,36z"/> <circle fill="#00E676" cx="40" cy="18" r="1"/> <rect x="11" y="4" fill="#90CAF9" width="26" height="10"/> <path fill="#242424" d="M37.5,31h-27C9.7,31,9,30.3,9,29.5v0c0-0.8,0.7-1.5,1.5-1.5h27c0.8,0,1.5,0.7,1.5,1.5v0 C39,30.3,38.3,31,37.5,31z"/> <rect x="11" y="31" fill="#90CAF9" width="26" height="11"/> <rect x="11" y="29" fill="#42A5F5" width="26" height="2"/> <g fill="#1976D2"> <rect x="16" y="33" width="17" height="2"/> <rect x="16" y="37" width="13" height="2"/> </g> </svg>
                 </td>
+                <td>{{ faktura["nazev"]	}}</td>
                 <td>{{ faktura["cislo_faktury"]	}}</td>
                 <td>{{ faktura["dodavatel"]	}}</td>
                 <td>{{ faktura["odberatel"]	}}</td>
-                <td>{{ faktura["datum_vystaveni"]	}}</td>
-                <td>{{ faktura["vystaveno"] }}</td>
+                <td style="width: 40px; height: 40px; cursor: pointer;"><a href="/smazat_sablonu?id={{ faktura['id'] }}">
+                  <svg version="1.1" style="width: 20px; height: 20px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.428px" height="482.429px" viewBox="0 0 482.428 482.429" style="enable-background:new 0 0 482.428 482.429;" xml:space="preserve"> <g> <g> <path d="M381.163,57.799h-75.094C302.323,25.316,274.686,0,241.214,0c-33.471,0-61.104,25.315-64.85,57.799h-75.098 c-30.39,0-55.111,24.728-55.111,55.117v2.828c0,23.223,14.46,43.1,34.83,51.199v260.369c0,30.39,24.724,55.117,55.112,55.117 h210.236c30.389,0,55.111-24.729,55.111-55.117V166.944c20.369-8.1,34.83-27.977,34.83-51.199v-2.828 C436.274,82.527,411.551,57.799,381.163,57.799z M241.214,26.139c19.037,0,34.927,13.645,38.443,31.66h-76.879 C206.293,39.783,222.184,26.139,241.214,26.139z M375.305,427.312c0,15.978-13,28.979-28.973,28.979H136.096 c-15.973,0-28.973-13.002-28.973-28.979V170.861h268.182V427.312z M410.135,115.744c0,15.978-13,28.979-28.973,28.979H101.266 c-15.973,0-28.973-13.001-28.973-28.979v-2.828c0-15.978,13-28.979,28.973-28.979h279.897c15.973,0,28.973,13.001,28.973,28.979 V115.744z"/> <path d="M171.144,422.863c7.218,0,13.069-5.853,13.069-13.068V262.641c0-7.216-5.852-13.07-13.069-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C158.074,417.012,163.926,422.863,171.144,422.863z"/> <path d="M241.214,422.863c7.218,0,13.07-5.853,13.07-13.068V262.641c0-7.216-5.854-13.07-13.07-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C228.145,417.012,233.996,422.863,241.214,422.863z"/> <path d="M311.284,422.863c7.217,0,13.068-5.853,13.068-13.068V262.641c0-7.216-5.852-13.07-13.068-13.07 c-7.219,0-13.07,5.854-13.07,13.07v147.154C298.213,417.012,304.067,422.863,311.284,422.863z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>
+                </a></td>
               </tr>
               {% endfor %}
       </table>
-      <div class="row p-3">
-          <a class="w-50" href="/fakturujto"><button class="btn btn-dark w-100">Vytvořit další</button></a>
-          <a class="w-50" href="/faktury"><button class="btn btn-white w-100">Zobrazit všechny</button></a>
+      <div class="row p-3" id="prehled-buttons-div">
+          <a class="w-50" id="upravit-fakturu-btn"><button class="btn btn-dark w-100">Upravit šablonu</button></a>
+          <a class="w-50" id="fakturuj-sablonu-btn"><button class="btn btn-dark w-100">Fakturovat že šablony</button></a>
       </div>
   </div>
-  <div class="row px-3">
-
-    <div class="col d-flex flex-column">
-      <div class="card m-5 p-5 shadow-lg col">
-        <h2 class="display-6">Stáhnout účetnictví</h2>
-        <form class="row p-3 d-flex p-5" action="/get_ucetnictvi_in_date">
-          <input id="ucetnictvi_date" type="date" name="ucetnictvi_od" class="form-control" value="2022-01-01"/>
-          <input id="ucetnictvi_date" type="date" name="ucetnictvi_do" class="form-control" value="2023-01-01"/>
-          <button class="w-100 btn btn-dark">Stáhnout od datumu do</button>
-        </form>
-      </div>
-    </div>
-
-    <div class="card m-5 p-5 shadow-lg d-flex col-7">
-      <h2 class="display-6">Vytvořit fakturu ze šablony</h2>
-      <div class="w-100 d-flex h-100 p-5">
-        {% for sablona in sablony %}
-          <a class="w-25" href="fakturuj_sablonu?id={{ sablona['faktura_id'] }}"><button class="border p-5 btn">{{ sablona["nazev"] }}</button></a>
-        {% endfor %}
-      </div>
-    </div>
-
+  <div class="w-50 p-5 col"  id="faktura_preview">
   </div>
 </div>
 {% endblock %}

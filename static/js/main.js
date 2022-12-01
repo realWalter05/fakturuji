@@ -1,4 +1,34 @@
 
+
+function ShowFakturaPreview(faktura_id, element) {
+  document.querySelector("#upravit-fakturu-btn").setAttribute("href", "upravit_fakturu?id="+faktura_id);
+  if (document.querySelector("#sablona-fakturu-btn")) {
+    document.querySelector("#sablona-fakturu-btn").setAttribute("href", "z_faktury_sablonu?id="+faktura_id);
+  }
+
+  previous = document.querySelector(".bg-light");
+  if (previous) {
+    previous.classList.remove("bg-light");
+  }
+  element.classList.add("bg-light");
+  $.ajax({
+    url: '/get_faktura_html',
+    type: "get",
+    data: {id: faktura_id},
+    datatype: "text",
+    contentType : 'application/json',
+    success: function(content) {
+      document.getElementById("faktura_preview").innerHTML= content;
+    },
+    error: function(xhr) {
+      console.log(xhr);
+    }});
+}
+
+function ModifySablonaButton(faktura_id) {
+  document.querySelector("#fakturuj-sablonu-btn").setAttribute("href", "fakturuj_sablonu?id="+faktura_id);
+}
+
 function PrintFaktura(faktura_id) {
   $.ajax({
     url: '/get_faktura_html',
@@ -9,7 +39,7 @@ function PrintFaktura(faktura_id) {
     success: function(content) {
       var myWindow = window.open('','','width=1200,height=600');
       myWindow.document.write(content);
-    
+
       myWindow.document.close();
       myWindow.print();
       myWindow.onafterprint = function(){
@@ -19,7 +49,7 @@ function PrintFaktura(faktura_id) {
     error: function(xhr) {
       console.log(xhr);
     }
-  });   
+  });
 }
 
 
@@ -39,7 +69,7 @@ function GetFirmaData(parent) {
     error: function(xhr) {
       console.log(xhr);
     }
-  });   
+  });
 }
 
 function GetDataFromId(id, parent, je_dodavatel) {
@@ -53,9 +83,9 @@ function GetDataFromId(id, parent, je_dodavatel) {
       console.log(je_dodavatel);
       if (je_dodavatel)
         document.getElementById("dodavatel_id").value = id;
-      else 
+      else
         document.getElementById("odberatel_id").value = id;
-      
+
       fill_data(JSON.parse(response), parent, je_dodavatel);
     },
     error: function(xhr) {
@@ -69,7 +99,7 @@ function set_date(id, plus_days) {
   var day = ("0" + now.getDate()).slice(-2);
   var month = ("0" + (now.getMonth() + 1)).slice(-2);
   var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-  
+
   $('#'+id).val(today);
 }
 
@@ -129,7 +159,7 @@ function HintPopisek(popisky, parent) {
     let a = document.createElement("a");
     a.classList.add("dropdown-item");
     a.classList.add("hint-element");
-    a.setAttribute("onclick", SetPopisek(value)); 
+    a.setAttribute("onclick", SetPopisek(value));
     a.textContent = value["nazev"];
     hintMenu.appendChild(a);
   });
@@ -149,7 +179,7 @@ function HintFirma(firmy, parent, je_dodavatel) {
     let a = document.createElement("a");
     a.classList.add("dropdown-item");
     a.classList.add("hint-element");
-    a.setAttribute("onclick", 'GetDataFromId('+value["id"]+', this.parentElement.parentElement.parentElement, '+je_dodavatel+');'); 
+    a.setAttribute("onclick", 'GetDataFromId('+value["id"]+', this.parentElement.parentElement.parentElement, '+je_dodavatel+');');
     a.textContent = value["nazev"];
     hintMenu.appendChild(a);
   });
@@ -159,7 +189,7 @@ function fill_data(data, parent, je_dodavatel) {
   if (parent.querySelector("#warning")) {
     // Deleting error message if there
     parent.querySelector("#warning").remove()
-  }  
+  }
   console.log(data);
   if (!data) {
     let status = document.createElement("div");
@@ -168,10 +198,10 @@ function fill_data(data, parent, je_dodavatel) {
     status.innerText = "Data nebyla nalezena."
 
     parent.appendChild(status);
-  } else {  
+  } else {
     parent.querySelector(".form-nazev").value = data[0];
     parent.querySelector(".form-ico").value = data[1];
-    parent.querySelector(".form-dic").value = data[2];    
+    parent.querySelector(".form-dic").value = data[2];
     parent.querySelector(".form-street").value = data[3];
     parent.querySelector(".form-cislo-popisne").value = data[4];
     parent.querySelector(".form-psc").value = data[5];
@@ -190,7 +220,7 @@ function fill_data(data, parent, je_dodavatel) {
       document.querySelector("input[name='iban']").value = data[15];
       document.querySelector("input[name='swift']").value = data[16];
       document.querySelector("input[name='konst_cislo']").value = data[17];
-      document.querySelector("input[name='var_cislo']").value = data[18];     
+      document.querySelector("input[name='var_cislo']").value = data[18];
     }
   }
 }
@@ -206,12 +236,12 @@ function CreateItemCol(type, class_text, name, placeholder) {
   col.classList.add("col");
   col.appendChild(input);
 
-  return col    
+  return col
 }
 
 function CreateItem() {
   let container = document.getElementById("polozky");
-  
+
   let row = document.createElement("div");
   row.classList.add("row");
   row.appendChild(CreateItemCol("text", "form-control", "polozka", "Dodávka"));
@@ -221,7 +251,7 @@ function CreateItem() {
   row.appendChild(CreateItemCol("text", "form-control", "currency", "Měna"));
 
   let polozka_item = document.createElement("div");
-  
+
   // Append children
   polozka_item.appendChild(row);
 

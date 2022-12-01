@@ -1,6 +1,6 @@
 import requests
 import xml.etree.ElementTree as ET
-import mysql.connector, io, string, random
+from datetime import datetime
 from excel_writer import ExcelWriter
 from database_handler import get_firma_data_from_id, get_popisek_by_id
 
@@ -12,13 +12,13 @@ def get_firma_dict(args):
 
     dodavatel_je_dodavatel = 0
     if args.get("dodavatel_je_dodavatel") == "on":
-        dodavatel_je_dodavatel = 1        
+        dodavatel_je_dodavatel = 1
 
 
     dodavatel_sifrovat = 0
     if args.get("dodavatel_sifrovat") == "on":
-        dodavatel_sifrovat = 1           
-        
+        dodavatel_sifrovat = 1
+
     return {
         "name" : args.get("dodavatel_") if args.get("dodavatel_") else "",
         "ico" : args.get("dodavatel_ico")  if args.get("dodavatel_ico") else "",
@@ -43,7 +43,7 @@ def get_firma_dict(args):
         "var_symbol" : args.get("var_symbol")  if args.get("var_symbol") else "",
         "iban" : args.get("iban")  if args.get("iban") else "",
         "swift" : args.get("swift") if args.get("swift") else "",
-    }   
+    }
 
 
 def get_items(args):
@@ -64,7 +64,7 @@ def get_items(args):
 
     for i in range(len(polozky)):
         item = Item(polozky[i], count[i], price[i], dphs[i], currencies[i])
-        items.append(item)  
+        items.append(item)
 
     return items
 
@@ -79,16 +79,16 @@ def create_faktura_excel(excel, user_data, faktura_data, items):
 
     dodavatel = get_firma_data_from_id(user_data, faktura_data["dodavatel"])
     odberatel = get_firma_data_from_id(user_data, faktura_data["odberatel"])
-    dodavatel_list = [dodavatel[0], f'{dodavatel[3]} {dodavatel[4]}', 
+    dodavatel_list = [dodavatel[0], f'{dodavatel[3]} {dodavatel[4]}',
                     f'{dodavatel[5]} {dodavatel[6]}', dodavatel[7], dodavatel[1],
                     dodavatel[2], f"{dodavatel[8]} {dodavatel[9]}", dodavatel[10],
                      dodavatel[11], dodavatel[12],  dodavatel[13], dodavatel[14],
-                       dodavatel[15], dodavatel[16], dodavatel[17], dodavatel[18]]
-    odberatel_list = [odberatel[0], f'{odberatel[3]} {odberatel[4]}', 
+                       dodavatel[15], dodavatel[16], dodavatel[17], dodavatel[18]] if dodavatel else []
+    odberatel_list = [odberatel[0], f'{odberatel[3]} {odberatel[4]}',
                     f'{odberatel[5]} {odberatel[6]}', odberatel[7], odberatel[1],
                     odberatel[2], f"{odberatel[8]} {odberatel[9]}", odberatel[10],
-                     odberatel[11], odberatel[12]]
-    
+                     odberatel[11], odberatel[12]] if odberatel else []
+
     description = ""
     if faktura_data["description_id"] != "":
         popisek_id = get_popisek_by_id(user_data, faktura_data["description_id"])
@@ -96,16 +96,26 @@ def create_faktura_excel(excel, user_data, faktura_data, items):
             description = popisek_id[0]["popisek"]
 
     # Faktura in excel
-    excel.create_faktura(dodavatel_list, odberatel_list, items, 1 if faktura_data["typ"] == 1 else 0, 
+    excel.create_faktura(dodavatel_list, odberatel_list, items, 1 if faktura_data["typ"] == 1 else 0,
                         faktura_data["dodavatel_dph"], faktura_data["qr_platba"], date, description, faktura_data["cislo_faktury"],
-                        faktura_data["vystaveno"])                                              
-    print("done")  
+                        faktura_data["vystaveno"])
+    print("done")
 
 
-def get_all_faktury(user_data, faktury, polozky): 
-    excel = ExcelWriter()  
+def get_all_faktury(user_data, faktury, polozky):
+    excel = ExcelWriter()
     for i in range(0, len(faktury)):
         create_faktura_excel(excel, user_data, faktury[i], polozky[i])
+    return excel
+
+
+def get_all_faktury_in_date(user_data, faktury, polozky, ucetnictvi_od, ucetnictvi_do):
+    excel = ExcelWriter()
+    for i in range(0, len(faktury)):
+        if datetime.strptime(ucetnictvi_od, "%Y-%m-%d") <= datetime.combine(faktury[i]["datum_vystaveni"], datetime.min.time()) \
+        and datetime.strptime(ucetnictvi_do, "%Y-%m-%d") >= datetime.combine(faktury[i]["datum_vystaveni"], datetime.min.time()):
+            print("getting")
+            create_faktura_excel(excel, user_data, faktury[i], polozky[i])
     return excel
 
 
@@ -185,7 +195,7 @@ def auto_fill(user_input, title):
 
                    city = geological_info.find(path + "PB").text if geological_info.find(path + "PB") is not None else ""
                    if city:
-                    psc = city.split(" ")[-1]                   
+                    psc = city.split(" ")[-1]
                     city = city.split(psc)[0].strip()
 
                # Getting the country
@@ -204,7 +214,7 @@ def auto_fill(user_input, title):
                if not psc:
                    not_found.append("město")
                if not cislo_popisne:
-                   not_found.append("cislo popisne")                                      
+                   not_found.append("cislo popisne")
                if not country:
                    not_found.append("zemi")
                if not ico:
