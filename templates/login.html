@@ -11,22 +11,22 @@
     {% elif msg == "wrong_pwd" %}
         <p class="text-danger text-center">Heslo nebylo zadáno správně.</p>
     {% elif msg == "login_required" %}
-        <p class="text-danger text-center">Pro přístup na tuto stránku se musíte přihlásit.</p>        
+        <p class="text-danger text-center">Pro přístup na tuto stránku se musíte přihlásit.</p>
     {% elif msg == "error" %}
         <p class="text-danger text-center">Při zpracovávání požadavku nastalo nějaká chyba. Zkuste to prosím později.</p>
-    {% endif %}            
+    {% endif %}
     <div class="form-group mb-2">
-        <label for="login-username">Uživatelské jméno/email</label>
+        <label for="login-username">Uživatelské jméno</label>
         <input type="text" class="form-control" name="username" id="login-username">
-      </div>	
+      </div>
     <div class="form-group mb-2">
         <label for="login-pwd">Heslo</label>
         <input type="password" class="form-control" name="password" id="login-pwd">
-    </div>		
+    </div>
     <button class="btn-dark btn w-100">Přihlásit se</button>
     <a class="text-center text-decoration-none p-2" href="/register"><p>Jestliže nemáte účet, zaregistrujte se</p></a>
     </form>
-</section>	
+</section>
 
 {% endblock %}
 

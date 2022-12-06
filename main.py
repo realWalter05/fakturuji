@@ -5,6 +5,9 @@ from excel_handler import *
 from database_handler import *
 from user_handler import *
 import json
+import base64
+from PIL import Image
+from io import BytesIO
 from datetime import datetime
 
 
@@ -59,7 +62,6 @@ def get_firmy():
 	je_odberatel = request.args.get('je_odberatel')
 
 	names = get_user_firmy_names(session["user_data"], je_dodavatel, je_odberatel)
-	print(names)
 	if search_text.strip() != "":
 		# If search text is not empty, filter result
 		names = filter_user_firmy(names, search_text)
@@ -73,9 +75,10 @@ def get_firmy():
 def get_ucetnictvi():
 	ucetnictvi_od = request.args.get('ucetnictvi_od')
 	ucetnictvi_do = request.args.get('ucetnictvi_do')
-	print(ucetnictvi_od)
-	print(ucetnictvi_do)
+
 	faktury = get_faktury_by_user(session["user_data"])
+	if not faktury:
+		return index()
 	polozky = get_polozky_by_faktura_id(session["user_data"], faktury)
 
 	excel = get_all_faktury_in_date(session["user_data"], faktury, polozky, ucetnictvi_od, ucetnictvi_do)
@@ -117,6 +120,19 @@ def get_faktura_html():
 	faktura_data[0]["datum_vystaveni"] = faktura_data[0]["datum_vystaveni"].strftime("%d.%m.%Y")
 	faktura_data[0]["datum_zdanpl"] = faktura_data[0]["datum_zdanpl"].strftime("%d.%m.%Y")
 	faktura_data[0]["datum_splatnosti"] = faktura_data[0]["datum_splatnosti"].strftime("%d.%m.%Y")
+
+	if faktura_data[0]["qr_platba"]:
+		# qr platba
+		"data:image/jpeg;base64,"
+		buffered = BytesIO()
+		response = requests.get("https://api.paylibo.com/paylibo/generator/czech/image?accountNumber="+str(int(dodavatel[13]))+
+                        "&bankCode="+str(int(dodavatel[14]))+"&amount="+str(faktura_data[0]["total_s_dph"])+"&currency=CZK&vs="+str(dodavatel[17])+"&size=200")
+		image = Image.open(BytesIO(response.content))
+		image.save(buffered, format="JPEG")
+		img_str = base64.b64encode(buffered.getvalue())
+		base_image = img_str.decode("utf-8")
+		return render_template("faktura_template_qr.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky, qr_platba_base=base_image)
+
 	return render_template("faktura_template.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky)
 
 
@@ -145,6 +161,18 @@ def get_faktura_pdf():
 	faktura_data[0]["datum_zdanpl"] = faktura_data[0]["datum_zdanpl"].strftime("%d.%m.%Y")
 	faktura_data[0]["datum_splatnosti"] = faktura_data[0]["datum_splatnosti"].strftime("%d.%m.%Y")
 
+	if faktura_data[0]["qr_platba"]:
+		# qr platba
+		"data:image/jpeg;base64,"
+		buffered = BytesIO()
+		response = requests.get("https://api.paylibo.com/paylibo/generator/czech/image?accountNumber="+str(int(dodavatel[13]))+
+                        "&bankCode="+str(int(dodavatel[14]))+"&amount="+str(faktura_data[0]["total_s_dph"])+"&currency=CZK&vs="+str(dodavatel[17])+"&size=200")
+		image = Image.open(BytesIO(response.content))
+		image.save(buffered, format="JPEG")
+		img_str = base64.b64encode(buffered.getvalue())
+		base_image = img_str.decode("utf-8")
+		return render_template("faktura_template_qr.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky, qr_platba_base=base_image)
+
 	print(f"{faktura_data[0]} polozky")
 	rendered = render_template("faktura_template.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky)
 	pdf = pdfkit.from_string(rendered, options=options, configuration=config)
@@ -154,14 +182,10 @@ def get_faktura_pdf():
 @app.route("/")
 def index():
 	if "user_data" in session:
-		faktury = get_user_faktury(session["user_data"])[-3:]
-		sablony = get_user_sablony(session["user_data"])[-4:]
-		for faktura in faktury:
-			dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
-			odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
-			faktura["dodavatel"] = get_firma_data_from_id(session["user_data"], dodavatel_id)[0] if dodavatel_id != None else ""
-			faktura["odberatel"] = get_firma_data_from_id(session["user_data"], odberatel_id)[0] if odberatel_id != None else ""
+		faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], 0, 3), session["user_data"])
+		sablony = get_user_sablony_limit(session["user_data"], 0, 4)
 		return render_template("prehled.html", faktury=faktury, sablony=sablony)
+
 	return render_template("index.html")
 
 
@@ -169,14 +193,12 @@ def index():
 @login_required
 def upravit_fakturu():
 	faktura_id = request.args.get('id')
-	print(f"id {faktura_id}")
 
 	faktura_data = get_faktura_by_id(session["user_data"], faktura_id)
-	print(faktura_data)
 	dodavatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["dodavatel"])
 	odberatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["odberatel"])
 	polozky = get_polozky_by_faktura_id(session["user_data"], faktura_data)[0]
-	print(f"{faktura_data} \n {dodavatel} \n {odberatel} \ {polozky}")
+
 	return render_template("upravit_fakturu.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky)
 
 
@@ -185,14 +207,12 @@ def upravit_fakturu():
 @login_required
 def fakturuj_sablonu():
 	faktura_id = request.args.get('id')
-	print(f"id {faktura_id}")
 
 	faktura_data = get_faktura_by_id(session["user_data"], faktura_id)
-	print(faktura_data)
 	dodavatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["dodavatel"])
 	odberatel = get_firma_data_from_id(session["user_data"], faktura_data[0]["odberatel"])
 	polozky = get_polozky_by_faktura_id(session["user_data"], faktura_data)[0]
-	print(f"{faktura_data} \n {dodavatel} \n {odberatel} \ {polozky}")
+
 	return render_template("fakturujto.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky)
 
 
@@ -206,30 +226,14 @@ def fakturujto():
 @app.route("/sablony")
 @login_required
 def sablony():
-	faktury = []
-	sablony = get_user_sablony(session["user_data"])
-	print(sablony)
-	for sablona in sablony:
-		faktura = get_faktura_by_id(session["user_data"], sablona["faktura_id"])[0]
-		print(faktura)
-		dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
-		odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
-		faktura["dodavatel"] = get_firma_data_from_id(session["user_data"], dodavatel_id)[0] if dodavatel_id != None else ""
-		faktura["odberatel"] = get_firma_data_from_id(session["user_data"], odberatel_id)[0] if odberatel_id != None else ""
-		faktura["nazev"] = sablona["nazev"]
-		faktury.append(faktura)
-	return render_template("sablony.html", faktury=faktury)
+	faktury = get_user_full_sablony(get_user_sablony_limit(session["user_data"], 0, 10), session["user_data"])
+	return render_template("sablony.html", sablony=faktury)
 
 
 @app.route("/faktury")
 @login_required
 def faktury():
-	faktury = get_user_faktury(session["user_data"])[-10:]
-	for faktura in faktury:
-			dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
-			odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
-			faktura["dodavatel"] = get_firma_data_from_id(session["user_data"], dodavatel_id)[0] if dodavatel_id != None else ""
-			faktura["odberatel"] = get_firma_data_from_id(session["user_data"], odberatel_id)[0] if odberatel_id != None else ""
+	faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], 0, 10), session["user_data"])
 	return render_template("faktury.html", faktury=faktury)
 
 
@@ -241,7 +245,7 @@ def fakturujto_jednou():
 @app.route("/pridat_firmu")
 @login_required
 def pridat_firmu():
-	firmy = get_user_firmy(session["user_data"])
+	firmy = get_user_firmy_limit(session["user_data"], 0, 10)
 	return render_template("pridat_firmu.html", firmy=firmy)
 
 
@@ -250,8 +254,8 @@ def pridat_firmu():
 def upravit_firmu():
 	firma_id = request.args.get("id")
 	firma = get_firma_data_from_id(session["user_data"], firma_id)
-	firmy = get_user_firmy(session["user_data"])
-	return render_template("pridat_firmu.html", firmy=firmy, firma=firma)
+	firmy = get_user_firmy_limit(session["user_data"], 0, 10)
+	return render_template("pridat_firmu.html", firmy=firmy, firma=firma, firma_id=firma_id)
 
 
 @app.route("/popisky")
@@ -279,9 +283,7 @@ def add_popisek():
 @app.route("/account")
 @login_required
 def account():
-	count = len(get_user_faktury(session["user_data"]))
-	print(count)
-	return render_template("account.html", faktura_count=count)
+	return render_template("account.html")
 
 
 @app.route("/unlogin")
@@ -303,7 +305,9 @@ def login():
 
 @app.route("/register_user", methods = ["GET", "POST"])
 def register_username():
-	msg = register_user(request.form["username"], request.form["password"])
+	msg = register_user(request.form["username"], request.form["email"], request.form["password"], request.form["password-repeat"])
+	if msg == "success":
+		return login_username()
 	return render_template("register.html", msg=msg)
 
 
@@ -316,9 +320,11 @@ def login_username():
 		session["user_data"] = {
 			"id": msg[0],
 			"name": msg[1],
-			"data_key": decrypt_data(request.form["password"], msg[3])
+			"email": msg[2],
+			"data_key": decrypt_data(request.form["password"], msg[4])
 		}
 		msg = "success"
+		return index()
 
 	return render_template("login.html", msg=msg)
 
@@ -330,7 +336,7 @@ def add_firma():
 	msg = "error"
 	if firma and firma["name"]:
 		msg = database_add_firma(session["user_data"], firma)
-	return render_template("pridat_firmu.html", msg=msg)
+	return render_template("pridat_firmu.html", msg=msg, firmy=get_user_firmy_limit(session["user_data"], 0, 10))
 
 
 @app.route("/change_firma", methods = ["GET", "POST"])
@@ -341,15 +347,14 @@ def change_firma():
 	msg = "error"
 	if firma and firma["name"]:
 		msg = database_add_firma(session["user_data"], firma)
-	return render_template("pridat_firmu.html", msg=msg)
+	return render_template("pridat_firmu.html", msg=msg, firmy=get_user_firmy_limit(session["user_data"], 0, 10))
 
 
 @app.route("/smazat_firmu", methods = ["GET", "POST"])
 @login_required
 def smazat_firmu():
 	delete_firma_by_id(session["user_data"], request.args.get("id"))
-	firmy = get_user_firmy(session["user_data"])
-	return render_template("pridat_firmu.html", firmy=firmy)
+	return render_template("pridat_firmu.html", firmy=get_user_firmy_limit(session["user_data"], 0, 10))
 
 
 @app.route("/process_faktura", methods = ["GET", "POST"])
@@ -357,7 +362,7 @@ def smazat_firmu():
 def process_faktura():
 	# Getting the form data
 	post_faktura(session["user_data"], request.args)
-	return render_template("index.html")
+	return index()
 
 
 @app.route("/process_upravit_fakturu", methods = ["GET", "POST"])
@@ -373,56 +378,44 @@ def process_upravit_fakturu():
 @login_required
 def z_faktury_sablonu():
 	make_sablona_from_id(session["user_data"], request.args.get("id"))
-	faktury = []
-	sablony = get_user_sablony(session["user_data"])
-	print(sablony)
-	for sablona in sablony:
-		faktura = get_faktura_by_id(session["user_data"], sablona["faktura_id"])[0]
-		print(faktura)
-		dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
-		odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
-		faktura["dodavatel"] = get_firma_data_from_id(session["user_data"], dodavatel_id)[0] if dodavatel_id != None else ""
-		faktura["odberatel"] = get_firma_data_from_id(session["user_data"], odberatel_id)[0] if odberatel_id != None else ""
-		faktura["nazev"] = sablona["nazev"]
-		faktury.append(faktura)
-	return render_template("sablony.html", faktury=faktury)
+	return sablony()
 
 
-@app.route("/smazat_fakturu", methods = ["GET", "POST"])
+@app.route("/get_dalsi_faktury", methods = ["GET"])
+@login_required
+def get_dalsi_faktury():
+	from_faktury = request.args.get("from")
+	to_faktury = request.args.get("to")
+
+	faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], from_faktury, to_faktury), session["user_data"])
+	return json.dumps(faktury, indent=4, sort_keys=True, default=str)
+
+
+@app.route("/get_dalsi_sablony", methods = ["GET"])
+@login_required
+def get_dalsi_sablony():
+	from_sablony = request.args.get("from")
+	to_sablony = request.args.get("to")
+
+	faktury = get_user_full_sablony(get_user_sablony_limit(session["user_data"], from_sablony, to_sablony), session["user_data"])
+	print(faktury, from_sablony, to_sablony)
+	print(get_user_sablony_limit(session["user_data"], from_sablony, to_sablony))
+	return json.dumps(faktury, indent=4, sort_keys=True, default=str)
+
+
+@app.route("/smazat_fakturu", methods = ["GET"])
 @login_required
 def smazat_fakturu():
 	# Getting the form data
 	delete_whole_faktura_by_id(session["user_data"], request.args.get("id"))
-
-	faktury = get_user_faktury(session["user_data"])[-10:]
-	for faktura in faktury:
-			dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
-			odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
-			faktura["dodavatel"] = get_firma_data_from_id(session["user_data"], dodavatel_id)[0] if dodavatel_id != None else ""
-			faktura["odberatel"] = get_firma_data_from_id(session["user_data"], odberatel_id)[0] if odberatel_id != None else ""
-	return render_template("faktury.html", faktury=faktury)
-
+	return faktury()
 
 @app.route("/smazat_sablonu", methods = ["GET", "POST"])
 @login_required
 def smazat_sablonu():
 	# Getting the form data
 	delete_sablona_by_id(session["user_data"], request.args.get("id"))
-
-	faktury = []
-	sablony = get_user_sablony(session["user_data"])
-	print(sablony)
-	for sablona in sablony:
-		faktura = get_faktura_by_id(session["user_data"], sablona["faktura_id"])[0]
-		print(faktura)
-		dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
-		odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
-		faktura["dodavatel"] = get_firma_data_from_id(session["user_data"], dodavatel_id)[0] if dodavatel_id != None else ""
-		faktura["odberatel"] = get_firma_data_from_id(session["user_data"], odberatel_id)[0] if odberatel_id != None else ""
-		faktura["nazev"] = sablona["nazev"]
-		faktury.append(faktura)
-	return render_template("sablony.html", faktury=faktury)
-
+	return sablony()
 
 
 @app.route("/smazat_popisek", methods = ["GET", "POST"])
@@ -433,3 +426,27 @@ def smazat_popisek():
 	delete_popisek_by_id(session["user_data"], request.args.get("id"))
 	popisky = get_user_popisky(session["user_data"], )
 	return render_template("popisky.html", popisky=popisky)
+
+
+@app.route("/delete_everything")
+@login_required
+def delete_everything():
+	faktury = get_user_faktury(session["user_data"])
+	for faktura in faktury:
+		delete_whole_faktura_by_id(session["user_data"], faktura["id"])
+
+	sablony = get_user_sablony(session["user_data"])
+	for sablona in sablony:
+		delete_sablona_by_id(session["user_data"], sablona["sid"])
+
+	popisky = get_user_popisky(session["user_data"])
+	for popisek in popisky:
+		delete_popisek_by_id(session["user_data"], popisek["id"])
+
+	firmy = get_user_firmy(session["user_data"])
+	for firma in firmy:
+		delete_firma_by_id(session["user_data"], firma["id"])
+
+	delete_user_account(session["user_data"], session["user_data"]["id"])
+	session.clear()
+	return index()

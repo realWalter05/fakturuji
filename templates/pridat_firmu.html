@@ -54,6 +54,9 @@
                           <a class="dropdown-item" id="dodavatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
                       </div>
                   </div>
+                {% if firma_id %}
+                  <input type="hidden" class="form-control" name="id" value="{{ firma_id }}"/>
+                {% endif %}
                 <input type="text" class="form-control form-ico" name="dodavatel_ico" placeholder="IČO" value="{{ firma[1] if firma else '' }}"/>
                 <input type="text" class="form-control form-dic" name="dodavatel_dic" placeholder="DIČ" value="{{ firma[2] if firma else '' }}"/>
                 <div class="row form-row-padding">

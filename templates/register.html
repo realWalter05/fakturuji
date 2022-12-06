@@ -10,20 +10,30 @@
         <p class="text-danger text-center">Vyplňte prosím všechny data.</p>
     {% elif msg == "username_taken" %}
         <p class="text-danger text-center">Vyberte si prosím jiné uživatelské jméno.</p>
+    {% elif msg == "not_same_pwd" %}
+        <p class="text-danger text-center">Vaše hesla nejsou shodná.</p>
     {% elif msg == "error" %}
         <p class="text-danger text-center">Při zpracovávání požadavku nastalo nějaká chyba. Zkuste to prosím později.</p>
-    {% endif %}            
+    {% endif %}
     <div class="form-group mb-2">
-        <label for="register-username">Uživatelské jméno/email</label>
+        <label for="register-username">Uživatelské jméno</label>
         <input type="text" class="form-control" name="username" id="register-username">
-      </div>	
+    </div>
+    <div class="form-group mb-2">
+        <label for="register-email">Email</label>
+        <input type="email" class="form-control" name="email" id="register-email">
+    </div>
     <div class="form-group mb-2">
         <label for="register-pwd">Heslo</label>
         <input type="password" class="form-control" name="password" id="register-pwd">
-    </div>		
-    <button class="btn-dark btn w-100">Zaregistrovat se</button>
+    </div>
+    <div class="form-group mb-2">
+        <label for="register-pwd-repeat">Zopakujte heslo</label>
+        <input type="password" class="form-control" name="password-repeat" id="register-pwd-repeat">
+    </div>
+    <button class="btn-dark btn w-100 mt-4">Zaregistrovat se</button>
     </form>
-</section>	
+</section>
 
 
 {% endblock %}

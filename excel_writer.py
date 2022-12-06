@@ -62,15 +62,23 @@ def fill_out_dates(sheet, dates, start_row):
 
 def return_number(string_number):
     string_number = str(string_number).replace(" ", "")
+    negative_number = False
+    if "-" in string_number:
+        string_number = string_number[1:]
+        negative_number = True
+
     if "." in string_number.replace(",", "."):
         decimal = string_number.replace(",", ".")
 
         if decimal.replace(".", "").isnumeric():
+            if negative_number:
+                return float(decimal) * -1
             return float(decimal)
 
     if string_number.isnumeric():
+        if negative_number:
+            return int(string_number) * -1
         return int(string_number)
-
     return 0
 
 
@@ -84,9 +92,9 @@ def fill_out_items(sheet, items, start_row, description):
 
         if item["pocet"]:
             sheet["E" + str(item_number)] = return_number(item["pocet"])
-
         if item["cena"]:
             sheet["F" + str(item_number)] = return_number(item["cena"])
+        print(return_number(item["cena"]))
 
         if item["dph"]:
             sheet["H" + str(item_number)] = return_number(item["dph"])
@@ -720,7 +728,6 @@ class ExcelWriter:
 
     def create_faktura(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, vystavila_osoba):
         # Get odberatel and dodavatel names
-        print(descriptions)
         if dodavatel_list:
             self.dodavatel = dodavatel_list[0]
 

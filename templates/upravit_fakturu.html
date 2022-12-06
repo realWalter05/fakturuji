@@ -93,9 +93,9 @@
                     <div class="polozka_item">
             	    	<div class="row">
             	    	    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:" value="{{ polozka['dodavka'] }}"/></div>
-            	    	    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH" value="{{ polozka['dph'] }}"/></div>
-            	    	    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet" value="{{ polozka['pocet'] }}"/></div>
-            	    	    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena" value="{{ polozka['cena'] }}"/></div>
+            	    	    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH" value="{{ polozka['dph'] }}"/></div>
+            	    	    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet" value="{{ polozka['pocet'] }}"/></div>
+            	    	    <div class="col"><input type="number" step="0.01"  class="form-control col" name="price" placeholder="Cena" value="{{ polozka['cena'] }}"/></div>
             	    	    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna" value="{{ polozka['mena'] }}"/></div>
             	    	</div>
             	    </div>
@@ -104,27 +104,27 @@
                 <div class="polozka_item">
             		<div class="row">
             		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
             		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
             		</div>
             	</div>
             	<div class="polozka_item">
             		<div class="row">
             		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
             		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
             		</div>
             	</div>
             	<div class="polozka_item">
             		<div class="row">
             		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="count" placeholder="Počet"/></div>
-            		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
+            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
             		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
             		</div>
             	</div>
@@ -179,7 +179,7 @@
                                 </label>
                             </div>
                     		<div class="form-check col">
-                    		    <input class="form-check-input" type="checkbox"  value="{{ 1 if faktura_data['dodavatel_dph'] else 0 }}" name="dodavatel_dph" id="dodavatel_dph">
+                    		    <input class="form-check-input" type="checkbox"  {{ 'checked' if faktura_data['dodavatel_dph'] else ''}} name="dodavatel_dph" id="dodavatel_dph">
                     		    <label class="form-check-label" for="dodavatel_dph">
                     		    Dodavatel je plátcem DPH
                     		    </label>
@@ -187,13 +187,13 @@
                         </div>
                         <div class="row m-1 mb-5">
                             <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="qr_platba" id="qr_platba" value="{{ 1 if faktura_data['dodavatel_dph'] else 0 }}">
+                                <input class="form-check-input" type="checkbox" name="qr_platba" id="qr_platba" {{ 'checked' if faktura_data['dodavatel_dph'] else ''}}>
                                 <label class="form-check-label" for="qr_platba">
                                 QR platba
                                 </label>
                             </div>
                             <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="je_sifrovano" id="je_sifrovano" value="{{ 1 if faktura_data['je_sifrovano'] else 0 }}">
+                                <input class="form-check-input" type="checkbox" name="je_sifrovano" id="je_sifrovano" {{ 'checked' if faktura_data['je_sifrovano'] else ''}}>
                                 <label class="form-check-label" for="je_sifrovano">
                                 Je šifrováno
                                 </label>

@@ -36,6 +36,9 @@
 <div class="mx-auto col-10 d-flex flex-column justify-content-around" style="height: 92.67vh">
   <div class="card mt-5 mx-5 mb-2 p-5 shadow-lg">
       <h2 class="display-3 text-center mb-5">Poslední faktury</h2>
+      {% if not faktury %}
+        <p class="text-muted m-5">Nemáte vytvořené žádné faktury</p>
+      {% else %}
       <table class="table">
               <tr>
                 <th scope="col" style="width: 40px;"></th>
@@ -66,6 +69,7 @@
               </tr>
               {% endfor %}
       </table>
+      {% endif %}
       <div class="row p-3">
           <a class="w-50" href="/fakturujto"><button class="btn btn-dark w-100">Vytvořit další</button></a>
           <a class="w-50" href="/faktury"><button class="btn btn-white w-100">Zobrazit všechny</button></a>
@@ -87,6 +91,9 @@
     <div class="card m-5 p-5 shadow-lg d-flex col-7">
       <h2 class="display-6">Vytvořit fakturu ze šablony</h2>
       <div class="w-100 d-flex h-100 p-5">
+        {% if not sablony %}
+          <p class="text-muted">Nemáte vytvořené žádné šablony</p>
+        {% endif %}
         {% for sablona in sablony %}
           <a class="w-25" href="fakturuj_sablonu?id={{ sablona['faktura_id'] }}"><button class="border p-5 btn">{{ sablona["nazev"] }}</button></a>
         {% endfor %}

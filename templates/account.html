@@ -8,13 +8,16 @@
 		<div class="form-group mb-2">
     		<label>Uživatelské jméno</label>
     		<input type="text" class="form-control" value="{{ session['user_data']['name'] }}" readonly>
-  		</div>	
+  		</div>
 		<div class="form-group mb-2">
-    		<label>Počet faktur</label>
-    		<input type="email" class="form-control"readonly value="{{ faktura_count }}">
-  		</div>		
-		<a href="/unlogin">Odhlásit se</a> 
-	</section>	
+    		<label>Email</label>
+    		<input type="email" class="form-control"readonly value="{{ session['user_data']['email'] }}">
+  		</div>
+		<div class="row">
+			<a class="col text-secondary" onclick="DeleteAccountDataDoubleCheck(this);">Vymazat Váš účet a všechna data o něm</a>
+			<a class="col text-end" href="/unlogin">Odhlásit se</a>
+		</div>
+	</section>
 </section>
 
 {% endblock %}

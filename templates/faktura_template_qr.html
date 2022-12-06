@@ -166,26 +166,25 @@
         {% endfor %}
         <tr style="height: 1rem"></tr>
         <tr class="bank_title cambria">
-            <td colspan="5">Bankovní účet</td>
+            <td colspan="2" rowspan="6">
+                <img src="data:image/png;base64,{{ qr_platba_base }}" alt="qr_platba_kod" style="width: 120px; height: 120px;"/>
+            </td>
+            <td colspan="3">Bankovní účet</td>
             <td colspan="3">Symbol:</td>
             <td class="dph_td cambria"></td>
             <td></td>
-            <td colspan="2" class="right"></td>
         </tr>
         <tr>
-            <td colspan="2">Číslo účtu:</td>
-            <td></td>
-            <td colspan="2">{{ dodavatel[13] }}/{{ dodavatel[14] }}</td>
+            <td colspan="2">Účet</td>
+            <td>{{ dodavatel[13] }}/{{ dodavatel[14] }}</td>
             <td>var:</td>
             <td colspan="2">{{ dodavatel[17] }}</td>
             <td class="dph_td cambria"></td>
             <td></td>
-            <td colspan="2" class="right"></td>
         </tr>
         <tr>
             <td colspan="2">SWIFT:</td>
-            <td></td>
-            <td colspan="2">{{ dodavatel[16] }}</td>
+            <td>{{ dodavatel[16] }}</td>
             <td>konst:</td>
             <td colspan="2">{{ dodavatel[18] }}</td>
             <td class="dph_td cambria">DPH ** %</td>
@@ -194,8 +193,7 @@
         </tr>
         <tr>
             <td colspan="2">IBAN:</td>
-            <td></td>
-            <td colspan="5">{{ dodavatel[15] }}</td>
+            <td colspan="4">{{ dodavatel[15] }}</td>
             <td class="dph_td cambria">BEZ DPH</td>
             <td></td>
             <td colspan="2" class="right">{{ faktura_data["total_bez_dph"] }} Kč</td>
