@@ -482,7 +482,7 @@ def post_faktura(user_data, args):
 		)
 		cursor = conn.cursor(prepared=True)
 
-		print(f" { args.get('je_sifrovano') } je sifrovano")
+		print(f" { args }")
 		je_sifrovano = 1 if args.get("je_sifrovano") == "on" else 0
 		post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano)
 		post_to_items_table(user_data, args, cursor, conn, cursor.lastrowid, je_sifrovano)

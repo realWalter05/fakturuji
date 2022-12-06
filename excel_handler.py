@@ -96,7 +96,7 @@ def create_faktura_excel(excel, user_data, faktura_data, items):
             description = popisek_id[0]["popisek"]
 
     # Faktura in excel
-    excel.create_faktura(dodavatel_list, odberatel_list, items, 1 if faktura_data["typ"] == 1 else 0,
+    excel.create_faktura(dodavatel_list, odberatel_list, items, faktura_data["typ"],
                         faktura_data["dodavatel_dph"], faktura_data["qr_platba"], date, description, faktura_data["cislo_faktury"],
                         faktura_data["vystaveno"])
     print("done")
@@ -118,11 +118,11 @@ def get_all_faktury_in_date(user_data, faktury, polozky, ucetnictvi_od, ucetnict
             create_faktura_excel(excel, user_data, faktury[i], polozky[i])
     return excel
 
-
+# TODO pdf fix něco u description
 def get_prices_polozky(polozky):
     for polozka in polozky:
-        polozka["bez_dph"] = round(int(polozka["pocet"]) * int(polozka["cena"]), 2)
-        polozka["s_dph"] = round(polozka["bez_dph"] + (polozka["bez_dph"] / 100) * int(polozka["dph"]), 2)
+        polozka["bez_dph"] = round((int(polozka["pocet"]) if polozka["pocet"] else 0) * (int(polozka["cena"]), 2) if polozka["cena"] else 0)
+        polozka["s_dph"] = round((polozka["bez_dph"] if polozka["bez_dph"] else 0) + ((polozka["bez_dph"] if polozka["bez_dph"] else 0) / 100) * (int(polozka["dph"]) if polozka["dph"] else 0), 2)
     return polozky
 
 
