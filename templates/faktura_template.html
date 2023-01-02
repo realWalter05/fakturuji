@@ -94,40 +94,40 @@
         <tr class="big_row">
             <td colspan="5">Vedeno v: {{ dodavatel[8] }} {{ dodavatel[9] }}</td>
             <td colspan="2"></td>
-            <td colspan="5"></td>
+            <td colspan="5">{% if faktura_data["typ"] == 1 %} <strong>Faktura vystavena v režimu přenesené daňové povinnosti. Daň odvede zákazník.</strong> {% endif %}</td>
         </tr>
         <tr style="height: 1rem"></tr>
         <tr>
-            <td colspan="2">Dodací list:</td>
+            <td colspan="2">{{ faktura_data["variable_title0"] if faktura_data["variable_title0"] else "" }}</td>
             <td></td>
-            <td colspan="2" class="right"></td>
+            <td colspan="2" class="right">{{ faktura_data["variable_data0"] if faktura_data["variable_data0"] else "" }}</td>
             <td colspan="2"></td>
             <td colspan="2"></td>
             <td></td>
             <td colspan="2" class="right"></td>
         </tr>
         <tr>
-            <td colspan="2">Způsob dopravy:</td>
+            <td colspan="2">{{ faktura_data["variable_title1"] if faktura_data["variable_title1"] else ""  }}</td>
             <td></td>
-            <td colspan="2" class="right"></td>
+            <td colspan="2" class="right">{{ faktura_data["variable_data1"] if faktura_data["variable_data1"] else "" }}</td>
             <td colspan="2"></td>
             <td colspan="2">Datum vystavení:</td>
             <td></td>
             <td colspan="2" class="right">{{ faktura_data["datum_vystaveni"] }}</td>
         </tr>
         <tr>
-            <td colspan="2">Místo určení:</td>
+            <td colspan="2">{{ faktura_data["variable_title2"] if faktura_data["variable_title2"] else "" }}</td>
             <td></td>
-            <td colspan="2" class="right"></td>
+            <td colspan="2" class="right">{{ faktura_data["variable_data2"] if faktura_data["variable_data2"] else "" }}</td>
             <td colspan="2"></td>
             <td colspan="2">Datum zdan. plnění:</td>
             <td></td>
             <td colspan="2" class="right">{{ faktura_data["datum_zdanpl"] }}</td>
         </tr>
         <tr>
-            <td colspan="2">Objednávky:</td>
+            <td colspan="2">{{ faktura_data["variable_title3"] if faktura_data["variable_title3"] else "" }}</td>
             <td></td>
-            <td colspan="2" class="right"></td>
+            <td colspan="2" class="right">{{ faktura_data["variable_data3"] if faktura_data["variable_data3"] else "" }}</td>
             <td colspan="2"></td>
             <td colspan="2">Datum splatnosti:</td>
             <td></td>
@@ -142,18 +142,24 @@
             <td colspan="3">Bez DPH</td>
             <td>S DPH</td>
         </tr>
+        {% if popisek %}
+        <tr style="height: 0.35rem"></tr>
+        <tr>
+            <td colspan="12">{{ popisek }}</td>
+        </tr>
+        {% endif %}
         {% for polozka in polozky %}
         <tr style="height: 0.35rem"></tr>
         <tr class="items">
             <td colspan="4">{{ polozka["dodavka"] }}</td>
             <td>{{ polozka["pocet"] }}</td>
-            <td colspan="2">{{ polozka["cena"] }} {{ polozka["mena"] }}</td>
+            <td colspan="2">{{ polozka["cena"] }} {{ faktura_data["mena_ending"] }}</td>
             <td>{{ polozka["dph"] }} %</td>
-            <td colspan="3">{{ polozka["bez_dph"] }} {{ polozka["mena"] }}</td>
-            <td>{{ polozka["s_dph"] }} {{ polozka["mena"] }}</td>
+            <td colspan="3">{{ polozka["bez_dph"] }} {{ faktura_data["mena_ending"] }}</td>
+            <td>{{ polozka["s_dph"] }} {{ faktura_data["mena_ending"] }}</td>
         </tr>
         {% endfor %}
-        {% for n in range(8-polozky|length) %}
+        {% for n in range((8 if not popisek else 7) - polozky|length) %}
         <tr style="height: 0.35rem"></tr>
         <tr class="items">
             <td colspan="4"></td>
@@ -168,9 +174,9 @@
         <tr class="bank_title cambria">
             <td colspan="5">Bankovní účet</td>
             <td colspan="3">Symbol:</td>
-            <td class="dph_td cambria"></td>
+            <td class="dph_td cambria">{% if dph|length > 2 %} DPH {{ dph[2][0] }} % {% endif %}</td>
             <td></td>
-            <td colspan="2" class="right"></td>
+            <td colspan="2" class="right">{% if dph|length > 2 %} {{ dph[2][1] }} {{ faktura_data["mena_ending"] }} {% endif %} </td>
         </tr>
         <tr>
             <td colspan="2">Číslo účtu:</td>
@@ -178,9 +184,9 @@
             <td colspan="2">{{ dodavatel[13] }}/{{ dodavatel[14] }}</td>
             <td>var:</td>
             <td colspan="2">{{ dodavatel[17] }}</td>
-            <td class="dph_td cambria"></td>
+            <td class="dph_td cambria">{% if dph|length > 1 %} DPH {{ dph[1][0] }} % {% endif %}</td>
             <td></td>
-            <td colspan="2" class="right"></td>
+            <td colspan="2" class="right">{% if dph|length > 1 %} {{ dph[1][1] }} {{ faktura_data["mena_ending"] }} {% endif %} </td>
         </tr>
         <tr>
             <td colspan="2">SWIFT:</td>
@@ -188,9 +194,9 @@
             <td colspan="2">{{ dodavatel[16] }}</td>
             <td>konst:</td>
             <td colspan="2">{{ dodavatel[18] }}</td>
-            <td class="dph_td cambria">DPH ** %</td>
+            <td class="dph_td cambria">{% if dph|length > 0 %} DPH {{ dph[0][0] }} % {% endif %}</td>
             <td></td>
-            <td colspan="2" class="right">******</td>
+            <td colspan="2" class="right">{% if dph|length > 0 %} {{ dph[0][1] }} {{ faktura_data["mena_ending"] }} {% endif %} </td>
         </tr>
         <tr>
             <td colspan="2">IBAN:</td>
@@ -198,7 +204,7 @@
             <td colspan="5">{{ dodavatel[15] }}</td>
             <td class="dph_td cambria">BEZ DPH</td>
             <td></td>
-            <td colspan="2" class="right">{{ faktura_data["total_bez_dph"] }} Kč</td>
+            <td colspan="2" class="right">{{ faktura_data["total_bez_dph"] }} {{ faktura_data["mena_ending"] }}</td>
         </tr>
         <tr>
             <td colspan="8"></td>
@@ -207,11 +213,11 @@
         <tr style="height: 0.5rem"></tr>
         <tr>
             <td colspan="8"></td>
-            <td colspan="4" class="celkem_s_dph cambria">CELKEM S DPH</td>
+            <td colspan="4" class="celkem_s_dph cambria">CELKEM{% if faktura_data["typ"] == 0 %} S DPH {% endif %}</td>
         </tr>
         <tr>
             <td colspan="8"></td>
-            <td colspan="4" class="full_price cambria">{{ faktura_data["total_s_dph"] }} Kč</td>
+            <td colspan="4" class="full_price cambria">{% if faktura_data["typ"] == 1 %} {{ faktura_data["total_bez_dph"] }} {% else %} {{ faktura_data["total_s_dph"] }} {% endif %} {{ faktura_data["mena_ending"] }}</td>
         </tr>
         <tr style="height: 0.5rem"></tr>
         <tr>

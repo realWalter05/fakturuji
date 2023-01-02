@@ -1,9 +1,47 @@
 
 
+function CreateSablona(faktura_id) {
+	document.getElementById("sablona-fakturu-btn").remove();
+	let form = document.createElement("form");
+	form.setAttribute("action", "/z_faktury_sablonu");
+	form.setAttribute("method", "GET");
+	form.setAttribute("class", "p-3 col");
+
+	let title = document.createElement("h1");
+	title.setAttribute("class", "display-5 p-3 text-center");
+	title.innerText = "Pojmenujte šablonu";
+	form.appendChild(title);
+
+	let input = document.createElement("input");
+	input.setAttribute("class", "form-control");
+	input.setAttribute("type", "text");
+	input.setAttribute("placeholder", "Název šablony...	");
+	input.setAttribute("name", "sablona_name");
+	form.appendChild(input);
+
+	let sablona_id = document.createElement("input");
+	sablona_id.setAttribute("class", "form-control");
+	sablona_id.setAttribute("type", "hidden");
+	sablona_id.setAttribute("name", "id");
+	sablona_id.value = faktura_id;
+	form.appendChild(sablona_id);
+
+	let button = document.createElement("button");
+	button.setAttribute("class", "form-control btn btn-dark w-100");
+	button.setAttribute("type", "submit");
+	button.innerText = "Vytvořit šablonu";
+	form.appendChild(button);
+
+	let div = document.createElement("div");
+	div.setAttribute("id", "sablona_popup");
+	div.appendChild(form);
+	document.querySelector("#prehled-buttons-div").appendChild(div);
+}
+
 function ShowFakturaPreview(faktura_id, element) {
 	document.querySelector("#upravit-fakturu-btn").setAttribute("href", "upravit_fakturu?id="+faktura_id);
 	if (document.querySelector("#sablona-fakturu-btn")) {
-		document.querySelector("#sablona-fakturu-btn").setAttribute("href", "z_faktury_sablonu?id="+faktura_id);
+		document.querySelector("#sablona-fakturu-btn").setAttribute("onclick", "CreateSablona("+faktura_id+")");
 	}
 
 	previous = document.querySelector(".bg-light");
@@ -25,9 +63,74 @@ function ShowFakturaPreview(faktura_id, element) {
 		}});
 }
 
-function ModifySablonaButton(faktura_id) {
+function ModifySablonaButton(faktura_id, sablona_sid) {
 	document.querySelector("#fakturuj-sablonu-btn").setAttribute("href", "fakturuj_sablonu?id="+faktura_id);
+	document.querySelector("#upravit-fakturu-btn").setAttribute("href", "upravit_sablonu?id="+faktura_id+"&sid="+sablona_sid);
 }
+
+function RevealFirmy() {
+	ShowInfo(document.querySelector("#dodavatel_col"), "dodavatel");
+	document.querySelector("#dodavatel_reveal_text").setAttribute("onclick", "HideFirmy();")
+	document.querySelector("#dodavatel_reveal_text").innerText = "Skrýt informace o dodavateli";
+	ShowInfo(document.querySelector("#odberatel_col"), "odberatel");
+	document.querySelector("#odberatel_reveal_text").setAttribute("onclick", "HideFirmy();")
+	document.querySelector("#odberatel_reveal_text").innerText = "Skrýt informace o dodavateli";
+
+}
+
+function HideFirmy() {
+	HideInfo(document.querySelector("#dodavatel_col"), "dodavatel");
+	document.querySelector("#dodavatel_reveal_text").setAttribute("onclick", "RevealFirmy();")
+	document.querySelector("#dodavatel_reveal_text").innerText = "Zobrazit informace o dodavateli";
+	HideInfo(document.querySelector("#odberatel_col"), "odberatel");
+	document.querySelector("#odberatel_reveal_text").setAttribute("onclick", "RevealFirmy();")
+	document.querySelector("#odberatel_reveal_text").innerText = "Zobrazit informace o odběrateli";
+}
+
+function ShowInfo(element, id_text) {
+	const parent = element.parentElement;
+	parent.querySelector("input[name='"+id_text+"_ico']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_dic']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_street']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_cislo_popisne']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_city']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_psc']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_rejstrik']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_country']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_vlozka']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_rejstrik']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_country']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_vlozka']").setAttribute("type", "text");
+	parent.querySelector("input[name='"+id_text+"_telefon']").setAttribute("type", "tel");
+	parent.querySelector("input[name='"+id_text+"_email']").setAttribute("type", "email");
+	parent.querySelector("input[name='"+id_text+"_web']").setAttribute("type", "text");
+	if (id_text == "dodavatel") {
+		document.querySelector("#bank_account_col").style.display = "block";
+	}
+}
+
+function HideInfo(element, id_text) {
+	const parent = element.parentElement;
+	parent.querySelector("input[name='"+id_text+"_ico']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_dic']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_street']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_cislo_popisne']").setAttribute("hidden", "text");
+	parent.querySelector("input[name='"+id_text+"_city']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_psc']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_rejstrik']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_country']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_vlozka']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_rejstrik']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_country']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_vlozka']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_telefon']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_email']").setAttribute("type", "hidden");
+	parent.querySelector("input[name='"+id_text+"_web']").setAttribute("type", "hidden");
+	if (id_text == "dodavatel") {
+		document.querySelector("#bank_account_col").style.display = "none";
+	}
+}
+
 
 function PrintFaktura(faktura_id) {
 	$.ajax({
@@ -50,6 +153,20 @@ function PrintFaktura(faktura_id) {
 			console.log(xhr);
 		}
 	});
+}
+
+
+function UpravitPopisek(popisek_id, popisek_nazev, popisek_text) {
+	document.querySelector("#popisky-btn").innerText = "Upravit popisek";
+	document.querySelector('input[name="nazev"]').value = popisek_nazev;
+	document.querySelector('input[name="popisek"]').value = popisek_text;
+	input = document.createElement("input")
+	input.setAttribute("name", "id");
+	input.setAttribute("type", "hidden");
+	input.setAttribute("value", popisek_id);
+	document.querySelector("#popisky-form").appendChild(input);
+	document.querySelector("#popisky-form").setAttribute("action", "/edit_popisek");
+
 }
 
 
@@ -120,12 +237,188 @@ function GetDalsiFaktury(from, to) {
 				// Trash collumn
 				let trashTr = document.createElement("td");
 				trashTr.setAttribute("class", "faktury-trash-icon");
-				trashTr.setAttribute("onclick", "PrintFaktura("+faktury_obj[faktura]["id"]+");");
-				trashTr.innerHTML = '<svg version="1.1" style="width: 20px; height: 20px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.428px" height="482.429px" viewBox="0 0 482.428 482.429" style="enable-background:new 0 0 482.428 482.429;" xml:space="preserve"> <g> <g> <path d="M381.163,57.799h-75.094C302.323,25.316,274.686,0,241.214,0c-33.471,0-61.104,25.315-64.85,57.799h-75.098 c-30.39,0-55.111,24.728-55.111,55.117v2.828c0,23.223,14.46,43.1,34.83,51.199v260.369c0,30.39,24.724,55.117,55.112,55.117 h210.236c30.389,0,55.111-24.729,55.111-55.117V166.944c20.369-8.1,34.83-27.977,34.83-51.199v-2.828 C436.274,82.527,411.551,57.799,381.163,57.799z M241.214,26.139c19.037,0,34.927,13.645,38.443,31.66h-76.879 C206.293,39.783,222.184,26.139,241.214,26.139z M375.305,427.312c0,15.978-13,28.979-28.973,28.979H136.096 c-15.973,0-28.973-13.002-28.973-28.979V170.861h268.182V427.312z M410.135,115.744c0,15.978-13,28.979-28.973,28.979H101.266 c-15.973,0-28.973-13.001-28.973-28.979v-2.828c0-15.978,13-28.979,28.973-28.979h279.897c15.973,0,28.973,13.001,28.973,28.979 V115.744z"/> <path d="M171.144,422.863c7.218,0,13.069-5.853,13.069-13.068V262.641c0-7.216-5.852-13.07-13.069-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C158.074,417.012,163.926,422.863,171.144,422.863z"/> <path d="M241.214,422.863c7.218,0,13.07-5.853,13.07-13.068V262.641c0-7.216-5.854-13.07-13.07-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C228.145,417.012,233.996,422.863,241.214,422.863z"/> <path d="M311.284,422.863c7.217,0,13.068-5.853,13.068-13.068V262.641c0-7.216-5.852-13.07-13.068-13.07 c-7.219,0-13.07,5.854-13.07,13.07v147.154C298.213,417.012,304.067,422.863,311.284,422.863z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>';
+				let aTrash = document.createElement("a");
+				aTrash.setAttribute("href", "/smazat_fakturu?id="+faktury_obj[faktura]["id"])
+				aTrash.innerHTML = '<svg version="1.1" style="width: 20px; height: 20px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.428px" height="482.429px" viewBox="0 0 482.428 482.429" style="enable-background:new 0 0 482.428 482.429;" xml:space="preserve"> <g> <g> <path d="M381.163,57.799h-75.094C302.323,25.316,274.686,0,241.214,0c-33.471,0-61.104,25.315-64.85,57.799h-75.098 c-30.39,0-55.111,24.728-55.111,55.117v2.828c0,23.223,14.46,43.1,34.83,51.199v260.369c0,30.39,24.724,55.117,55.112,55.117 h210.236c30.389,0,55.111-24.729,55.111-55.117V166.944c20.369-8.1,34.83-27.977,34.83-51.199v-2.828 C436.274,82.527,411.551,57.799,381.163,57.799z M241.214,26.139c19.037,0,34.927,13.645,38.443,31.66h-76.879 C206.293,39.783,222.184,26.139,241.214,26.139z M375.305,427.312c0,15.978-13,28.979-28.973,28.979H136.096 c-15.973,0-28.973-13.002-28.973-28.979V170.861h268.182V427.312z M410.135,115.744c0,15.978-13,28.979-28.973,28.979H101.266 c-15.973,0-28.973-13.001-28.973-28.979v-2.828c0-15.978,13-28.979,28.973-28.979h279.897c15.973,0,28.973,13.001,28.973,28.979 V115.744z"/> <path d="M171.144,422.863c7.218,0,13.069-5.853,13.069-13.068V262.641c0-7.216-5.852-13.07-13.069-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C158.074,417.012,163.926,422.863,171.144,422.863z"/> <path d="M241.214,422.863c7.218,0,13.07-5.853,13.07-13.068V262.641c0-7.216-5.854-13.07-13.07-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C228.145,417.012,233.996,422.863,241.214,422.863z"/> <path d="M311.284,422.863c7.217,0,13.068-5.853,13.068-13.068V262.641c0-7.216-5.852-13.07-13.068-13.07 c-7.219,0-13.07,5.854-13.07,13.07v147.154C298.213,417.012,304.067,422.863,311.284,422.863z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>';
+				trashTr.appendChild(aTrash);
 				container.appendChild(trashTr);
 			}
 
-			document.querySelector("#get-dalsi-faktury-btn").setAttribute('GetDalsiFaktury('+from + 5+','+ to + 5+')');
+			document.querySelector("#get-dalsi-faktury-btn").setAttribute('onclick', 'GetDalsiFaktury('+(from + 5)+','+ (to + 5)+')');
+		},
+		error: function(xhr) {
+			console.log(xhr);
+		}
+	});
+}
+
+
+function GetDalsiPopisky(from, to) {
+	$.ajax({
+		url: '/get_dalsi_popisky',
+		type: "get",
+		data: {from: from, to: to},
+		datatype: "text",
+		contentType : 'application/json',
+		success: function(popisky) {
+			popisky_obj = JSON.parse(popisky);
+
+			const popiskyContainer = document.querySelector(".popisky-container");
+			for (let popisek in popisky_obj) {
+				let firstTr = document.createElement("input");
+				firstTr.setAttribute("type", "text");
+				firstTr.setAttribute("class", "form-control col-3 w-25");
+				firstTr.readOnly  = true;
+				firstTr.value = popisky_obj[popisek]["nazev"];
+
+				let secondTr = document.createElement("input");
+				secondTr.setAttribute("type", "text");
+				secondTr.setAttribute("class", "form-control col w-75");
+				secondTr.readOnly  = true;
+				secondTr.value = popisky_obj[popisek]["nazev"];
+
+				let div = document.createElement("div");
+				div.setAttribute("style", "width: 40px; height: 40px; cursor: pointer;");
+				let a = document.createElement("a");
+				a.setAttribute("href", "/smazat_popisek?id="+popisky_obj[popisek]["nazev"]);
+				a.innerHTML = '<svg version="1.1" style="width: 20px; height: 20px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.428px" height="482.429px" viewBox="0 0 482.428 482.429" style="enable-background:new 0 0 482.428 482.429;" xml:space="preserve"> <g> <g> <path d="M381.163,57.799h-75.094C302.323,25.316,274.686,0,241.214,0c-33.471,0-61.104,25.315-64.85,57.799h-75.098 c-30.39,0-55.111,24.728-55.111,55.117v2.828c0,23.223,14.46,43.1,34.83,51.199v260.369c0,30.39,24.724,55.117,55.112,55.117 h210.236c30.389,0,55.111-24.729,55.111-55.117V166.944c20.369-8.1,34.83-27.977,34.83-51.199v-2.828 C436.274,82.527,411.551,57.799,381.163,57.799z M241.214,26.139c19.037,0,34.927,13.645,38.443,31.66h-76.879 C206.293,39.783,222.184,26.139,241.214,26.139z M375.305,427.312c0,15.978-13,28.979-28.973,28.979H136.096 c-15.973,0-28.973-13.002-28.973-28.979V170.861h268.182V427.312z M410.135,115.744c0,15.978-13,28.979-28.973,28.979H101.266 c-15.973,0-28.973-13.001-28.973-28.979v-2.828c0-15.978,13-28.979,28.973-28.979h279.897c15.973,0,28.973,13.001,28.973,28.979 V115.744z"/> <path d="M171.144,422.863c7.218,0,13.069-5.853,13.069-13.068V262.641c0-7.216-5.852-13.07-13.069-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C158.074,417.012,163.926,422.863,171.144,422.863z"/> <path d="M241.214,422.863c7.218,0,13.07-5.853,13.07-13.068V262.641c0-7.216-5.854-13.07-13.07-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C228.145,417.012,233.996,422.863,241.214,422.863z"/> <path d="M311.284,422.863c7.217,0,13.068-5.853,13.068-13.068V262.641c0-7.216-5.852-13.07-13.068-13.07 c-7.219,0-13.07,5.854-13.07,13.07v147.154C298.213,417.012,304.067,422.863,311.284,422.863z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>';
+				div.appendChild(a);
+
+				let divSecond = document.createElement("div");
+				divSecond.setAttribute("style", "width: 40px; height: 40px; cursor: pointer;");
+				let aSecond = document.createElement("a");
+				aSecond.setAttribute("onclick", 'UpravitPopisek("'+popisky_obj[popisek]['id']+'","'+popisky_obj[popisek]['nazev']+'","'+popisky_obj[popisek]['popisek']+'");');
+				aSecond.innerHTML = '<svg width="24px" height="24px" viewBox="0 0 24 24" id="_24x24_On_Light_Edit" data-name="24x24/On Light/Edit" xmlns="http://www.w3.org/2000/svg"> <rect id="view-box" width="24" height="24" fill="none"/> <path id="Shape" d="M.75,17.5A.751.751,0,0,1,0,16.75V12.569a.755.755,0,0,1,.22-.53L11.461.8a2.72,2.72,0,0,1,3.848,0L16.7,2.191a2.72,2.72,0,0,1,0,3.848L5.462,17.28a.747.747,0,0,1-.531.22ZM1.5,12.879V16h3.12l7.91-7.91L9.41,4.97ZM13.591,7.03l2.051-2.051a1.223,1.223,0,0,0,0-1.727L14.249,1.858a1.222,1.222,0,0,0-1.727,0L10.47,3.91Z" transform="translate(3.25 3.25)" fill="#141124"/> </svg>';
+				divSecond.appendChild(aSecond);
+
+				let container = document.createElement("div");
+				container.setAttribute("class", "row form-row-padding")
+				container.appendChild(firstTr);
+				container.appendChild(secondTr);
+				container.appendChild(div);
+				container.appendChild(divSecond);
+				popiskyContainer.appendChild(container);
+			}
+
+			document.querySelector("#get-dalsi-popisky-btn").setAttribute('onclick', 'GetDalsiPopisky('+(from + 5)+','+ (to + 5)+');');
+		},
+		error: function(xhr) {
+			console.log(xhr);
+		}
+	});
+}
+
+
+
+function GetDalsiFirmy(from, to) {
+	$.ajax({
+		url: '/get_dalsi_firmy',
+		type: "get",
+		data: {from: from, to: to},
+		datatype: "text",
+		contentType : 'application/json',
+		success: function(firmy) {
+			firmy_obj = JSON.parse(firmy);
+
+			const firmyTableBody = document.querySelector("#firmy-table-body");
+			for (let popisek in firmy_obj) {
+				let firstTd = document.createElement("td");
+				let firstA = document.createElement("a");
+				firstA.setAttribute("href", "/upravit_firmu?id="+firmy_obj[popisek]["id"]);
+				firstA.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16"><path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/></svg>';
+				firstTd.appendChild(firstA);
+
+				let nazev = document.createElement("td");
+				nazev.innerText = firmy_obj[popisek]["nazev"];
+
+				let ico = document.createElement("td");
+				ico.innerText = firmy_obj[popisek]["ico"];
+
+				let dic = document.createElement("td");
+				dic.innerText = firmy_obj[popisek]["dic"];
+
+				let ulice = document.createElement("td");
+				ulice.innerText = firmy_obj[popisek]["ulice"];
+
+				let cislo_popisne = document.createElement("td");
+				cislo_popisne.innerText = firmy_obj[popisek]["cislo_popisne"];
+
+				let mesto = document.createElement("td");
+				mesto.innerText = firmy_obj[popisek]["mesto"];
+
+				let psc = document.createElement("td");
+				psc.innerText = firmy_obj[popisek]["psc"];
+
+				let zeme = document.createElement("td");
+				zeme.innerText = firmy_obj[popisek]["zeme"];
+
+				let soud_rejstrik = document.createElement("td");
+				soud_rejstrik.innerText = firmy_obj[popisek]["soud_rejstrik"];
+
+				let soudni_vlozka = document.createElement("td");
+				soudni_vlozka.innerText = firmy_obj[popisek]["soudni_vlozka"];
+
+				let telefon = document.createElement("td");
+				telefon.innerText = firmy_obj[popisek]["telefon"];
+
+				let email = document.createElement("td");
+				email.innerText = firmy_obj[popisek]["email"];
+
+				let web = document.createElement("td");
+				web.innerText = firmy_obj[popisek]["web"];
+
+				let cislo_uctu = document.createElement("td");
+				cislo_uctu.innerText = firmy_obj[popisek]["cislo_uctu"];
+
+				let cislo_banky = document.createElement("td");
+				cislo_banky.innerText = firmy_obj[popisek]["cislo_banky"];
+
+				let iban = document.createElement("td");
+				iban.innerText = firmy_obj[popisek]["iban"];
+
+				let swift = document.createElement("td");
+				swift.innerText = firmy_obj[popisek]["swift"];
+
+				let konstSymbol = document.createElement("td");
+				konstSymbol.innerText = firmy_obj[popisek]["konst_symbol"];
+
+				let varSymbol = document.createElement("td");
+				varSymbol.innerText = firmy_obj[popisek]["var_symbol"];
+
+				let lastTd = document.createElement("td");
+				let lastA = document.createElement("a");
+				lastA.setAttribute("style", "width: 40px; height: 40px; cursor: pointer;");
+				lastA.setAttribute("href", "/smazat_firmu?id="+firmy_obj[popisek]["id"]);
+				lastA.innerHTML = '<svg version="1.1" style="width: 20px; height: 20px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.428px" height="482.429px" viewBox="0 0 482.428 482.429" style="enable-background:new 0 0 482.428 482.429;" xml:space="preserve"> <g> <g> <path d="M381.163,57.799h-75.094C302.323,25.316,274.686,0,241.214,0c-33.471,0-61.104,25.315-64.85,57.799h-75.098 c-30.39,0-55.111,24.728-55.111,55.117v2.828c0,23.223,14.46,43.1,34.83,51.199v260.369c0,30.39,24.724,55.117,55.112,55.117 h210.236c30.389,0,55.111-24.729,55.111-55.117V166.944c20.369-8.1,34.83-27.977,34.83-51.199v-2.828 C436.274,82.527,411.551,57.799,381.163,57.799z M241.214,26.139c19.037,0,34.927,13.645,38.443,31.66h-76.879 C206.293,39.783,222.184,26.139,241.214,26.139z M375.305,427.312c0,15.978-13,28.979-28.973,28.979H136.096 c-15.973,0-28.973-13.002-28.973-28.979V170.861h268.182V427.312z M410.135,115.744c0,15.978-13,28.979-28.973,28.979H101.266 c-15.973,0-28.973-13.001-28.973-28.979v-2.828c0-15.978,13-28.979,28.973-28.979h279.897c15.973,0,28.973,13.001,28.973,28.979 V115.744z"/> <path d="M171.144,422.863c7.218,0,13.069-5.853,13.069-13.068V262.641c0-7.216-5.852-13.07-13.069-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C158.074,417.012,163.926,422.863,171.144,422.863z"/> <path d="M241.214,422.863c7.218,0,13.07-5.853,13.07-13.068V262.641c0-7.216-5.854-13.07-13.07-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C228.145,417.012,233.996,422.863,241.214,422.863z"/> <path d="M311.284,422.863c7.217,0,13.068-5.853,13.068-13.068V262.641c0-7.216-5.852-13.07-13.068-13.07 c-7.219,0-13.07,5.854-13.07,13.07v147.154C298.213,417.012,304.067,422.863,311.284,422.863z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>';
+				lastTd.appendChild(lastA);
+
+				let tr = document.createElement("tr");
+				tr.appendChild(firstTd);
+				tr.appendChild(nazev);
+				tr.appendChild(ico);
+				tr.appendChild(dic);
+				tr.appendChild(ulice);
+				tr.appendChild(cislo_popisne);
+				tr.appendChild(mesto);
+				tr.appendChild(psc);
+				tr.appendChild(zeme);
+				tr.appendChild(soud_rejstrik);
+				tr.appendChild(soudni_vlozka);
+				tr.appendChild(telefon);
+				tr.appendChild(email);
+				tr.appendChild(web);
+				tr.appendChild(cislo_uctu);
+				tr.appendChild(cislo_banky);
+				tr.appendChild(iban);
+				tr.appendChild(swift);
+				tr.appendChild(konstSymbol);
+				tr.appendChild(varSymbol);
+				tr.appendChild(lastTd);
+
+				firmyTableBody.appendChild(tr);
+			}
+
+			document.querySelector("#get-dalsi-firmy-btn").setAttribute('onclick', 'GetDalsiFirmy('+(from + 5)+','+ (to + 5)+');');
 		},
 		error: function(xhr) {
 			console.log(xhr);
@@ -207,7 +500,7 @@ function GetDalsiSablony(from, to) {
 				container.appendChild(trashTr);
 			}
 
-			document.querySelector("#get-dalsi-faktury-btn").setAttribute('GetDalsiFaktury('+from + 5+','+ to + 5+')');
+			document.querySelector("#get-dalsi-faktury-btn").setAttribute('onclick', 'GetDalsiFaktury('+(from + 5)+','+ (to + 5)+')');
 		},
 		error: function(xhr) {
 			console.log(xhr);
@@ -235,6 +528,7 @@ function GetFirmaData(parent) {
 	});
 }
 
+
 function GetDataFromId(id, parent, je_dodavatel) {
 	$.ajax({
 		url: '/get_data_from_id',
@@ -257,18 +551,24 @@ function GetDataFromId(id, parent, je_dodavatel) {
 	});
 }
 
-function set_date(id, plus_days) {
-	var now = new Date();
-	var day = ("0" + now.getDate()).slice(-2);
-	var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+function SetDate(id, plus_days) {
+	let now = new Date();
+
+	if (plus_days) {
+		now.setDate(now.getDate()+plus_days);
+	}
+
+	let day = ("0" + now.getDate()).slice(-2);
+	let month = ("0" + (now.getMonth() + 1)).slice(-2);
+	let today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
 	$('#'+id).val(today);
 }
 
-set_date("splatnost_date")
-set_date("zdanpl_date")
-set_date("vystaveni_date")
+SetDate("splatnost_date", 7)
+SetDate("zdanpl_date")
+SetDate("vystaveni_date")
 
 function GetPopisky(text, parent) {
 	$.ajax({
@@ -303,9 +603,10 @@ function GetHintFirmy(text, parent, je_dodavatel, je_odberatel) {
 }
 
 
-function SetPopisek(value) {
-	document.querySelector('input[name=\"description\"]').value = value["popisek"];
-	document.querySelector('input[name=\"description_id\"]').value = value["id"];
+function SetPopisek(nazev, popisek, id) {
+	document.querySelector("#description_chooser").value = nazev;
+	document.querySelector('input[name=\"description\"]').value = popisek;
+	document.querySelector('input[name=\"description_id\"]').value = id;
 }
 
 
@@ -322,7 +623,7 @@ function HintPopisek(popisky, parent) {
 		let a = document.createElement("a");
 		a.classList.add("dropdown-item");
 		a.classList.add("hint-element");
-		a.setAttribute("onclick", SetPopisek(value));
+		a.setAttribute("onclick", "SetPopisek('"+ value["nazev"] + "','" + value['popisek'] +"','"+ value['id'] + "');");
 		a.textContent = value["nazev"];
 		hintMenu.appendChild(a);
 	});
@@ -367,8 +668,8 @@ function fill_data(data, parent, je_dodavatel) {
 		parent.querySelector(".form-dic").value = data[2];
 		parent.querySelector(".form-street").value = data[3];
 		parent.querySelector(".form-cislo-popisne").value = data[4];
-		parent.querySelector(".form-psc").value = data[5];
-		parent.querySelector(".form-city").value = data[6];
+		parent.querySelector(".form-city").value = data[5];
+		parent.querySelector(".form-psc").value = data[6];
 		parent.querySelector(".form-country").value = data[7];
 		parent.querySelector(".form-rejstrik").value = data[8];
 		parent.querySelector(".form-vlozka").value = data[9];
@@ -411,14 +712,14 @@ function CreateItem() {
 	row.appendChild(CreateItemCol("number", "form-control", "dph", "DPH"));
 	row.appendChild(CreateItemCol("number", "form-control", "count", "Počet"));
 	row.appendChild(CreateItemCol("number", "form-control", "price", "Cena"));
-	row.appendChild(CreateItemCol("text", "form-control", "currency", "Měna"));
 
 	let polozka_item = document.createElement("div");
+	polozka_item.classList.add("polozka_item")
 
 	// Append children
 	polozka_item.appendChild(row);
 
-	container.appendChild(polozka_item)
+	container.insertBefore(polozka_item, container.lastElementChild)
 }
 
 function SetDropdownAresTest(output_id, input_data) {
@@ -431,5 +732,123 @@ function DeleteAccountDataDoubleCheck(element) {
 		window.location.href = "/delete_everything";
 	} else {
 		element.innerText = "Určitě si přejete smazat všechna data? Kliknutě znovu pro smazání"
+	}
+}
+
+
+function ChangeFirma() {
+	let parentDiv = document.querySelector("#bank_account_col");
+	if (parentDiv.querySelector("#changeDodavatelBtn") || parentDiv.querySelector("#changeOdberatelBtn")) {
+		// Check if not already there
+		return
+	}
+
+	let container = document.createElement("div");
+	container.setAttribute("class", "row mt-3 d-flex justify-content-between");
+	container.setAttribute("id", "changeBtnContainer");
+
+	let btnDodavatel = document.createElement("button");
+	btnDodavatel.setAttribute("class", "btn btn-dark w-25");
+	btnDodavatel.setAttribute("id", "changeDodavatelBtn");
+	btnDodavatel.setAttribute("onclick", "ChangeDodavatelFakturujto();");
+	btnDodavatel.innerText = "Změnit data dodavatele";
+	container.appendChild(btnDodavatel);
+
+	let btnOdberatel = document.createElement("button");
+	btnOdberatel.setAttribute("class", "btn btn-dark w-25");
+	btnOdberatel.innerText = "Změnit data odběratele";
+	btnOdberatel.setAttribute("id", "changeOdberatelBtn");
+	container.appendChild(btnOdberatel);
+
+	parentDiv.appendChild(container);
+}
+
+
+function ChangeDodavatelFakturujto() {
+	let inputs = document.querySelector("#dodavatel_col").querySelectorAll("input");
+	let bankInputs = document.querySelector("#bank_account_col").querySelectorAll("input");
+
+	$.ajax({
+		url: '/get_data_from_id',
+		type: "get",
+		data: {id: inputs[2].value},
+		datatype: "json",
+		contentType : 'application/json',
+		success: function(response) {
+			console.log("we are here");
+			let data = JSON.parse(response);
+			console.log(inputs[2].value);
+			$.ajax({
+				url: '/change_firma',
+				type: "post",
+				data: {
+					id : inputs[2].value,
+					dodavatel_ : inputs[0].value,
+					dodavatel_ico : inputs[1].value,
+					dodavatel_dic : inputs[3].value,
+					dodavatel_street : inputs[4].value,
+					dodavatel_cislo_popisne : inputs[5].value,
+					dodavatel_city : inputs[6].value,
+					dodavatel_psc : inputs[7].value,
+					dodavatel_country : inputs[9].value,
+					dodavatel_rejstrik : inputs[8].value,
+					dodavatel_vlozka : inputs[10].value,
+					dodavatel_telefon : inputs[11].value,
+					dodavatel_email : inputs[12].value,
+					dodavatel_web : inputs[13].value,
+					dodavatel_je_odberatel : "on" ? data[19] : "off",
+					dodavatel_je_dodavatel : "on" ? data[20] : "off",
+					dodavatel_sifrovat : "on" ? data[21] : "off",
+					cislo_uctu : bankInputs[0].value,
+					cislo_banky : bankInputs[1].value,
+					konst_symbol : bankInputs[3].value,
+					var_symbol : bankInputs[4].value,
+					iban : bankInputs[5].value,
+					swift : bankInputs[2].value,
+				},
+				success: function() {
+					document.querySelector("#changeBtnContainer").remove();
+				},
+				error: function(xhr) {
+					console.log(xhr);
+				}});
+		},
+		error: function(xhr) {
+			console.log("fail");
+		}
+	});
+}
+
+
+function ShowSidebar() {
+	let sidebar = document.querySelector(".sidebar");
+	if (sidebar) {
+		if (sidebar.getAttribute("style") == "display: block !important;") {
+			sidebar.setAttribute("style", "");
+		} else {
+			sidebar.setAttribute("style", "display: block !important;");
+		}
+	}
+}
+
+function CheckQrPlatba(status) {
+	if (status.value == "on") {
+		if (document.querySelector("input[name='account_number']").value == "" || document.querySelector("input[name='bank_number']").value == "") {
+			// QR platba not available
+			status.checked = false;
+			if (document.querySelector("#faktura-warning-text")) {
+				return
+			}
+			let warning = document.createElement("p");
+			warning.setAttribute("class", "w-100 text-danger");
+			warning.setAttribute("id", "faktura-warning-text");
+			warning.innerText = "QR platba nemůže byt zapnuta, jelikož dodavatel neobsahuje platné číslo účtu a banku.";
+			document.getElementById("final-fakturuji-div").prepend(warning);
+		} else {
+			let warningText = document.querySelector("#faktura-warning-text");
+			if (warningText) {
+				warningText.remove();
+			}
+		}
 	}
 }

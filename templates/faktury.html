@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block main %}
-<div class="row m-0" style="height: 100vh;">
-  <div class="sidebar col" style="height: 100vh;">
+<div class="row m-0" >
+  <div class="sidebar col">
   <div class="d-flex flex-column flex-shrink-0 p-3 text-white text-center">
 	<ul class="nav nav-pills flex-column mb-auto">
 	  <li class="nav-item">
@@ -33,7 +33,7 @@
 	</ul>
   </div>
 </div>
-<div class="mx-auto col-10 row">
+<div class="mx-auto col-10 row" id="main-div">
   <div class="w-50 p-5 col shadow-lg">
 	  <h2 class="display-3 text-center mb-3">Seznam faktur</h2>
 	  <div id="faktury-table-container">
@@ -43,10 +43,10 @@
 			<th scope="col" style="width: 40px;"></th>
 			<th scope="col" style="width: 40px;"></th>
 			<th scope="col" style="width: 40px;"></th>
-			<th scope="col">cislo_faktury	</th>
+			<th scope="col">ID<th>
 			<th scope="col">Dodavatel</th>
 			<th scope="col">Odběratel</th>
-			<th scope="col">Datum vystavení</th>
+			<th scope="col">Vystavení</th>
 			<th scope="col" style="width: 40px;"></th>
 		  </tr>
 		  {% for faktura in faktury %}
@@ -75,7 +75,7 @@
 	  <div class="row p-3" id="prehled-buttons-div">
 		  <a style="cursor: pointer;" id="get-dalsi-faktury-btn" onclick="GetDalsiFaktury(10, 20);"><p>Zobrazit další</p></a>
 		  <a class="w-50" id="upravit-fakturu-btn"><button class="btn btn-dark w-100">Upravit fakturu</button></a>
-		  <a class="w-50" id="sablona-fakturu-btn"><button class="btn btn-dark w-100">Vytvořit z ní šablonu</button></a>
+		  <button id="sablona-fakturu-btn" class="btn btn-dark w-50">Vytvořit z ní šablonu</button>
 	  </div>
   </div>
   <div class="w-50 p-5 col"  id="faktura_preview">

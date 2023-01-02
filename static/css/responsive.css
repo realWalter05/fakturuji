@@ -1,0 +1,132 @@
+@media screen and (max-width: 1580px) and (min-width: 1200px) {
+    #sablona-div {
+        width: 75vw;
+    }
+
+}
+
+@media screen and (max-width: 1200px) {
+    .sidebar {
+        display: none !important;
+    }
+
+    #main-div {
+        width: 100vw;
+    }
+
+    .container-main {
+        width: 100vw;
+    }
+
+    #account-div .w-50 {
+        width: 90vw !important;
+    }
+
+    #sablona-div {
+        width: 87vw;
+    }
+
+    #firma-div-table {
+        overflow-x: scroll !important;
+    }
+
+    .m-5 {
+        margin: 2rem !important;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #popisky-form input {
+        width: 100vw !important;
+    }
+
+    .popisky-container input:nth-child(2) {
+        margin-bottom: 1rem;
+    }
+
+    #popisky-btn {
+        width: 80vw !important;
+    }
+
+    #popisky-form .px-5 {
+        padding: 0 1rem 0 1rem !important;
+    }
+
+    #upravit-fakturu-btn {
+        margin-bottom: 1rem !important;
+    }
+
+    #main-div .w-50{
+        width: 100vw !important;
+    }
+
+    #sablona-div div {
+        flex-wrap: wrap !important;
+    }
+
+    #sablona-div div a button {
+        width: 50vw;
+        text-align: center;
+    }
+
+    #main-div {
+        padding: 0;
+        margin: 0;
+    }
+
+    #container-scroll{
+        overflow: scroll;
+    }
+
+    #container-scroll table {
+        width: 800px;
+    }
+
+    #fakturuji-div {
+        width: 100vw !important;
+    }
+
+    #submit_btn, #currency-div, #popisek-nad-polozky-div input, #fakturuji-div, #vystaveno-div, #variable-data input {
+        width: 100vw !important;
+    }
+
+    #dodavatel_col, #odberatel_col, #dodavatel_col input, #odberatel_col input, #bank_account_col input, #faktura-vystavena-div, #vystavila_osoba, #checkboxes-faktura label {
+        width: 100vw !important;
+    }
+
+    #dodavatel_col {
+        margin-bottom: 1rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    #sablona-div {
+        width: 100vw ;
+        margin: 0 0 2rem 0;
+        padding: 0;
+    }
+
+    #bottom-faktury {
+        margin-bottom: 2rem !important;
+    }
+
+    #account-div .p-5 {
+        padding: 0 !important;
+    }
+
+    .polozka_item .row .col input {
+        width: 90vw !important;
+    }
+
+    .polozka_item .row .col:nth-child(4n) {
+        margin-bottom: 1rem;
+    }
+}
+
+@media screen and (max-width: 1880px) and (min-width: 1580px) {
+    #stahnout-ucetnictvi .p-5 {
+        padding: 3rem 0 0 0 !important;
+    }
+}
+
+

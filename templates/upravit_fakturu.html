@@ -2,244 +2,234 @@
 
 {% block main %}
 <div class="w-100" id="background-image-second">
+    {% if sablona_sid %}
+    <form method="GET" class="p-4 w-75 m-auto" action="/process_upravit_sablonu">
+        <input type="hidden" name="faktura_id" id="faktura_id" value="{{ faktura_data['id'] if faktura_data else '' }}"/>
+        <input type="hidden" name="sablona_sid" id="sablona_sid" value="{{ sablona_sid }}"/>
+        <input type="hidden" name="sablona_name" id="sablona_name" value="{{ sablona_name }}"/>
+    {% else%}
     <form method="GET" class="p-4 w-75 m-auto" action="/process_upravit_fakturu">
         <input type="hidden" name="faktura_id" id="faktura_id" value="{{ faktura_data['id'] if faktura_data else '' }}"/>
-        <div id="carouselExampleControls" class="carousel" data-bs-ride="carousel" data-bs-interval="false">
-            <div class="carousel-inner mt-5">
-        <div class="carousel-item active"><div class="row ">
-                <div class="col w-50" id="dodavatel_col">
-            		<h3 class="text-center display-5">Dodavatel</h4>
-                    <div class="dropdown">
-                        <input class="form-control dropdown-toggle form-nazev" value="{{ dodavatel[0] if dodavatel else '' }}" onclick="SetDropdownAresTest('dodavatel-get-data', this);
-                        GetHintFirmy(this.value, this.parentElement.parentElement, 1, 0);" oninput="SetDropdownAresTest('dodavatel-get-data', this);
-                        GetHintFirmy(this.value, this.parentElement.parentElement, 1, 0);" autocomplete="off" name="dodavatel_" placeholder="Dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" id="dodavatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control form-ico" name="dodavatel_ico" placeholder="IČO" value="{{ dodavatel[1] if dodavatel else '' }}"/>
-                    <input type="hidden" name="dodavatel_id" id="dodavatel_id" value="{{ faktura_data['dodavatel'] if faktura_data else '' }}"/>
-                    <input type="text" class="form-control form-dic" name="dodavatel_dic" placeholder="DIČ" value="{{ dodavatel[2] if dodavatel else '' }}"/>
-                    <div class="row form-row-padding">
-                        <input type="text" class="form-control col form-street" name="dodavatel_street" placeholder="Ulice" value="{{ dodavatel[3] if dodavatel else '' }}"/>
-                        <input type="text" clas0="1orm-control col form-cislo-popisne" name="dodavatel_cislo_popisne" placeholder="Číslo popisné" value="{{ dodavatel[4] if dodavatel else '' }}"/>
-                    </div>
-                    <div class="row form-row-padding">
-                        <input type="text" class="form-control col form-city" name="dodavatel_city" placeholder="Město" value="{{ dodavatel[5] if dodavatel else '' }}"/>
-                        <input type="text" class="form-control col form-psc" name="dodavatel_psc" placeholder="PSČ" value="{{ dodavatel[6] if dodavatel else '' }}"/>
-                    </div>
-
-                    <input type="text" class="form-control form-rejstrik" name="dodavatel_rejstrik" placeholder="Obchodní rejstřík" value="{{ dodavatel[8] if dodavatel else '' }}"/>
-                    <div class="row form-row-padding">
-                        <input type="text" class="form-control col form-country" name="dodavatel_country" placeholder="Země" value="{{ dodavatel[7] if dodavatel else '' }}"/>
-                        <input type="text" class="form-control col form-vlozka" name="dodavatel_vlozka" placeholder="Soudní vložka" value="{{ dodavatel[9] if dodavatel else '' }}"/>
-                    </div>
-
-                    <input type="tel" class="form-control form-telefon" name="dodavatel_telefon" placeholder="Telefonní číslo" value="{{ dodavatel[10] if dodavatel else '' }}"/>
-                    <input type="text" class="form-control form-email" name="dodavatel_email" placeholder="Email" value="{{ dodavatel[11] if dodavatel else '' }}"/>
-                    <input type="text" class="form-control form-web" name="dodavatel_web" placeholder="Web" value="{{ dodavatel[12] if dodavatel else '' }}"/>
-                </div>
-                <div class="col w-50" id="odberatel_col">
-            	    <h3 class="text-center display-5">Odběratel</h4>
-                    <div class="dropdown">
-                        <input class="form-control dropdown-toggle form-nazev" value="{{ odberatel[0] if odberatel else '' }}" onclick="SetDropdownAresTest('odberatel-get-data', this);
-                        GetHintFirmy(this.value, this.parentElement.parentElement, 0, 1);" oninput="SetDropdownAresTest('odberatel-get-data', this);
-                        GetHintFirmy(this.value, this.parentElement.parentElement, 0, 1);" autocomplete="off" name="odberatel_" placeholder="Odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" id="odberatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
-                            </div>
-                        </div>
-                    <input type="text" class="form-control form-ico" name="odberatel_ico" placeholder="IČO" value="{{ odberatel[1] if odberatel else '' }}"/>
-                    <input type="hidden" name="odberatel_id" id="odberatel_id" value="{{ faktura_data['odberatel'] if faktura_data else '' }}"/>
-                    <input type="text" class="form-control form-dic" name="odberatel_dic" placeholder="DIČ" value="{{ odberatel[2] if odberatel else '' }}"/>
-                        <div class="row form-row-padding">
-                        <input type="text" class="form-control col form-street" name="odberatel_street" placeholder="Ulice" value="{{ odberatel[3] if odberatel else '' }}"/>
-                        <input type="text" class="form-control col form-cislo-popisne" name="odberatel_cislo_popisne" placeholder="Číslo popisné" value="{{ odberatel[4] if odberatel else '' }}"/>
-                        </div>
-                        <div class="row form-row-padding">
-                        <input type="text" class="form-control col form-city" name="odberatel_city" placeholder="Město" value="{{ odberatel[5] if odberatel else '' }}"/>
-                        <input type="text" class="form-control col form-psc" name="odberatel_psc" placeholder="PSČ" value="{{ odberatel[6] if odberatel else '' }}"/>
-                        </div>
-
-                    <input type="text" class="form-control form-rejstrik" name="odberatel_rejstrik" placeholder="Obchodní rejstřík" value="{{ odberatel[8] if odberatel else '' }}"/>
-                        <div class="row form-row-padding">
-                        <input type="text" class="form-control col form-country" name="odberatel_country" placeholder="Země" value="{{ odberatel[7] if odberatel else '' }}"/>
-                        <input type="text" class="form-control col form-vlozka" name="odberatel_vlozka" placeholder="Soudní vložka" value="{{ odberatel[9] if odberatel else '' }}"/>
-                        </div>
-
-                    <input type="tel" class="form-control form-telefon" name="odberatel_telefon" placeholder="Telefonní číslo" value="{{ odberatel[10] if odberatel else '' }}"/>
-                    <input type="text" class="form-control form-email" name="odberatel_email" placeholder="Email" value="{{ odberatel[11] if odberatel else '' }}"/>
-                    <input type="text" class="form-control form-web" name="odberatel_web" placeholder="Web" value="{{ odberatel[12] if odberatel else '' }}"/>
-                </div>
-                <div class="p-4">
-                    <h4 class="text-center display-5">Bankovní údaje</h3>
-                    <div class="row">
-                        <input type="text" class="form-control col" name="account_number" placeholder="*Číslo účtu" value="{{ dodavatel[13] if odberatel else '' }}"/>
-                        <input type="text" class="form-control col" name="bank_number" placeholder="*Číslo banky" value="{{ dodavatel[14] if odberatel else '' }}"/>
-                        <input type="text" class="form-control col" name="swift" placeholder="SWIFT" value="{{ dodavatel[16] if odberatel else '' }}"/>
-                    </div>
-                    <div class="row">
-                        <input type="text" class="form-control col" name="konst_cislo" placeholder="Konst. symbol" value="{{ dodavatel[18] if odberatel else '' }}"/>
-                        <input type="number" class="form-control col" name="var_cislo" placeholder="Var. symbol" value="{{ dodavatel[17] if odberatel else '' }}"/>
-                        <input type="number" class="form-control col" name="iban" placeholder="IBAN" value="{{ dodavatel[15] if odberatel else '' }}"/>
-                    </div>
-                  </div>
-        </div></div>
-        <div class="carousel-item">
-            <div id="polozky">
-            	<button type="button" class="form-control w-100 dark btn-dark" onclick="CreateItem();">Přidat položku</button>
-            	{% if polozky %}
-                    {% for polozka in polozky %}
-                    <div class="polozka_item">
-            	    	<div class="row">
-            	    	    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:" value="{{ polozka['dodavka'] }}"/></div>
-            	    	    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH" value="{{ polozka['dph'] }}"/></div>
-            	    	    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet" value="{{ polozka['pocet'] }}"/></div>
-            	    	    <div class="col"><input type="number" step="0.01"  class="form-control col" name="price" placeholder="Cena" value="{{ polozka['cena'] }}"/></div>
-            	    	    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna" value="{{ polozka['mena'] }}"/></div>
-            	    	</div>
-            	    </div>
-                    {% endfor %}
-                {% else %}
-                <div class="polozka_item">
-            		<div class="row">
-            		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
-            		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
-            		</div>
-            	</div>
-            	<div class="polozka_item">
-            		<div class="row">
-            		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
-            		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
-            		</div>
-            	</div>
-            	<div class="polozka_item">
-            		<div class="row">
-            		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
-            		    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
-            		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
-            		</div>
-            	</div>
-                {% endif %}
-            </div>
-            <div class="mt-5">
-                <h3 class="display-5">Popisek nad položky</h3>
-                <div class="dropdown" style="height: auto;">
-                    <input class="form-control dropdown-toggle" oninput="
-                    GetPopisky(this.value, this.parentElement.parentElement, 0, 1);" autocomplete="off" placeholder="Vyberte si popisek již z vašich vybraných" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {% endif %}
+        <div class="row">
+            <div class="col w-50" id="dodavatel_col">
+                <h3 class="display-5">Dodavatel</h4>
+                <div class="dropdown">
+                    <input class="form-control dropdown-toggle form-nazev" value="{{ dodavatel[0] if dodavatel else '' }}" onclick="GetHintFirmy(this.value, this.parentElement.parentElement, 1, 0);"
+                    oninput="GetHintFirmy(this.value, this.parentElement.parentElement, 1, 0);" autocomplete="off" name="dodavatel_" placeholder="Dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
                     </div>
                 </div>
-                <input class="form-control" name="description" placeholder="Popisek">
-                <input type="hidden" name="description_id" placeholder="Popisek" value="{{ faktura_data['description_id'] if faktura_data else '' }}"/>
-                <div class="m-5"><br><br><br><br><br><br><br></div>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-ico" name="dodavatel_ico" placeholder="IČO" value="{{ dodavatel[1] if dodavatel else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" name="dodavatel_id" id="dodavatel_id" value="{{ faktura_data['dodavatel'] if faktura_data else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-dic" name="dodavatel_dic" placeholder="DIČ" value="{{ dodavatel[2] if dodavatel else '' }}"/>
+                <div class="row form-row-padding">
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-street" name="dodavatel_street" placeholder="Ulice" value="{{ dodavatel[3] if dodavatel else '' }}"/>
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-cislo-popisne" name="dodavatel_cislo_popisne" placeholder="Číslo popisné" value="{{ dodavatel[4] if dodavatel else '' }}"/>
+                </div>
+                <div class="row form-row-padding">
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-city" name="dodavatel_city" placeholder="Město" value="{{ dodavatel[5] if dodavatel else '' }}"/>
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-psc" name="dodavatel_psc" placeholder="PSČ" value="{{ dodavatel[6] if dodavatel else '' }}"/>
+                </div>
+
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-rejstrik" name="dodavatel_rejstrik" placeholder="Obchodní rejstřík" value="{{ dodavatel[8] if dodavatel else '' }}"/>
+                <div class="row form-row-padding">
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-country" name="dodavatel_country" placeholder="Země" value="{{ dodavatel[7] if dodavatel else '' }}"/>
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-vlozka" name="dodavatel_vlozka" placeholder="Soudní vložka" value="{{ dodavatel[9] if dodavatel else '' }}"/>
+                </div>
+
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-telefon" name="dodavatel_telefon" placeholder="Telefonní číslo" value="{{ dodavatel[10] if dodavatel else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-email" name="dodavatel_email" placeholder="Email" value="{{ dodavatel[11] if dodavatel else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-web" name="dodavatel_web" placeholder="Web" value="{{ dodavatel[12] if dodavatel else '' }}"/>
+                <a onclick="RevealFirmy();" id="dodavatel_reveal_text">Zobrazit informace o dodavateli</a>
+            </div>
+            <div class="col w-50" id="odberatel_col">
+                <h3 class="display-5">Odběratel</h4>
+                <div class="dropdown">
+                    <input class="form-control dropdown-toggle form-nazev" value="{{ odberatel[0] if odberatel else '' }}" onclick="GetHintFirmy(this.value, this.parentElement.parentElement, 0, 1);"
+                    oninput="GetHintFirmy(this.value, this.parentElement.parentElement, 0, 1);" autocomplete="off" name="odberatel_" placeholder="Odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
+                        </div>
+                    </div>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-ico" name="odberatel_ico" placeholder="IČO" value="{{ odberatel[1] if odberatel else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" name="odberatel_id" id="odberatel_id" value="{{ faktura_data['odberatel'] if faktura_data else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-dic" name="odberatel_dic" placeholder="DIČ" value="{{ odberatel[2] if odberatel else '' }}"/>
+                <div class="row form-row-padding">
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-street" name="odberatel_street" placeholder="Ulice" value="{{ odberatel[3] if odberatel else '' }}"/>
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-cislo-popisne" name="odberatel_cislo_popisne" placeholder="Číslo popisné" value="{{ odberatel[4] if odberatel else '' }}"/>
+                </div>
+                <div class="row form-row-padding">
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-city" name="odberatel_city" placeholder="Město" value="{{ odberatel[5] if odberatel else '' }}"/>
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-psc" name="odberatel_psc" placeholder="PSČ" value="{{ odberatel[6] if odberatel else '' }}"/>
+                </div>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-rejstrik" name="odberatel_rejstrik" placeholder="Obchodní rejstřík" value="{{ odberatel[8] if odberatel else '' }}"/>
+                <div class="row form-row-padding">
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-country" name="odberatel_country" placeholder="Země" value="{{ odberatel[7] if odberatel else '' }}"/>
+                    <input type="hidden" oninput="ChangeFirma();" class="form-control col form-vlozka" name="odberatel_vlozka" placeholder="Soudní vložka" value="{{ odberatel[9] if odberatel else '' }}"/>
+                </div>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-telefon" name="odberatel_telefon" placeholder="Telefonní číslo" value="{{ odberatel[10] if odberatel else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-email" name="odberatel_email" placeholder="Email" value="{{ odberatel[11] if odberatel else '' }}"/>
+                <input type="hidden" oninput="ChangeFirma();" class="form-control form-web" name="odberatel_web" placeholder="Web" value="{{ odberatel[12] if odberatel else '' }}"/>
+                <a onclick="RevealFirmy();" id="odberatel_reveal_text">Zobrazit informace o odběrateli</a>
+            </div>
+            <div class="p-4" id="bank_account_col">
+                <h4 class="display-5">Bankovní údaje dodavatele</h3>
+                <div class="row">
+                    <input type="text" oninput="ChangeFirma();" class="form-control col" name="account_number" placeholder="*Číslo účtu" value="{{ dodavatel[13] if odberatel else '' }}"/>
+                    <input type="text" oninput="ChangeFirma();" class="form-control col" name="bank_number" placeholder="*Číslo banky" value="{{ dodavatel[14] if odberatel else '' }}"/>
+                    <input type="text" oninput="ChangeFirma();" class="form-control col" name="swift" placeholder="SWIFT" value="{{ dodavatel[16] if odberatel else '' }}"/>
+                </div>
+                <div class="row">
+                    <input type="text" oninput="ChangeFirma();" class="form-control col" name="konst_cislo" placeholder="Konst. symbol" value="{{ dodavatel[18] if odberatel else '' }}"/>
+                    <input type="number" oninput="ChangeFirma();" class="form-control col" name="var_cislo" placeholder="Var. symbol" value="{{ dodavatel[17] if odberatel else '' }}"/>
+                    <input type="number" oninput="ChangeFirma();" class="form-control col" name="iban" placeholder="IBAN" value="{{ dodavatel[15] if odberatel else '' }}"/>
+                </div>
+              </div>
+        </div>
+        <div id="polozky" class="mt-4">
+            <h3 class="display-5">Položky</h3>
+            {% if polozky %}
+                {% for polozka in polozky %}
+                <div class="polozka_item">
+                    <div class="row">
+                        <div class="col"><input type="text" step="0.01"  class="form-control col" name="polozka" placeholder="Dodávka:" value="{{ polozka['dodavka'] }}"/></div>
+                        <div class="col"><input type="number" step="0.01"  class="form-control col" name="dph" placeholder="DPH" value="{{ polozka['dph'] }}"/></div>
+                        <div class="col"><input type="number" step="0.01"  class="form-control col" name="count" placeholder="Počet" value="{{ polozka['pocet'] }}"/></div>
+                        <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena" value="{{ polozka['cena'] }}"/></div>
+                        <div class="col"><input type="text" step="0.01"  class="form-control col" name="currency" placeholder="Měna" value="{{ polozka['mena'] }}"/></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="polozka_item">
+                <div class="row">
+                    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
+                    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
+                </div>
+            </div>
+            <div class="polozka_item">
+                <div class="row">
+                    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
+                    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
+                </div>
+            </div>
+            <div class="polozka_item">
+                <div class="row">
+                    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="dph" placeholder="DPH"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="count" placeholder="Počet"/></div>
+                    <div class="col"><input type="number" step="0.01" class="form-control col" name="price" placeholder="Cena"/></div>
+                    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
+                </div>
+            </div>
+            {% endif %}
+            <div onclick="CreateItem();" style="cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg></div>
+        </div>
+        <div class="mt-5 mb-5">
+            <h3 class="display-5">Popisek nad položky</h3>
+            <div class="dropdown row" style="height: auto;">
+                <input class="form-control col dropdown-toggle" id="description_chooser" value="{{ popisek['nazev'] if popisek else '' }}" oninput="GetPopisky(this.value, this.parentElement.parentElement);" onclick="GetPopisky(this.value, this.parentElement.parentElement);"
+                 autocomplete="off" placeholder="Vyberte si popisek již z vašich vybraných" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="dropdown-menu w-25" id="hint-menu" aria-labelledby="dropdownMenuButton">
+                </div>
+                <input class="form-control col-6 w-75" name="description" readonly placeholder="Popisek" value="{{ popisek['popisek'] if popisek else '' }}">
+            </div>
+            <input type="hidden" name="description_id" placeholder="Popisek" value="{{ faktura_data['description_id'] if faktura_data else '' }}"/>
+        </div>
+        <div class="mt-5 mb-5">
+            <h3 class="display-5">Variabilní data</h3>
+            <p>Vyplňte variabilní data, které potřebujete na faktuře nebo je ponechte prázdné.</p>
+            <div class="row px-3">
+                <input class="form-control col" name="variable_title0" value="{{ (faktura_data['variable_title0'] if faktura_data['variable_title0'] else '') if faktura_data else '' }}" placeholder="Dodací list: ">
+                <input class="form-control col-6 w-75" name="variable_data0" value="{{ (faktura_data['variable_data0'] if faktura_data['variable_data0'] else '') if faktura_data else '' }}" placeholder="...">
+            </div>
+            <div class="row px-3">
+                <input class="form-control col" name="variable_title1" value="{{ (faktura_data['variable_title1'] if faktura_data['variable_title1'] else '') if faktura_data else '' }}" placeholder="Způsob dopravy: ">
+                <input class="form-control col-6 w-75" name="variable_data1" value="{{ (faktura_data['variable_data1'] if faktura_data['variable_data1'] else '') if faktura_data else '' }}" name="description" placeholder="...">
+            </div>
+            <div class="row px-3">
+                <input class="form-control col" name="variable_title2" value="{{ (faktura_data['variable_title2'] if faktura_data['variable_title2'] else '') if faktura_data else '' }}" placeholder="Místo určení: ">
+                <input class="form-control col-6 w-75" name="variable_data2" value="{{ (faktura_data['variable_data2'] if faktura_data['variable_data2'] else '') if faktura_data else '' }}" name="description" placeholder="...">
+            </div>
+            <div class="row px-3">
+                <input class="form-control col" name="variable_title3" value="{{ (faktura_data['variable_title3'] if faktura_data['variable_title3'] else '') if faktura_data else '' }}" placeholder="Objednávka: ">
+                <input class="form-control col-6 w-75" name="variable_data3" value="{{ (faktura_data['variable_data3'] if faktura_data['variable_data3'] else '') if faktura_data else '' }}" name="description" placeholder="...">
             </div>
         </div>
-        <div class="carousel-item"><div>
+        <div class="row">
+            <div class="col">
+                <h3 class="display-5">Datumy</h3>
                 <div class="row">
-                    <div class="col">
-                    	<h4>Datumy</h4>
-                        <div class="row">
-                        	<label class="col" for="vystaveni_date">Datum vystavení</label>
-                        	<input type="date" class="col form-control" name="vystaveni_date" id="vystaveni_date" placeholder="Datum vystavení" value="{{ faktura_data['datum_vystaveni'] if faktura_data else '' }}"/>
-                        </div>
-                        <div class="row">
-                        	<label class="col" for="zdanpl_date">Zdanitelné plnění</label>
-                        	<input type="date" class="col form-control" name="zdanpl_date" id="zdanpl_date" value="{{ faktura_data['datum_zdanpl'] }}"/>
-                        </div>
-                        <div class="row">
-                        	<label class="col" for="splatnost_date">Datum splatnosti</label>
-                        	<input type="date" class="col form-control" name="splatnost_date" id="splatnost_date" value="{{ faktura_data['datum_splatnosti'] if faktura_data else '' }}"/>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-control border-0">
-                        	<label class="col" for="faktura_numbering">Číslo faktury</label>
-                        	<input type="text" class="form-control" name="faktura_numbering" id="faktura_numbering" placeholder="2022001" value="{{ faktura_data['cislo_faktury'] if faktura_data else '' }}"/>
-                        </div>
-                        <div class="form-control border-0">
-                        	<label class="col" for="vystavila_osoba">Vystaveno</label>
-                       		<input type="text" class="form-control" name="vystavila_osoba" id="vystavila_osoba" placeholder="např. Petr Novák - jednatel společnosti" value="{{ faktura_data['vystaveno'] if faktura_data else '' }}"/>
-                        </div>
-                    </div>
-                    <div class="row mt-5">
-                        <div class="row m-1">
-                            <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="prenesena_dph" id="prenesena_dph">
-                                <label class="form-check-label" for="prenesena_dph">
-                                Faktura vystavena v přeneseném DPH
-                                </label>
-                            </div>
-                    		<div class="form-check col">
-                    		    <input class="form-check-input" type="checkbox"  {{ 'checked' if faktura_data['dodavatel_dph'] else ''}} name="dodavatel_dph" id="dodavatel_dph">
-                    		    <label class="form-check-label" for="dodavatel_dph">
-                    		    Dodavatel je plátcem DPH
-                    		    </label>
-                    		</div>
-                        </div>
-                        <div class="row m-1 mb-5">
-                            <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="qr_platba" id="qr_platba" {{ 'checked' if faktura_data['dodavatel_dph'] else ''}}>
-                                <label class="form-check-label" for="qr_platba">
-                                QR platba
-                                </label>
-                            </div>
-                            <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="je_sifrovano" id="je_sifrovano" {{ 'checked' if faktura_data['je_sifrovano'] else ''}}>
-                                <label class="form-check-label" for="je_sifrovano">
-                                Je šifrováno
-                                </label>
-                            </div>
-                        </div>
-       				<input name="excel_button" id="submit_btn" type="submit" class="btn-dark btn w-25 float-right m-4 form-control" value="FakturujTo v Excelu"/>
-                  </div>
+                    <label class="col" for="vystaveni_date">Datum vystavení</label>
+                    <input type="date" class="col form-control" name="vystaveni_date" id="vystaveni_date" placeholder="Datum vystavení" value="{{ faktura_data['datum_vystaveni'] if faktura_data else '' }}"/>
                 </div>
-        </div></div>
-
-    </div>
-
-</div>
-        <button class="carousel-control-prev" style="transform: scale(0.35) rotate(180deg);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-
-            <?xml version="1.0" encoding="iso-8859-1"?>
-            <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                 viewBox="0 0 473.654 473.654" style="enable-background:new 0 0 473.654 473.654;" xml:space="preserve">
-            <circle style="fill:#262A30;" cx="236.827" cy="236.827" r="236.827"/><path style="fill:#FFFFFF;" d="M358.072,216.091c-27.011-27.011-54.018-54.022-81.029-81.033
-                c-17.124-17.127-47.781-4.529-47.781,19.737c0,13.485,0,26.97,0,40.455c-3.354-0.819-6.959-1.309-10.89-1.309
-                c-25.904,0-51.808,0-77.712,0c-54.332,0-54.815,84.159-0.606,84.159c25.904,0,51.808,0,77.712,0c4.158,0,7.965-0.546,11.495-1.455
-                c0,12.423,0,24.846,0,37.265c-0.146,1.731-0.105,3.455,0.108,5.153c0.8,12.038,8.04,19.764,17.09,23.14
-                c8.867,4.353,19.711,4.241,29.008-3.803c1.511-1.148,2.891-2.464,4.121-3.953c26.233-26.229,52.466-52.462,78.696-78.692
-                C369.13,244.916,368.834,226.85,358.072,216.091z"/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
-          </button>
-          <button class="carousel-control-next" style="transform: scale(0.35);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-
-            <?xml version="1.0" encoding="iso-8859-1"?>
-            <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                 viewBox="0 0 473.654 473.654" style="enable-background:new 0 0 473.654 473.654;" xml:space="preserve">
-            <circle style="fill:#262A30;" cx="236.827" cy="236.827" r="236.827"/><path style="fill:#FFFFFF;" d="M358.072,216.091c-27.011-27.011-54.018-54.022-81.029-81.033
-                c-17.124-17.127-47.781-4.529-47.781,19.737c0,13.485,0,26.97,0,40.455c-3.354-0.819-6.959-1.309-10.89-1.309
-                c-25.904,0-51.808,0-77.712,0c-54.332,0-54.815,84.159-0.606,84.159c25.904,0,51.808,0,77.712,0c4.158,0,7.965-0.546,11.495-1.455
-                c0,12.423,0,24.846,0,37.265c-0.146,1.731-0.105,3.455,0.108,5.153c0.8,12.038,8.04,19.764,17.09,23.14
-                c8.867,4.353,19.711,4.241,29.008-3.803c1.511-1.148,2.891-2.464,4.121-3.953c26.233-26.229,52.466-52.462,78.696-78.692
-                C369.13,244.916,368.834,226.85,358.072,216.091z"/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
-
-          </button>
+                <div class="row">
+                    <label class="col" for="zdanpl_date">Zdanitelné plnění</label>
+                    <input type="date" class="col form-control" name="zdanpl_date" id="zdanpl_date" value="{{ faktura_data['datum_zdanpl']  if faktura_data else '' }}"/>
+                </div>
+                <div class="row">
+                    <label class="col" for="splatnost_date">Datum splatnosti</label>
+                    <input type="date" class="col form-control" name="splatnost_date" id="splatnost_date" value="{{ faktura_data['datum_splatnosti'] if faktura_data else '' }}"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-control border-0">
+                    <label class="col" for="vystavila_osoba">Vystaveno</label>
+                       <input type="text" class="form-control" name="vystavila_osoba" id="vystavila_osoba" placeholder="např. Petr Novák - jednatel společnosti" value="{{ faktura_data['vystaveno'] if faktura_data else '' }}"/>
+                </div>
+                <div class="form-control border-0 d-none" id="cislo_faktury_box">
+                    <label class="col" for="faktura_numbering">Číslo faktury</label>
+                    <input type="text" class="form-control" name="faktura_numbering" id="faktura_numbering" placeholder="2022001" value="{{ faktura_data['cislo_faktury'] if faktura_data else '' }}"/>
+                </div>
+                <div class="form-check px-5 col">
+                    <input class="form-check-input" type="checkbox" id="manual_cislo_checkbox" onclick="this.parentElement.classList.add('d-none'); document.getElementById('cislo_faktury_box').classList.remove('d-none');">
+                    <label class="form-check-label" for="manual_cislo_checkbox">
+                    Zadat číslo faktury manuálně
+                    </label>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="row m-1">
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" name="prenesena_dph" id="prenesena_dph">
+                        <label class="form-check-label" for="prenesena_dph">
+                        Faktura vystavena v přeneseném DPH
+                        </label>
+                    </div>
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox"  {{ ('checked' if faktura_data['dodavatel_dph'] else 0) if faktura_data else '' }} name="dodavatel_dph" id="dodavatel_dph">
+                        <label class="form-check-label" for="dodavatel_dph">
+                        Dodavatel je plátcem DPH
+                        </label>
+                    </div>
+                </div>
+                <div class="row m-1 mb-5">
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" name="qr_platba" id="qr_platba" {{ ('checked' if faktura_data['qr_platba'] else '') if faktura_data else '' }}>
+                        <label class="form-check-label" for="qr_platba">
+                        QR platba
+                        </label>
+                    </div>
+                    <input class="hidden" type="checkbox" name="je_sifrovano" id="je_sifrovano" checked>
+                </div>
+                <div class="row w-50">
+                    <label class="form-check-label col" for="currency-select">Vyberte měnu faktury</label>
+                    <select class="form-select col" name="currency-select" aria-label="Vyberte měnu" id="currency-select">
+                        <option value="czk" {{ ('selected' if faktura_data["mena"] == 'czk' else '') if faktura_data else '' }}>CZK</option>
+                        <option value="eur" {{ ('selected' if faktura_data["mena"] == 'eur' else '') if faktura_data else '' }}>EUR</option>
+                        <option value="usd" {{ ('selected' if faktura_data["mena"] == 'usd' else '') if faktura_data else '' }}>USD</option>
+                        <option value="gbp" {{ ('selected' if faktura_data["mena"] == 'gbp' else '') if faktura_data else '' }}>GBP</option>
+                    </select>
+                </div>
+                <input id="submit_btn" type="submit" class="btn-dark btn w-50 float-right form-control" value="FakturujTo v Excelu"/>
+            </div>
+        </div>
     </form>
-    <br/>
 </div>
 {% endblock %}

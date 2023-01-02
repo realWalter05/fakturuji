@@ -12,7 +12,7 @@
 }
 
 .sidebar {
-    height: 92.67vh;
+    height: auto;
     min-height: 92.67vh;
     width: 280px;
     background: rgb(38, 42, 48);
@@ -55,7 +55,11 @@
 
 #faktury-table-container {
     height: 48vh !important;
-    overflow-y: auto !important;
+    overflow: scroll !important;
+}
+
+#faktury-table-container table {
+    width: 800px;
 }
 
 .table-icon {
@@ -68,4 +72,48 @@
     width: 40px;
     height: 40px;
     cursor: pointer;
+}
+
+.popisky-container {
+    max-height: 400px;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#bank_account_col {
+    display: none;
+}
+
+input[readonly]{
+    background-color:transparent !important;
+    font-size: 1em !important;
+}
+
+.hidden {
+    display: none;
+}
+
+#main-div {
+    min-height: 92.67vh;
+}
+
+#fakturuji-div {
+    background: rgba(255,255,255,0.7);
+}
+
+#popisek-nad-polozky-div div {
+    height: auto;
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+}
+
+#faktura_preview {
+    overflow: scroll;
+}
+
+#firma-div-table {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 390px;
 }

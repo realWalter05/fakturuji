@@ -82,7 +82,7 @@ def return_number(string_number):
     return 0
 
 
-def fill_out_items(sheet, items, start_row, description):
+def fill_out_items(sheet, items, start_row, description, mena):
     loop = 0
     for item in items:
         item_number = 21 + start_row + loop if description else 20 + start_row + loop
@@ -99,7 +99,7 @@ def fill_out_items(sheet, items, start_row, description):
         if item["dph"]:
             sheet["H" + str(item_number)] = return_number(item["dph"])
 
-        style_item(item_number, sheet)
+        style_item(item_number, sheet, mena)
 
         loop = loop + 1
 
@@ -185,7 +185,7 @@ def write_qr_platba_code(sheet, start_row, account_number, bank_code, items, var
     sheet.add_image(img)
 
 
-def style_item(item_number, sheet):
+def style_item(item_number, sheet, mena):
     # Style item
     white_bottom_border = Border(bottom=Side(border_style=BORDER_THICK, color='FFFFFF'))
     gray_fill = PatternFill(start_color='00F3F3F3', end_color='00F3F3F3', fill_type='solid')
@@ -205,7 +205,7 @@ def style_item(item_number, sheet):
 
     sheet.merge_cells(start_row=item_number, start_column=6, end_row=item_number, end_column=7)
     sheet["F" + str(item_number)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
-    sheet["F" + str(item_number)].number_format = "#,##0.00 Kč"
+    sheet["F" + str(item_number)].number_format = f"#,##0.00 {mena}"
     sheet["F" + str(item_number)].fill = gray_fill
     sheet["F" + str(item_number)].border = white_bottom_border
     sheet["G" + str(item_number)].border = white_bottom_border
@@ -217,7 +217,7 @@ def style_item(item_number, sheet):
 
     sheet.merge_cells(start_row=item_number, start_column=9, end_row=item_number, end_column=10)
     sheet["I" + str(item_number)].alignment = Alignment(vertical="center", shrinkToFit=True)
-    sheet["I" + str(item_number)].number_format = "#,##0.00 Kč"
+    sheet["I" + str(item_number)].number_format = f"#,##0.00 {mena}"
     sheet["I" + str(item_number)].value = "=IF(AND(E" + str(item_number) + "=\"\",F" +\
                                           str(item_number) + "=\"\"),\"\",E" + str(item_number) + "*F" + str(item_number) + ")"
     sheet["I" + str(item_number)].fill = gray_fill
@@ -226,7 +226,7 @@ def style_item(item_number, sheet):
 
     sheet.merge_cells(start_row=item_number, start_column=11, end_row=item_number, end_column=12)
     sheet["K" + str(item_number)].alignment = Alignment(vertical="center", shrinkToFit=True)
-    sheet["K" + str(item_number)].number_format = "#,##0.00 Kč"
+    sheet["K" + str(item_number)].number_format = f"#,##0.00 {mena}"
     sheet["K" + str(item_number)].value = "=IF(I" + str(item_number) + "=\"\", \"\", (I" + str(item_number) +\
                                           "+(I" + str(item_number) + "/100)*H" + str(item_number) + "))"
     sheet["K" + str(item_number)].fill = gray_fill
@@ -234,7 +234,7 @@ def style_item(item_number, sheet):
     sheet["L" + str(item_number)].border = white_bottom_border
 
 
-def style_items_faktura(sheet, start_row, description):
+def style_items_faktura(sheet, start_row, description, mena):
     # Setting blank line
     sheet.row_dimensions[start_row + 18].height = 16.5
     sheet.row_dimensions[start_row + 19].height = 6
@@ -248,7 +248,7 @@ def style_items_faktura(sheet, start_row, description):
     loop = 0
     while loop < 8:
         item_number = 21 + start_row + loop if description else 20 + start_row + loop
-        style_item(item_number, sheet)
+        style_item(item_number, sheet, mena)
 
         loop = loop + 1
 
@@ -289,7 +289,7 @@ def style_items_faktura(sheet, start_row, description):
     sheet["L" + str(start_row + 18)].fill = PatternFill(start_color='001383DD', end_color='001383DD', fill_type='solid')
 
 
-def style_first_part_faktura(sheet, start_row, faktura_numbering):
+def style_first_part_faktura(sheet, start_row, faktura_numbering, variable_data):
     # Changing the height of rows in the first section
     sheet.row_dimensions[start_row].height = 24.5
     sheet.row_dimensions[start_row + 1].height = 25.8
@@ -380,10 +380,14 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["A" + str(start_row + 3)].value = "Dodavatel"
     sheet["A" + str(start_row + 8)].value = "IČ:"
     sheet["A" + str(start_row + 9)].value = "DIČ:"
-    sheet["A" + str(start_row + 13)].value = "Dodací list:"
-    sheet["A" + str(start_row + 14)].value = "Způsob dopravy:"
-    sheet["A" + str(start_row + 15)].value = "Místo určení:"
-    sheet["A" + str(start_row + 16)].value = "Objednávky:"
+    sheet["A" + str(start_row + 13)].value = variable_data[0][0]
+    sheet["D" + str(start_row + 13)].value = variable_data[0][1]
+    sheet["A" + str(start_row + 14)].value = variable_data[1][0]
+    sheet["D" + str(start_row + 14)].value = variable_data[1][1]
+    sheet["A" + str(start_row + 15)].value = variable_data[2][0]
+    sheet["D" + str(start_row + 15)].value = variable_data[2][1]
+    sheet["A" + str(start_row + 16)].value = variable_data[3][0]
+    sheet["D" + str(start_row + 16)].value = variable_data[3][1]
 
     sheet["H" + str(start_row + 3)].value = "Odběratel"
     sheet["H" + str(start_row + 8)].value = "IČ:"
@@ -455,7 +459,7 @@ def style_first_part_faktura(sheet, start_row, faktura_numbering):
     sheet["L" + str(start_row)].fill = PatternFill(start_color='001383DD', end_color='001383DD', fill_type='solid')
 
 
-def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, description, prenesena_dph, vystavila_osoba):
+def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, description, prenesena_dph, vystavila_osoba, mena):
     # Changing the height of rows in the second section
     sheet.row_dimensions[start_row].height = 12.5
     sheet.row_dimensions[start_row + 1].height = 18.8
@@ -595,16 +599,16 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
     sheet["I" + str(start_row + 4)].alignment = Alignment(vertical="center", horizontal="right")
 
     sheet["K" + str(start_row + 1)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
-    sheet["K" + str(start_row + 1)].number_format = "#,##0.00 Kč"
+    sheet["K" + str(start_row + 1)].number_format = f"#,##0.00 {mena}"
 
     sheet["K" + str(start_row + 2)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
-    sheet["K" + str(start_row + 2)].number_format = "#,##0.00 Kč"
+    sheet["K" + str(start_row + 2)].number_format = f"#,##0.00 {mena}"
 
     sheet["K" + str(start_row + 3)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
-    sheet["K" + str(start_row + 3)].number_format = "#,##0.00 Kč"
+    sheet["K" + str(start_row + 3)].number_format = f"#,##0.00 {mena}"
 
     sheet["K" + str(start_row + 4)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
-    sheet["K" + str(start_row + 4)].number_format = "#,##0.00 Kč"
+    sheet["K" + str(start_row + 4)].number_format = f"#,##0.00 {mena}"
     sheet["K" + str(start_row + 4)].value = "=SUM(I"+str(start_row - items_count + 2)+":I"+str(start_row)+")" if description else \
         "=SUM(I"+str(start_row - items_count + 1)+":I"+str(start_row-1)+")"
 
@@ -618,7 +622,7 @@ def style_second_part_faktura(sheet, start_row, items_count, items, qr_platba, d
 
     sheet["I" + str(start_row + 8)].font = Font(size=15)
     sheet["I" + str(start_row + 8)].alignment = Alignment(vertical="center", horizontal="right", shrinkToFit=True)
-    sheet["I" + str(start_row + 8)].number_format = "#,##0.00 Kč"
+    sheet["I" + str(start_row + 8)].number_format = f"#,##0.00 {mena}"
     sheet["I" + str(start_row + 8)].value = "=K"+str(start_row + 4)+"+K"+str(start_row + 3)+"+K"+str(start_row + 2)+"+K"+str(start_row + 1)
 
     # Coloring rows
@@ -650,10 +654,10 @@ def set_print_settings(sheet):
     sheet.page_margins.footer = 0.3
 
 
-def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba):
+def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, mena, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba, variable_data):
     set_print_settings(sheet)
-    style_first_part_faktura(sheet, start_row, faktura_numbering)
-    style_items_faktura(sheet, start_row, descriptions)
+    style_first_part_faktura(sheet, start_row, faktura_numbering, variable_data)
+    style_items_faktura(sheet, start_row, descriptions, mena)
     fill_out_dates(sheet, dates, start_row)
     fill_out_extra_data(sheet, prenesena_dph, dodavatel_dph, descriptions, start_row)
 
@@ -661,7 +665,7 @@ def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, qr_
     if len(items) > 8:
         second_start_row = len(items) + 1
 
-    style_second_part_faktura(sheet, second_start_row + start_row + 19, second_start_row, items, qr_platba, descriptions, prenesena_dph, vystavila_osoba)
+    style_second_part_faktura(sheet, second_start_row + start_row + 19, second_start_row, items, qr_platba, descriptions, prenesena_dph, vystavila_osoba, mena)
     c = "D"
     if qr_platba:
         c = "E"
@@ -670,7 +674,7 @@ def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, qr_
                                  faktura_numbering, prenesena_dph)
         except Exception as e:
             print(e)
-            raise Exception
+            c = "D"
 
     fill_out_account_info(sheet, dodavatel_df, second_start_row + start_row + 19, faktura_numbering, c)
 
@@ -726,7 +730,7 @@ class ExcelWriter:
         self.sheet = None
 
 
-    def create_faktura(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, qr_platba, dates, descriptions, def_faktura_numbering, vystavila_osoba):
+    def create_faktura(self, dodavatel_list, odberatel_list, items, prenesena_dph, dodavatel_dph, mena, qr_platba, dates, descriptions, def_faktura_numbering, vystavila_osoba, variable_data):
         # Get odberatel and dodavatel names
         if dodavatel_list:
             self.dodavatel = dodavatel_list[0]
@@ -752,7 +756,7 @@ class ExcelWriter:
 
         try:
             # Create and fill out the faktura template
-            create_faktura(self.sheet, self.start_row, items, self.faktura_numbering, self.dodavatel_df, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba)
+            create_faktura(self.sheet, self.start_row, items, self.faktura_numbering, self.dodavatel_df, mena, qr_platba, dates, prenesena_dph, dodavatel_dph, descriptions, vystavila_osoba, variable_data)
         except Exception as e:
             self.status = "errQrPlatba"
             print(f"err qr platba {e}")
@@ -766,7 +770,7 @@ class ExcelWriter:
 
         # Fill out items
         if len(items) > 0:
-            fill_out_items(self.sheet, items, self.start_row, descriptions)
+            fill_out_items(self.sheet, items, self.start_row, descriptions, mena)
 
     def set_start_row(self):
         self.start_row = 1

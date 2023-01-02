@@ -9,7 +9,7 @@
                 <div class="col w-50" id="dodavatel_col">
             		<h3 class="text-center">Dodavatel</h4>
                     <div class="dropdown">
-                        <input class="form-control dropdown-toggle form-nazev" oninput="SetDropdownAresTest('dodavatel-get-data', this); 
+                        <input class="form-control dropdown-toggle form-nazev" oninput="SetDropdownAresTest('dodavatel-get-data', this);
                         GetHintFirmy(this.value, this.parentElement.parentElement, 1, 0);" autocomplete="off" name="dodavatel_" placeholder="Dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" id="dodavatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
@@ -25,22 +25,22 @@
                     <div class="row form-row-padding">
                         <input type="text" class="form-control col form-city" name="dodavatel_city" placeholder="Město"/>
                         <input type="text" class="form-control col form-psc" name="dodavatel_psc" placeholder="PSČ"/>
-                    </div>                
-        
+                    </div>
+
                     <input type="text" class="form-control form-rejstrik" name="dodavatel_rejstrik" placeholder="Obchodní rejstřík"/>
                     <div class="row form-row-padding">
-                        <input type="text" class="form-control col form-country" name="dodavatel_country" placeholder="Země"/>	
+                        <input type="text" class="form-control col form-country" name="dodavatel_country" placeholder="Země"/>
                         <input type="text" class="form-control col form-vlozka" name="dodavatel_vlozka" placeholder="Soudní vložka"/>
-                    </div>                     
-                
+                    </div>
+
                     <input type="tel" class="form-control form-telefon" name="dodavatel_telefon" placeholder="Telefonní číslo"/>
                     <input type="text" class="form-control form-email" name="dodavatel_email" placeholder="Email"/>
-                    <input type="text" class="form-control form-web" name="dodavatel_web" placeholder="Web"/>		 
+                    <input type="text" class="form-control form-web" name="dodavatel_web" placeholder="Web"/>
                 </div>
                 <div class="col w-50" id="odberatel_col">
             		<h3 class="text-center">Odběratel</h4>
                     <div class="dropdown">
-                        <input class="form-control dropdown-toggle form-nazev" oninput="SetDropdownAresTest('odberatel-get-data', this); 
+                        <input class="form-control dropdown-toggle form-nazev" oninput="SetDropdownAresTest('odberatel-get-data', this);
                         GetHintFirmy(this.value, this.parentElement.parentElement, 0, 1);" autocomplete="off" name="odberatel_" placeholder="Odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="dropdown-menu" id="hint-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" id="odberatel-get-data" onclick="GetFirmaData(this.parentElement.parentElement.parentElement);">Dovyplnit ""</a>
@@ -56,35 +56,35 @@
                     <div class="row form-row-padding">
                         <input type="text" class="form-control col form-city" name="odberatel_city" placeholder="Město"/>
                         <input type="text" class="form-control col form-psc" name="odberatel_psc" placeholder="PSČ"/>
-                    </div>                
-        
-                    <input type="text" class="form-control form-rejstrik" name="odberatel_rejstrik" placeholder="Obchodní rejstřík"/>	
+                    </div>
+
+                    <input type="text" class="form-control form-rejstrik" name="odberatel_rejstrik" placeholder="Obchodní rejstřík"/>
                     <div class="row form-row-padding">
                         <input type="text" class="form-control col form-country" name="odberatel_country" placeholder="Země"/>
                         <input type="text" class="form-control col form-vlozka" name="odberatel_vlozka" placeholder="Soudní vložka"/>
-                    </div>                     
-                
+                    </div>
+
                     <input type="tel" class="form-control form-telefon" name="odberatel_telefon" placeholder="Telefonní číslo"/>
                     <input type="text" class="form-control form-email" name="odberatel_email" placeholder="Email"/>
-                    <input type="text" class="form-control form-web" name="odberatel_web" placeholder="Web"/>		 
-                </div>  
+                    <input type="text" class="form-control form-web" name="odberatel_web" placeholder="Web"/>
+                </div>
                 <div class="p-4">
                     <h4 class="text-center">Bankovní údaje</h3>
                     <div class="row">
                         <input type="text" class="form-control col" name="account_number" placeholder="*Číslo účtu"/>
-                        <input type="text" class="form-control col" name="bank_number" placeholder="*Číslo banky"/>				  	
-                        <input type="text" class="form-control col" name="swift" placeholder="SWIFT"/>				  	
-                    </div>                                	
-                    <div class="row">	  	
-                        <input type="text" class="form-control col" name="konst_cislo" placeholder="Konst. symbol"/>
-                        <input type="number" class="form-control col" name="var_cislo" placeholder="Var. symbol"/>					  					  
-                        <input type="number" class="form-control col" name="iban" placeholder="IBAN"/>					  					  
+                        <input type="text" class="form-control col" name="bank_number" placeholder="*Číslo banky"/>
+                        <input type="text" class="form-control col" name="swift" placeholder="SWIFT"/>
                     </div>
-                  </div>                
+                    <div class="row">
+                        <input type="text" class="form-control col" name="konst_cislo" placeholder="Konst. symbol"/>
+                        <input type="number" class="form-control col" name="var_cislo" placeholder="Var. symbol"/>
+                        <input type="number" class="form-control col" name="iban" placeholder="IBAN"/>
+                    </div>
+                  </div>
         </div></div>
         <div class="carousel-item"><div id="polozky">
-        	<button type="button" class="form-control w-100 dark btn-dark" onclick="CreateItem();">Přidat položku</button>                           		
-        	<div class="polozka_item">	
+        	<button type="button" class="form-control w-100 dark btn-dark" onclick="CreateItem();">Přidat položku</button>
+        	<div class="polozka_item">
         		<div class="row">
         		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
         		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
@@ -93,7 +93,7 @@
         		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
         		</div>
         	</div>
-        	<div class="polozka_item">	
+        	<div class="polozka_item">
         		<div class="row">
         		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
         		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
@@ -102,7 +102,7 @@
         		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
         		</div>
         	</div>
-        	<div class="polozka_item">	
+        	<div class="polozka_item">
         		<div class="row">
         		    <div class="col"><input type="text" class="form-control col" name="polozka" placeholder="Dodávka:"/></div>
         		    <div class="col"><input type="number" class="form-control col" name="dph" placeholder="DPH"/></div>
@@ -110,13 +110,13 @@
         		    <div class="col"><input type="number" class="form-control col" name="price" placeholder="Cena"/></div>
         		    <div class="col"><input type="text" class="form-control col" name="currency" placeholder="Měna"/></div>
         		</div>
-        	</div>                    	                    	
-        </div></div>                       
+        	</div>
+        </div></div>
         <div class="carousel-item"><div>
                 <div class="row">
                     <div class="col">
                     	<h4>Datumy</h4>
-                        <div class="row">                                   
+                        <div class="row">
                         	<label class="col" for="vystaveni_date">Datum vystavení</label>
                         	<input type="date" class="col form-control" name="vystaveni_date" id="vystaveni_date" placeholder="Datum vystavení"/>
                         </div>
@@ -125,19 +125,19 @@
                         	<input type="date" class="col form-control" name="zdanpl_date" id="zdanpl_date"/>
                         </div>
                         <div class="row">
-                        	<label class="col" for="splatnost_date">Datum splatnosti</label> 
+                        	<label class="col" for="splatnost_date">Datum splatnosti</label>
                         	<input type="date" class="col form-control" name="splatnost_date" id="splatnost_date"/>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-control border-0">
-                        	<label class="col" for="faktura_numbering">Číslo faktury</label> 
+                        	<label class="col" for="faktura_numbering">Číslo faktury</label>
                         	<input type="text" class="form-control" name="faktura_numbering" id="faktura_numbering" placeholder="2022001"/>
                         </div>
                         <div class="form-control border-0">
-                        	<label class="col" for="vystavila_osoba">Vystaveno</label> 
+                        	<label class="col" for="vystavila_osoba">Vystaveno</label>
                        		<input type="text" class="form-control" name="vystavila_osoba" id="vystavila_osoba" placeholder="např. Petr Novák - jednatel společnosti"/>
-                        </div>                                                                    	
+                        </div>
                     </div>
                     <div class="row mt-5">
                         <div class="row m-1">
@@ -152,8 +152,8 @@
                     		    <label class="form-check-label" for="dodavatel_dph">
                     		    Dodavatel je plátcem DPH
                     		    </label>
-                    		</div>	                                         
-                        </div>                                   
+                    		</div>
+                        </div>
                         <div class="row m-1 mb-5">
                             <div class="form-check col">
                                 <input class="form-check-input" type="checkbox" name="qr_platba" id="qr_platba">
@@ -161,23 +161,18 @@
                                 QR platba
                                 </label>
                             </div>
-                            <div class="form-check col">
-                                <input class="form-check-input" type="checkbox" name="je_sifrovano" id="je_sifrovano">
-                                <label class="form-check-label" for="je_sifrovano">
-                                Je šifrováno
-                                </label>
-                            </div>                            
+                            <input class="hidden" type="checkbox" name="je_sifrovano" id="je_sifrovano" checked>
                         </div>
        				<input name="excel_button" id="submit_btn" type="submit" class="btn-dark btn w-25 float-right m-4 form-control" value="FakturujTo v Excelu"/>
                   </div>
                 </div>
-        </div></div>		
-        
+        </div></div>
+
     </div>
 
-</div>	
+</div>
         <button class="carousel-control-prev" style="transform: scale(0.35) rotate(180deg);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-            
+
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
 
@@ -190,7 +185,7 @@
                 c-25.904,0-51.808,0-77.712,0c-54.332,0-54.815,84.159-0.606,84.159c25.904,0,51.808,0,77.712,0c4.158,0,7.965-0.546,11.495-1.455
                 c0,12.423,0,24.846,0,37.265c-0.146,1.731-0.105,3.455,0.108,5.153c0.8,12.038,8.04,19.764,17.09,23.14
                 c8.867,4.353,19.711,4.241,29.008-3.803c1.511-1.148,2.891-2.464,4.121-3.953c26.233-26.229,52.466-52.462,78.696-78.692
-                C369.13,244.916,368.834,226.85,358.072,216.091z"/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>            
+                C369.13,244.916,368.834,226.85,358.072,216.091z"/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
           </button>
           <button class="carousel-control-next" style="transform: scale(0.35);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -206,9 +201,9 @@
                 c0,12.423,0,24.846,0,37.265c-0.146,1.731-0.105,3.455,0.108,5.153c0.8,12.038,8.04,19.764,17.09,23.14
                 c8.867,4.353,19.711,4.241,29.008-3.803c1.511-1.148,2.891-2.464,4.121-3.953c26.233-26.229,52.466-52.462,78.696-78.692
                 C369.13,244.916,368.834,226.85,358.072,216.091z"/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
-            
+
           </button>
     </form>
-    <br/>    	
+    <br/>
 </div>
 {% endblock %}

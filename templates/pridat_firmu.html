@@ -33,11 +33,11 @@
     </ul>
   </div>
 </div>
-<div class="mx-auto col-10">
+<div class="mx-auto col-10" id="main-div">
     {% if firma %}
-    <form method="GET" class="p-4" action="/change_firma">
+    <form method="POST" class="p-4" action="/change_firma">
     {% else %}
-    <form method="GET" class="p-4" action="/add_firma">
+    <form method="POST" class="p-4" action="/add_firma">
     {% endif %}
         <div class="mt-5 mb-5 px-5">
             <div id="dodavatel-col">
@@ -57,8 +57,10 @@
                 {% if firma_id %}
                   <input type="hidden" class="form-control" name="id" value="{{ firma_id }}"/>
                 {% endif %}
-                <input type="text" class="form-control form-ico" name="dodavatel_ico" placeholder="IČO" value="{{ firma[1] if firma else '' }}"/>
-                <input type="text" class="form-control form-dic" name="dodavatel_dic" placeholder="DIČ" value="{{ firma[2] if firma else '' }}"/>
+                <div class="row form-row-padding">
+                  <input type="text" class="form-control form-ico col" name="dodavatel_ico" placeholder="IČO" value="{{ firma[1] if firma else '' }}"/>
+                  <input type="text" class="form-control form-dic col" name="dodavatel_dic" placeholder="DIČ" value="{{ firma[2] if firma else '' }}"/>
+                </div>
                 <div class="row form-row-padding">
                     <input type="text" class="form-control col form-street" name="dodavatel_street" placeholder="Ulice" value="{{ firma[3] if firma else '' }}"/>
                     <input type="text" class="form-control col form-cislo-popisne" name="dodavatel_cislo_popisne" placeholder="Číslo popisné" value="{{ firma[4] if firma else '' }}"/>
@@ -73,10 +75,11 @@
                     <input type="text" class="form-control col form-country" name="dodavatel_country" placeholder="Země" value="{{ firma[7] if firma else '' }}"/>
                     <input type="text" class="form-control col form-vlozka" name="dodavatel_vlozka" placeholder="Soudní vložka" value="{{ firma[9] if firma else '' }}"/>
                 </div>
-
-                <input type="tel" class="form-control form-telefon" name="dodavatel_telefon" placeholder="Telefonní číslo" value="{{ firma[10] if firma else '' }}"/>
-                <input type="text" class="form-control form-email" name="dodavatel_email" placeholder="Email" value="{{ firma[11] if firma else '' }}"/>
-                <input type="text" class="form-control form-web" name="dodavatel_web" placeholder="Web" value="{{ firma[12] if firma else '' }}"/>
+                <div class="row form-row-padding">
+                  <input type="tel" class="form-control col form-telefon" name="dodavatel_telefon" placeholder="Telefonní číslo" value="{{ firma[10] if firma else '' }}"/>
+                  <input type="text" class="form-control col form-email" name="dodavatel_email" placeholder="Email" value="{{ firma[11] if firma else '' }}"/>
+                  <input type="text" class="form-control col form-web" name="dodavatel_web" placeholder="Web" value="{{ firma[12] if firma else '' }}"/>
+                </div>
             </div>
             <div class="mt-4">
                 <h4>Bankovní údaje</h3>
@@ -93,17 +96,14 @@
               </div>
               <div class="row px-3 py-2">
                 <div class="col">
-                    <input type="checkbox" {{ ('checked' if firma[20] else '') if firma else '' }} name="dodavatel_je_dodavatel" id="only_dodavatel_check" {{ "" if firma else "checked"}}>
+                    <input type="checkbox" {{ ('checked' if firma[19] else '') if firma else '' }} name="dodavatel_je_dodavatel" id="only_dodavatel_check" {{ "" if firma else "checked"}}>
                     <label for="only_dodavatel_check">Zařadit firmu k dodavatelům</label>
                 </div>
                 <div class="col">
-                    <input type="checkbox" {{ ('checked' if firma[21] else '') if firma else '' }} name="dodavatel_je_odberatel" id="only_odberatel_check" {{ "" if firma else "checked"}}>
+                    <input type="checkbox" {{ ('checked' if firma[20] else '') if firma else '' }} name="dodavatel_je_odberatel" id="only_odberatel_check" {{ "" if firma else "checked"}}>
                     <label for="only_odberatel_check">Zařadit firmu k odběratelům</label>
                 </div>
-                <div class="col">
-                  <input type="checkbox" {{ ('checked' if firma[22] else '') if firma else '' }} name="dodavatel_sifrovat" id="sifrovat_check">
-                  <label for="sifrovat_check">Šifrovat</label>
-              </div>
+                <input class="hidden" type="checkbox" name="je_sifrovano" id="je_sifrovano" checked>
             </div>
             {% if firma %}
               <button class="btn-dark btn w-25 mt-4 col">Upravit firmu</button>
@@ -113,7 +113,7 @@
         </div>
     </form>
     {% if firmy %}
-    <div style="overflow-y: scroll; overflow-x: hidden; height: 380px;" class="px-5">
+    <div id="firma-div-table" class="px-5">
       <table class="table">
         <thead>
           <tr>
@@ -139,7 +139,7 @@
             <th scope="col">Var. symbol</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="firmy-table-body">
           {% for firma in firmy %}
           <tr>
             <td><a href="/upravit_firmu?id={{ firma['id'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16"><path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/></svg></a></td>
@@ -169,6 +169,7 @@
         {% endfor %}
         </tbody>
       </table>
+      <a style="cursor: pointer;" id="get-dalsi-firmy-btn" onclick="GetDalsiFirmy(10, 20);"><p>Zobrazit další</p></a>
     </div>
     {% endif %}
 </div>
