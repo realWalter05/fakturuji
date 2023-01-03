@@ -40,6 +40,10 @@
 }
 
 @media screen and (max-width: 800px) {
+    .form {
+        width: 80vw !important;
+    }
+
     #popisky-form input {
         width: 100vw !important;
     }

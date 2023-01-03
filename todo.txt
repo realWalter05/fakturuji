@@ -7,9 +7,9 @@ popisky check
 sablony check
 index check
 fakturujtojednou
-prihlaseni
-registrace
+prihlaseni check
+registrace check
 
-udělat index stranku
+udělat index stranku check
 fakturujto jednou
 hosting
