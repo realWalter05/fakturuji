@@ -11,5 +11,6 @@ prihlaseni check
 registrace check
 
 udělat index stranku check
-fakturujto jednou
+fakturujto jednou check
 hosting
+sablony fix check

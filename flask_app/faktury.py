@@ -91,6 +91,14 @@ def process_faktura():
 	post_faktura(session["user_data"], request.args)
 	return redirect("/", code=302)
 
+@app.route("/process_jednorazova_faktura", methods = ["GET", "POST"])
+def process_jednorazova_faktura():
+	excel = create_jednorazova_faktura_excel(request.args)
+	output = make_response(excel.get_virtual_save())
+	output.headers["Content-Disposition"] = f"attachment; filename=sheet{excel.faktura_numbering}.xlsx"
+	output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+	return output
+
 
 @app.route("/process_upravit_fakturu", methods = ["GET", "POST"])
 @login_required

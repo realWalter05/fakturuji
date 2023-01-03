@@ -1,4 +1,5 @@
 import mysql.connector
+import bcrypt, secrets, string
 from python.user_handler import *
 from datetime import date
 
@@ -737,8 +738,8 @@ def create_faktura_sablona_copy(user_data, faktura_id):
 		cursor = conn.cursor(prepared=True)
 
 		# Add firma
-		sql = """INSERT INTO faktury (user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph, datum_vystaveni,datum_zdanpl,datum_splatnosti,qr_platba,vystaveno,je_sifrovano, je_sablona)
-			 SELECT user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph, datum_vystaveni,datum_zdanpl,datum_splatnosti,qr_platba,vystaveno,je_sifrovano, 1 FROM faktury WHERE id=%s AND user_id=%s"""
+		sql = """INSERT INTO faktury (user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph, datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,qr_platba,vystaveno,je_sifrovano,je_sablona,variable_title0,variable_data0,variable_title1,variable_data1,variable_title2,variable_data2,variable_title3,variable_data3)
+			 SELECT user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,qr_platba,vystaveno,je_sifrovano,1,variable_title0,variable_data0,variable_title1,variable_data1,variable_title2,variable_data2,variable_title3,variable_data3 FROM faktury WHERE id=%s AND user_id=%s"""
 		data = (faktura_id, user_data["id"])
 
 		cursor.execute(sql, data)

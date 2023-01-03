@@ -44,6 +44,18 @@ def fill_out_odberatele(sheet, odberatel_df, start_row):
     sheet["K" + str(start_row + 7)] = odberatel_df.iloc[0]["web"]
 
 
+def get_mena_ending_reversed(mena):
+    currencies = {
+        "Kč": "CZK",
+        "€" : "EUR",
+        "$" : "USD",
+        "£" : "GBP",
+    }
+    if mena in currencies:
+        return currencies[mena]
+    return "CZK"
+
+
 def fill_out_extra_data(sheet, prenesena_dph, dodavatel_dph, descriptions, start_row):
     if dodavatel_dph:
         sheet["D" + str(start_row + 9)] = "Dodavatel je plátce DPH"
@@ -161,7 +173,7 @@ def fill_out_account_info(sheet, dodavatel_df, start_row, faktura_variable, colu
     sheet["G" + str(start_row + 3)].value = dodavatel_df.iloc[0]["konst_cislo"]
 
 
-def write_qr_platba_code(sheet, start_row, account_number, bank_code, items, var_cislo, prenesena_dph):
+def write_qr_platba_code(sheet, start_row, account_number, bank_code, items, var_cislo, prenesena_dph, mena):
     ammount = 0
     if not prenesena_dph:
         for item in items:
@@ -177,7 +189,7 @@ def write_qr_platba_code(sheet, start_row, account_number, bank_code, items, var
 
     # Writing the qr platba code
     response = requests.get("https://api.paylibo.com/paylibo/generator/czech/image?accountNumber="+str(int(account_number))+
-                            "&bankCode="+str(int(bank_code))+"&amount="+str(ammount)+"&currency=CZK&vs="+str(var_cislo)+"&size=200")
+                            "&bankCode="+str(int(bank_code))+"&amount="+str(ammount)+"&currency="+get_mena_ending_reversed(mena)+"&vs="+str(var_cislo)+"&size=200")
     img = openpyxl.drawing.image.Image(Image.open(BytesIO(response.content)))
     img.width = 120
     img.height = 120
@@ -671,7 +683,7 @@ def create_faktura(sheet, start_row, items, faktura_numbering, dodavatel_df, men
         c = "E"
         try:
             write_qr_platba_code(sheet, second_start_row + start_row + 19, dodavatel_df.iloc[0]["cislo_uctu"], dodavatel_df.iloc[0]["kod_banky"], items,
-                                 faktura_numbering, prenesena_dph)
+                                 faktura_numbering, prenesena_dph, mena)
         except Exception as e:
             print(e)
             c = "D"

@@ -86,27 +86,6 @@ def get_firma_dict(args):
     }
 
 
-def get_items(args):
-    items = []
-    class Item():
-        def __init__(self, polozka, dph, count, price, currency):
-            self.delivery_name = polozka
-            self.dph = dph
-            self.count = count
-            self.price = price
-
-    polozky = args.getlist("polozka")
-    count = args.getlist("count")
-    price = args.getlist("price")
-    dphs = args.getlist("dph")
-
-    for i in range(len(polozky)):
-        item = Item(polozky[i], count[i], price[i], dphs[i])
-        items.append(item)
-
-    return items
-
-
 def get_dph_rates(items):
     # Get various dph rates
     dph_rates = []
@@ -198,6 +177,60 @@ def create_faktura_excel(excel, user_data, faktura_data, items):
                         faktura_data["dodavatel_dph"], mena, faktura_data["qr_platba"], date, description, faktura_data["cislo_faktury"],
                         faktura_data["vystaveno"], variable_data)
     print("done")
+    print(items)
+
+
+def create_jednorazova_faktura_excel(args):
+    excel = ExcelWriter()
+    # Getting the form data
+    date = {
+        "vystaveni_date": args.get("vystaveni_date"),
+        "zdanpl_date": args.get("zdanpl_date"),
+        "splatnost_date": args.get("splatnost_date"),
+    }
+
+    dodavatel_list = [args.get('dodavatel_'), args.get('dodavatel_ico'), args.get('dodavatel_dic'),
+                    f"{args.get('dodavatel_street')} {args.get('dodavatel_cislo_popisne')}", f"{args.get('dodavatel_city')} {args.get('dodavatel_psc')}",
+                    args.get("dodavatel_country"), f"{args.get('dodavatel_rejstrik')} {args.get('dodavatel_vlozka')}", args.get("dodavatel_telefon"),
+                    args.get("dodavatel_email"), args.get("dodavatel_web"), args.get("account_number"), args.get("bank_number"), args.get("iban"),
+                    args.get("swift"), args.get("var_cislo"), args.get("konst_cislo")]
+    odberatel_list = [args.get('odberatel_'), args.get('odberatel_ico'), args.get('odberatel_dic'),
+                    f"{args.get('odberatel_street')} {args.get('odberatel_cislo_popisne')}", f"{args.get('odberatel_city')} {args.get('odberatel_psc')}",
+                    args.get("odberatel_country"), f"{args.get('odberatel_rejstrik')} {args.get('odberatel_vlozka')}", args.get("odberatel_telefon"),
+                    args.get("odberatel_email"), args.get("odberatel_web")]
+
+    items = []
+    polozky = args.getlist("polozka")
+    count = args.getlist("count")
+    price = args.getlist("price")
+    dphs = args.getlist("dph")
+
+    for i in range(len(polozky)):
+        item = {"dodavka" : polozky[i],
+                "pocet" : count[i],
+                "cena" : price[i],
+                "dph" : dphs[i]}
+        items.append(item)
+
+    mena = get_mena_ending(args.get("currency-select"))
+    variable_data = [
+        [args.get("variable_title0"), args.get("variable_data0")],
+        [args.get("variable_title1"), args.get("variable_data1")],
+        [args.get("variable_title2"), args.get("variable_data2")],
+        [args.get("variable_title3"), args.get("variable_data3")],
+    ]
+
+    description = args.get("description")
+    typ = 1 if args.get("prenesena_dph") == "on" else 0
+    qr_platba = 1 if args.get("qr_platba") == "on" else 0
+    print(qr_platba)
+    dodavatel_dph = 1 if args.get("dodavatel_dph") == "on" else 0
+
+    # Faktura in excel
+    excel.create_faktura(dodavatel_list, odberatel_list, items, typ,
+                        dodavatel_dph, mena, qr_platba, date, description, args.get("faktura_numbering"),
+                        args.get("vystavila_osoba"), variable_data)
+    return excel
 
 
 def get_all_faktury(user_data, faktury, polozky):
@@ -215,6 +248,7 @@ def get_all_faktury_in_date(user_data, faktury, polozky, ucetnictvi_od, ucetnict
             print("getting")
             create_faktura_excel(excel, user_data, faktury[i], polozky[i])
     return excel
+
 
 def get_prices_polozky(polozky):
     for polozka in polozky:
