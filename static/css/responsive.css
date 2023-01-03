@@ -3,6 +3,10 @@
         width: 75vw;
     }
 
+    #index-div .w-25 {
+        width: 23vw !important;
+    }
+
 }
 
 @media screen and (max-width: 1200px) {
@@ -97,6 +101,19 @@
     #dodavatel_col {
         margin-bottom: 1rem;
     }
+
+    #index-icons {
+        display: block !important;
+    }
+
+    #index-icons img {
+        width: 60vw !important;
+        height: auto !important;
+    }
+
+    #index-div .w-25 {
+        width: 80vw !important;
+    }
 }
 
 @media screen and (max-width: 576px) {
@@ -129,4 +146,21 @@
     }
 }
 
+@media screen and (max-width: 1400px) and (min-width: 800px) {
+    #index-div .w-25 {
+        width: 30vw !important;
+    }
+}
 
+@media screen and (max-width: 1400px) {
+    #faktura-priklad-div {
+        text-align: center;
+        margin: auto;
+    }
+
+    #faktura-priklad {
+        width: 80vw;
+        margin: auto;
+        height: auto;
+    }
+}

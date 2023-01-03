@@ -5,7 +5,7 @@ faktury check
 add_firma check
 popisky check
 sablony check
-index
+index check
 fakturujtojednou
 prihlaseni
 registrace

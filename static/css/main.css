@@ -117,3 +117,11 @@ input[readonly]{
     overflow-x: hidden;
     height: 390px;
 }
+
+#faktura-priklad-div {
+    text-align: end;
+}
+
+#faktura-priklad {
+    height: 50rem;
+}
