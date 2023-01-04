@@ -108,8 +108,8 @@ def database_add_firma(user_data, firma):
 		sql_insert_query = """INSERT INTO firmy
 								(user_id, nazev, ico, dic, ulice, cislo_popisne, mesto, psc, zeme, soud_rejstrik,
 								 soudni_vlozka, telefon, email, web, cislo_uctu, cislo_banky, iban, swift, var_symbol,
-								 konst_symbol, je_odberatel, je_dodavatel, je_sifrovano)
-							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+								 konst_symbol, je_odberatel, je_dodavatel, je_sifrovano, smazano_uzivatelem)
+							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
 		if firma["je_sifrovano"]:
 			encryptor = Encryptor(user_data["data_key"])
@@ -130,7 +130,7 @@ def database_add_firma(user_data, firma):
 		data = (user_data["id"], firma["name"], firma["ico"], firma["dic"], firma["street"], firma["cislo_popisne"], firma["city"],
 				firma["psc"], firma["country"], firma["rejstrik"], firma["vlozka"], firma["telefon"], firma["email"],
 				firma["web"], firma["cislo_uctu"], firma["cislo_banky"], firma["iban"], firma["swift"], firma["var_symbol"],
-				firma["konst_symbol"], firma["je_odberatel"], firma["je_dodavatel"], firma["je_sifrovano"])
+				firma["konst_symbol"], firma["je_odberatel"], firma["je_dodavatel"], firma["je_sifrovano"], 0)
 		cursor.execute(sql_insert_query, data)
 		conn.commit()
 		return "success"
@@ -215,7 +215,7 @@ def database_add_popisek(user_data, popisek):
 		cursor = conn.cursor(prepared=True)
 
 		# Add firma
-		sql_insert_query = "INSERT INTO popisky (user_id,nazev,popisek,je_sifrovano) VALUES (%s,%s,%s,%s)"
+		sql_insert_query = "INSERT INTO popisky (user_id,nazev,popisek,je_sifrovano,smazano_uzivatelem) VALUES (%s,%s,%s,%s,%s)"
 
 		if popisek["je_sifrovano"]:
 			encryptor = Encryptor(user_data["data_key"])
@@ -229,7 +229,7 @@ def database_add_popisek(user_data, popisek):
 
 
 		# Encrypt the data
-		data = (user_data["id"], popisek["nazev"], popisek["popisek"], popisek["je_sifrovano"])
+		data = (user_data["id"], popisek["nazev"], popisek["popisek"], popisek["je_sifrovano"], 0)
 		cursor.execute(sql_insert_query, data)
 		conn.commit()
 		return "success"

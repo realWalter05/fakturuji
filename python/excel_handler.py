@@ -57,7 +57,7 @@ def get_firma_dict(args):
 
 
     dodavatel_sifrovat = 0
-    if args.get("dodavatel_sifrovat") == "on":
+    if args.get("je_sifrovano") == "on":
         dodavatel_sifrovat = 1
 
     return {
