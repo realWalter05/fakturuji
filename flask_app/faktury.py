@@ -12,12 +12,15 @@ def get_ucetnictvi():
 	ucetnictvi_od = request.args.get('ucetnictvi_od')
 	ucetnictvi_do = request.args.get('ucetnictvi_do')
 
-	faktury = get_faktury_by_user(session["user_data"])
+	faktury = get_faktury_not_sablony_by_user(session["user_data"])
+	print(f"faktury {faktury}")
 	if not faktury:
 		return index()
 	polozky = get_polozky_by_faktura_id(session["user_data"], faktury)
 
 	excel = get_all_faktury_in_date(session["user_data"], faktury, polozky, ucetnictvi_od, ucetnictvi_do)
+	if not excel:
+		return index()
 	output = make_response(excel.get_virtual_save())
 	output.headers["Content-Disposition"] = f"attachment; filename=ucetnictvi.xlsx"
 	output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

@@ -241,13 +241,19 @@ def get_all_faktury(user_data, faktury, polozky):
 
 
 def get_all_faktury_in_date(user_data, faktury, polozky, ucetnictvi_od, ucetnictvi_do):
+    faktury_exist = False
+
     excel = ExcelWriter()
     for i in range(0, len(faktury)):
         if datetime.strptime(ucetnictvi_od, "%Y-%m-%d") <= datetime.combine(faktury[i]["datum_vystaveni"], datetime.min.time()) \
         and datetime.strptime(ucetnictvi_do, "%Y-%m-%d") >= datetime.combine(faktury[i]["datum_vystaveni"], datetime.min.time()):
             print("getting")
+            faktury_exist = True
             create_faktura_excel(excel, user_data, faktury[i], polozky[i])
-    return excel
+
+    if faktury_exist:
+        return excel
+    return None
 
 
 def get_prices_polozky(polozky):

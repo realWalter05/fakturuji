@@ -368,7 +368,7 @@ def get_cislo_faktury(user_data, dodavatel_id):
 	return cislo_faktury
 
 
-def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano):
+def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, je_sablona):
 	print("posting to faktura table")
 	dodavatel_id = args.get("dodavatel_id")
 	odberatel_id = args.get("odberatel_id")
@@ -402,11 +402,11 @@ def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano):
 								(user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,
 								datum_vystaveni,datum_zdanpl,datum_splatnosti,mena,qr_platba,vystaveno,je_sifrovano,je_sablona,
 								variable_title0, variable_data0, variable_title1, variable_data1, variable_title2, variable_data2, variable_title3, variable_data3)
-							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
 		# Encrypt the data
 		data = (user_data["id"], faktura_numbering, dodavatel_id, odberatel_id, typ_faktury, dodavatel_dph,
-				vystaveni_date, zdanpl_date, splatnost_date, currency_select, qr_platba, vystavila_osoba, je_sifrovano,0,
+				vystaveni_date, zdanpl_date, splatnost_date, currency_select, qr_platba, vystavila_osoba, je_sifrovano,je_sablona,
 				variable_title0, variable_data0, variable_title1, variable_data1, variable_title2, variable_data2, variable_title3, variable_data3)
 	if description_id:
 		# Add firma
@@ -414,11 +414,11 @@ def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano):
 								(user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,
 								datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,mena,qr_platba,vystaveno,je_sifrovano,je_sablona,
 								variable_title0, variable_data0, variable_title1, variable_data1, variable_title2, variable_data2, variable_title3, variable_data3)
-							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
 		# Encrypt the data
 		data = (user_data["id"], faktura_numbering, dodavatel_id, odberatel_id, typ_faktury, dodavatel_dph,
-				vystaveni_date, zdanpl_date, splatnost_date, description_id, currency_select, qr_platba, vystavila_osoba, je_sifrovano,0,
+				vystaveni_date, zdanpl_date, splatnost_date, description_id, currency_select, qr_platba, vystavila_osoba, je_sifrovano,je_sablona,
 				variable_title0, variable_data0, variable_title1, variable_data1, variable_title2, variable_data2, variable_title3, variable_data3)
 	cursor.execute(sql_insert_query, data)
 	conn.commit()
@@ -532,7 +532,7 @@ def post_faktura(user_data, args):
 
 		print(f" { args }")
 		je_sifrovano = 1 if args.get("je_sifrovano") == "on" else 0
-		post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano)
+		post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, 0)
 		post_to_items_table(user_data, args, cursor, conn, cursor.lastrowid, je_sifrovano)
 
 	except mysql.connector.Error as error:
@@ -559,7 +559,7 @@ def post_sablona_faktura(user_data, args):
 
 		print(f" { args }")
 		je_sifrovano = 1 if args.get("je_sifrovano") == "on" else 0
-		post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano)
+		post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, 1)
 		faktura_id = cursor.lastrowid
 		post_to_items_table(user_data, args, cursor, conn, cursor.lastrowid, je_sifrovano)
 		make_sablona_from_id(user_data, faktura_id, args.get("sablona_name"))
@@ -661,6 +661,12 @@ def get_faktury_by_user(user_data):
 	return select_data_prepared_query(sql, data)
 
 
+def get_faktury_not_sablony_by_user(user_data):
+	sql = "SELECT * FROM faktury WHERE user_id=%s and je_sablona=0;"
+	data = (user_data["id"],)
+	return select_data_prepared_query(sql, data)
+
+
 def get_polozky_by_faktura_id(user_data, faktury):
 	conn = None
 	try:
@@ -738,8 +744,8 @@ def create_faktura_sablona_copy(user_data, faktura_id):
 		cursor = conn.cursor(prepared=True)
 
 		# Add firma
-		sql = """INSERT INTO faktury (user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph, datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,qr_platba,vystaveno,je_sifrovano,je_sablona,variable_title0,variable_data0,variable_title1,variable_data1,variable_title2,variable_data2,variable_title3,variable_data3)
-			 SELECT user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,qr_platba,vystaveno,je_sifrovano,1,variable_title0,variable_data0,variable_title1,variable_data1,variable_title2,variable_data2,variable_title3,variable_data3 FROM faktury WHERE id=%s AND user_id=%s"""
+		sql = """INSERT INTO faktury (user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph, datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,mena,qr_platba,vystaveno,je_sifrovano,je_sablona,variable_title0,variable_data0,variable_title1,variable_data1,variable_title2,variable_data2,variable_title3,variable_data3)
+			 SELECT user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,mena,qr_platba,vystaveno,je_sifrovano,1,variable_title0,variable_data0,variable_title1,variable_data1,variable_title2,variable_data2,variable_title3,variable_data3 FROM faktury WHERE id=%s AND user_id=%s"""
 		data = (faktura_id, user_data["id"])
 
 		cursor.execute(sql, data)

@@ -95,8 +95,8 @@
       <div class="card m-sm-5 p-5 shadow-lg col">
         <h2 class="display-6 text-center">Stáhnout účetnictví</h2>
         <form class="row p-3 d-flex p-xxl-5" action="/get_ucetnictvi_in_date">
-          <input id="ucetnictvi_date" type="date" name="ucetnictvi_od" class="form-control" value="2022-01-01"/>
-          <input id="ucetnictvi_date" type="date" name="ucetnictvi_do" class="form-control" value="2023-01-01"/>
+          <input id="ucetnictvi_date" type="date" name="ucetnictvi_od" class="form-control" value="{{ get_ucetnictvi_data['from'] }}"/>
+          <input id="ucetnictvi_date" type="date" name="ucetnictvi_do" class="form-control" value="{{ get_ucetnictvi_data['to'] }}"/>
           <button class="w-100 btn btn-dark">Stáhnout od datumu do</button>
         </form>
       </div>
