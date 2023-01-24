@@ -86,23 +86,27 @@
                 <div class="row form-row-padding">
                     <input type="text" class="form-control col" name="cislo_uctu" placeholder="*Číslo účtu" value="{{ firma[13] if firma else '' }}"/>
                     <input type="text" class="form-control col" name="cislo_banky" placeholder="*Číslo banky" value="{{ firma[14] if firma else '' }}"/>
-                    <input type="number" class="form-control col" name="iban" placeholder="IBAN" value="{{ firma[15] if firma else '' }}"/>
+                    <input type="text" class="form-control col" name="iban" placeholder="IBAN" value="{{ firma[15] if firma else '' }}"/>
                 </div>
                 <div class="row form-row-padding">
                     <input type="text" class="form-control col" name="konst_symbol" placeholder="Konst. symbol" value="{{ firma[18] if firma else '' }}"/>
-                    <input type="number" class="form-control col" name="var_symbol" placeholder="Var. symbol" value="{{ firma[17] if firma else '' }}"/>
+                    <input type="hidden" class="form-control col" name="var_symbol" placeholder="Var. symbol" value="{{ firma[17] if firma else '' }}" id="faktura-variabilni-cislo"/>
                     <input type="text" class="form-control col" name="swift" placeholder="SWIFT" value="{{ firma[16] if firma else '' }}"/>
                 </div>
               </div>
               <div class="row px-3 py-2">
                 <div class="col">
-                    <input type="checkbox" {{ ('checked' if firma[19] else '') if firma else '' }} name="dodavatel_je_dodavatel" id="only_dodavatel_check" {{ "" if firma else "checked"}}>
+                    <input type="checkbox" {{ ('checked' if firma[20] else '') if firma else '' }} name="dodavatel_je_dodavatel" id="only_dodavatel_check" {{ "" if firma else "checked"}}>
                     <label for="only_dodavatel_check">Zařadit firmu k dodavatelům</label>
                 </div>
                 <div class="col">
-                    <input type="checkbox" {{ ('checked' if firma[20] else '') if firma else '' }} name="dodavatel_je_odberatel" id="only_odberatel_check" {{ "" if firma else "checked"}}>
+                    <input type="checkbox" {{ ('checked' if firma[19] else '') if firma else '' }} name="dodavatel_je_odberatel" id="only_odberatel_check" {{ "" if firma else "checked"}}>
                     <label for="only_odberatel_check">Zařadit firmu k odběratelům</label>
                 </div>
+                <div class="col">
+                  <input type="checkbox" id="overwrite_variable_cislo" onclick="ShowVariabilniCislo();">
+                  <label for="overwrite_variable_cislo">Přepsat k fakturám automaticky přirazované var. číslo</label>
+              </div>
                 <input class="hidden" type="checkbox" name="je_sifrovano" id="je_sifrovano" checked>
             </div>
             {% if firma %}

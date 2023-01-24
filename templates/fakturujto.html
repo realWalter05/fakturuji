@@ -174,7 +174,7 @@
                 </div>
                 <div class="form-control border-0 d-none col" id="cislo_faktury_box">
                     <label class="col" for="faktura_numbering">Číslo faktury</label>
-                    <input type="text" class="form-control" name="faktura_numbering" id="faktura_numbering" placeholder="2022001" value="{{ faktura_data['cislo_faktury'] if faktura_data else '' }}"/>
+                    <input type="text" class="form-control" name="faktura_numbering" id="faktura_numbering" placeholder="2022001"/>
                 </div>
                 <div class="form-check px-5 pt-2 col mt-4 w-50">
                     <input class="form-check-input" type="checkbox" id="manual_cislo_checkbox" onclick="this.parentElement.classList.add('d-none'); document.getElementById('cislo_faktury_box').classList.remove('d-none');">

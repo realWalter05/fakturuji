@@ -29,6 +29,13 @@ def get_faktura_template(user_data, faktura_id):
     faktura_data[0]["datum_zdanpl"] = faktura_data[0]["datum_zdanpl"].strftime("%d.%m.%Y")
     faktura_data[0]["datum_splatnosti"] = faktura_data[0]["datum_splatnosti"].strftime("%d.%m.%Y")
 
+    # Change variabilni symbol to cislo_faktury
+    if not dodavatel[17]:
+        dodavatel[17] = faktura_data[0]["cislo_faktury"]
+
+    if not odberatel[17]:
+        odberatel[17] = faktura_data[0]["cislo_faktury"]
+
     try:
         if faktura_data[0]["qr_platba"]:
             # qr platba
@@ -148,6 +155,14 @@ def create_faktura_excel(excel, user_data, faktura_data, items):
 
     dodavatel = get_firma_data_from_id(user_data, faktura_data["dodavatel"])
     odberatel = get_firma_data_from_id(user_data, faktura_data["odberatel"])
+
+    # Change variabilni symbol to cislo_faktury
+    if not dodavatel[17]:
+        dodavatel[17] = faktura_data["cislo_faktury"]
+
+    if not odberatel[17]:
+        odberatel[17] = faktura_data["cislo_faktury"]
+
     dodavatel_list = [dodavatel[0], f'{dodavatel[3]} {dodavatel[4]}',
                     f'{dodavatel[5]} {dodavatel[6]}', dodavatel[7], dodavatel[1],
                     dodavatel[2], f"{dodavatel[8]} {dodavatel[9]}", dodavatel[10],
@@ -189,6 +204,7 @@ def create_jednorazova_faktura_excel(args):
         "splatnost_date": args.get("splatnost_date"),
     }
 
+
     dodavatel_list = [args.get('dodavatel_'), args.get('dodavatel_ico'), args.get('dodavatel_dic'),
                     f"{args.get('dodavatel_street')} {args.get('dodavatel_cislo_popisne')}", f"{args.get('dodavatel_city')} {args.get('dodavatel_psc')}",
                     args.get("dodavatel_country"), f"{args.get('dodavatel_rejstrik')} {args.get('dodavatel_vlozka')}", args.get("dodavatel_telefon"),
@@ -198,6 +214,13 @@ def create_jednorazova_faktura_excel(args):
                     f"{args.get('odberatel_street')} {args.get('odberatel_cislo_popisne')}", f"{args.get('odberatel_city')} {args.get('odberatel_psc')}",
                     args.get("odberatel_country"), f"{args.get('odberatel_rejstrik')} {args.get('odberatel_vlozka')}", args.get("odberatel_telefon"),
                     args.get("odberatel_email"), args.get("odberatel_web")]
+
+    # Change variabilni symbol to cislo_faktury
+    if not dodavatel_list[17]:
+        dodavatel_list[17] = args.get("faktura_numbering")
+
+    if not odberatel_list[17]:
+        odberatel_list[17] = args.get("faktura_numbering")
 
     items = []
     polozky = args.getlist("polozka")

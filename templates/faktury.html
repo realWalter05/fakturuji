@@ -36,6 +36,31 @@
 <div class="mx-auto col-10 row" id="main-div">
   <div class="w-50 p-5 col shadow-lg">
 	  <h2 class="display-3 text-center mb-3">Seznam faktur</h2>
+	  <div class="w-100">
+		<input type="text" class="form-control" id="faktury-filter" placeholder="Filtrujte faktury" oninput="GetNewFakturyFiltruj();">
+		<div class="row">
+			<div class="col">
+				<div class="dropdown">
+					<input type="hidden" id="dodavatel-filter">
+					<input required class="form-control dropdown-toggle form-nazev" onclick="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 1, 0); GetNewFakturyFiltruj();"
+					oninput="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 1, 0); GetNewFakturyFiltruj();" autocomplete="off" placeholder="Pouze dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<div class="dropdown-menu hint-menu" aria-labelledby="dropdownMenuButton">
+					</div>
+				</div>
+				<div><div class="dropdown">
+					<input type="hidden" id="odberatel-filter">
+					<input required class="form-control dropdown-toggle form-nazev" onclick="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 0, 1); GetNewFakturyFiltruj();"
+					oninput="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 0, 1); GetNewFakturyFiltruj();" autocomplete="off" placeholder="Pouze odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<div class="dropdown-menu hint-menu" aria-labelledby="dropdownMenuButton">
+					</div>
+				</div></div>
+			</div>
+			<div class="col">
+				<input id="faktury-od-filter" type="date" oninput="GetNewFakturyFiltruj();" class="form-control"/>
+				<input id="faktury-do-filter" type="date" oninput="GetNewFakturyFiltruj();" class="form-control"/>
+			</div>
+		</div>
+	  </div>
 	  <div id="faktury-table-container">
 	  <table class="table">
 		<tbody id="faktury-table">

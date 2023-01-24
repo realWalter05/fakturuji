@@ -304,6 +304,41 @@ def get_user_faktury(user_data):
 	return result
 
 
+def get_user_faktury_filtrovano_limit(user_data, from_faktura, to_faktura, faktury_od, faktury_do, only_dodavatel, only_odberatel, faktury_filter):
+	sql = "SELECT * FROM faktury WHERE user_id=%s AND je_sablona=0"
+	data_list = [user_data["id"]]
+	if faktury_od:
+		sql = sql + " AND datum_vystaveni >= %s"
+		data_list.append(faktury_od)
+
+	if faktury_do:
+		sql = sql + " AND datum_vystaveni <= %s"
+		data_list.append(faktury_do)
+
+	if only_dodavatel:
+		sql = sql + " AND dodavatel = %s"
+		data_list.append(only_dodavatel)
+
+	if only_odberatel:
+		sql = sql + " AND odberatel = %s"
+		data_list.append(only_odberatel)
+
+	if faktury_filter:
+		sql = sql + " AND cislo_faktury = %s"
+		data_list.append(faktury_filter)
+
+	sql = sql + " ORDER BY id DESC LIMIT %s, %s;"
+	data_list.append(from_faktura)
+	data_list.append(to_faktura)
+
+	data = tuple(data_list)
+	result = select_data_prepared_query(sql, data)
+	print(sql)
+	print(data)
+	print(len(result))
+	return result
+
+
 def get_user_faktury_limit(user_data, from_faktura, to_faktura):
 	sql = "SELECT * FROM faktury WHERE user_id=%s  AND je_sablona=0 ORDER BY id DESC LIMIT %s, %s;"
 	data = (user_data["id"], from_faktura, to_faktura)
@@ -354,9 +389,10 @@ def get_cislo_faktury(user_data, dodavatel_id):
 	sql = "SELECT MAX(cislo_faktury) FROM `faktury` WHERE user_id=%s and dodavatel=%s"
 	data = (user_data["id"], dodavatel_id)
 	last_cislo_faktury = select_data_prepared_query(sql, data)[0]["MAX(cislo_faktury)"]
-
+	print("woww")
+	print(last_cislo_faktury)
 	# Set default number
-	cislo_faktury = str(date.today().year)+str(dodavatel_id)+"01"
+	cislo_faktury = str(date.today().year)+ '%02d' % int(dodavatel_id) + "01"
 	if last_cislo_faktury and type(last_cislo_faktury) != int:
 		try:
 			# Try to convert to int
@@ -396,19 +432,20 @@ def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, je_sablon
 	variable_title3 = args.get("variable_title3")
 	variable_data3 = args.get("variable_data3")
 
-	if description_id == "":
-		# Add firma
+	if description_id == "" or description_id == None:
+		# Add firma THIS SHOULD BE FIXED ON UBUNTU IT DOESNT LIKE THE NULL VALUE TODO
 		sql_insert_query = """INSERT INTO faktury
 								(user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,
-								datum_vystaveni,datum_zdanpl,datum_splatnosti,mena,qr_platba,vystaveno,je_sifrovano,je_sablona,
+								datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,mena,qr_platba,vystaveno,je_sifrovano,je_sablona,
 								variable_title0, variable_data0, variable_title1, variable_data1, variable_title2, variable_data2, variable_title3, variable_data3)
-							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
 		# Encrypt the data
 		data = (user_data["id"], faktura_numbering, dodavatel_id, odberatel_id, typ_faktury, dodavatel_dph,
 				vystaveni_date, zdanpl_date, splatnost_date, currency_select, qr_platba, vystavila_osoba, je_sifrovano,je_sablona,
 				variable_title0, variable_data0, variable_title1, variable_data1, variable_title2, variable_data2, variable_title3, variable_data3)
 	if description_id:
+		print("yep")
 		# Add firma
 		sql_insert_query = """INSERT INTO faktury
 								(user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,

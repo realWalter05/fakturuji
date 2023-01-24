@@ -36,7 +36,7 @@ def get_faktura():
 
 	excel = get_all_faktury(session["user_data"], faktury, polozky)
 	output = make_response(excel.get_virtual_save())
-	output.headers["Content-Disposition"] = f"attachment; filename=sheet{excel.faktura_numbering}.xlsx"
+	output.headers["Content-Disposition"] = f"attachment; filename={excel.dodavatel}_{excel.faktura_numbering}.xlsx"
 	output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 	return output
 
@@ -56,9 +56,10 @@ def get_faktura_pdf():
 	options = {'disable-smart-shrinking': ''}
 
 	faktura_id = request.args.get('id')
+	faktura_data = get_faktura_by_id(session['user_data'], faktura_id)[0]
 	rendered = get_faktura_template(session["user_data"], faktura_id)
 	pdf = pdfkit.from_string(rendered, options=options, configuration=config)
-	return Response(pdf, mimetype="application/pdf",headers={"Content-Disposition":"attachment;filename=faktura.pdf"})
+	return Response(pdf, mimetype="application/pdf",headers={"Content-Disposition":f"attachment;filename={get_firma_data_from_id(session['user_data'], faktura_data['dodavatel'])[0]}_{faktura_data['cislo_faktury']}.pdf"})
 
 
 @app.route("/upravit_fakturu", methods = ["GET", "POST"])
@@ -94,11 +95,12 @@ def process_faktura():
 	post_faktura(session["user_data"], request.args)
 	return redirect("/", code=302)
 
+
 @app.route("/process_jednorazova_faktura", methods = ["GET", "POST"])
 def process_jednorazova_faktura():
 	excel = create_jednorazova_faktura_excel(request.args)
 	output = make_response(excel.get_virtual_save())
-	output.headers["Content-Disposition"] = f"attachment; filename=sheet{excel.faktura_numbering}.xlsx"
+	output.headers["Content-Disposition"] = f"attachment; filename={excel.dodavatel}_{excel.faktura_numbering}.xlsx"
 	output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 	return output
 
@@ -119,6 +121,22 @@ def get_dalsi_faktury():
 	to_faktury = request.args.get("to")
 
 	faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], from_faktury, to_faktury), session["user_data"])
+	return json.dumps(faktury, indent=4, sort_keys=True, default=str)
+
+
+@app.route("/get_filtrovane_faktury", methods = ["GET"])
+@login_required
+def get_filtrovane_faktury():
+	from_faktury = request.args.get("from") if request.args.get("from") else 0
+	to_faktury = request.args.get("to") if request.args.get("to") else 10
+	faktury_od = request.args.get("faktury_od")
+	faktury_do = request.args.get("faktury_do")
+	only_dodavatel = request.args.get("only_dodavatel")
+	only_odberatel = request.args.get("only_odberatel")
+	faktury_filter = request.args.get("faktury_filter")
+
+	print(faktury_filter, only_dodavatel, only_odberatel, faktury_do, faktury_od)
+	faktury = get_user_full_faktury(get_user_faktury_filtrovano_limit(session["user_data"], from_faktury, to_faktury, faktury_od, faktury_do, only_dodavatel, only_odberatel, faktury_filter), session["user_data"])
 	return json.dumps(faktury, indent=4, sort_keys=True, default=str)
 
 

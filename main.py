@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, make_response, session, Response, redirect
-import pdfkit, json
+import json
 from dateutil.relativedelta import relativedelta
 from python.database_handler import *
 from python.excel_handler import *
@@ -17,7 +17,6 @@ def index():
 		faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], 0, 3), session["user_data"])
 		sablony = get_user_sablony_limit(session["user_data"], 0, 4)
 		get_ucetnictvi_data = {"from" : (datetime.now() - relativedelta(years=1)).strftime("%Y-%m-%d"), "to" : datetime.today().strftime("%Y-%m-%d")}
-		print(get_ucetnictvi_data)
 		return render_template("prehled.html", faktury=faktury, sablony=sablony, get_ucetnictvi_data=get_ucetnictvi_data)
 
 	return render_template("index.html")
