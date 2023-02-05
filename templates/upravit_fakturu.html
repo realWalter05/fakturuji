@@ -212,7 +212,8 @@
                     </div>
                     <input class="hidden" type="checkbox" name="je_sifrovano" id="je_sifrovano" checked>
                 </div>
-                <div class="row w-50">
+                <div class="row mt-2" id="final-fakturuji-div">
+                    <div class="row w-50" id="currency-div">
                     <label class="form-check-label col" for="currency-select">Vyberte měnu faktury</label>
                     <select class="form-select col" name="currency-select" aria-label="Vyberte měnu" id="currency-select">
                         <option value="czk" {{ ('selected' if faktura_data["mena"] == 'czk' else '') if faktura_data else '' }}>CZK</option>
@@ -220,8 +221,9 @@
                         <option value="usd" {{ ('selected' if faktura_data["mena"] == 'usd' else '') if faktura_data else '' }}>USD</option>
                         <option value="gbp" {{ ('selected' if faktura_data["mena"] == 'gbp' else '') if faktura_data else '' }}>GBP</option>
                     </select>
+                    </div>
+                    <input id="submit_btn" type="submit" class="btn-dark btn w-50 float-right form-control" value="FakturujTo v Excelu"/>
                 </div>
-                <input id="submit_btn" type="submit" class="btn-dark btn w-50 float-right form-control" value="FakturujTo v Excelu"/>
             </div>
         </div>
     </form>

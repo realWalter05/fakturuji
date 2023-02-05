@@ -389,10 +389,10 @@ def get_cislo_faktury(user_data, dodavatel_id):
 	sql = "SELECT MAX(cislo_faktury) FROM `faktury` WHERE user_id=%s and dodavatel=%s"
 	data = (user_data["id"], dodavatel_id)
 	last_cislo_faktury = select_data_prepared_query(sql, data)[0]["MAX(cislo_faktury)"]
+
 	print("woww")
 	print(last_cislo_faktury)
 	# Set default number
-	cislo_faktury = str(date.today().year)+ '%02d' % int(dodavatel_id) + "01"
 	if last_cislo_faktury and type(last_cislo_faktury) != int:
 		try:
 			# Try to convert to int
@@ -400,6 +400,12 @@ def get_cislo_faktury(user_data, dodavatel_id):
 			cislo_faktury = cislo_int + 1
 		except ValueError:
 			pass
+	# TODO
+	sql = "SELECT * FROM firmy WHERE user_id=%s AND je_dodavatel=1"
+	data = (user_data["id"],)
+	data = select_data_prepared_query(sql, data)
+	dodavatel_relative_id = len(data) if data else 1
+	cislo_faktury = str(date.today().year)+ ('%02d' % int(dodavatel_relative_id if dodavatel_relative_id else 0)) + "01"
 
 	return cislo_faktury
 
