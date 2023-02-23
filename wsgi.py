@@ -1,4 +1,4 @@
-from main import app
+import sys
+sys.path.insert(0, './')
 
-if __name__ == "__main__":
-	app.run(debug=True)
+from main import app as application

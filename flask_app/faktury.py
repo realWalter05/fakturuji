@@ -51,14 +51,19 @@ def get_faktura_html():
 @app.route('/get_faktura_pdf')
 @login_required
 def get_faktura_pdf():
-	path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-	config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 	options = {'disable-smart-shrinking': ''}
 
 	faktura_id = request.args.get('id')
 	faktura_data = get_faktura_by_id(session['user_data'], faktura_id)[0]
 	rendered = get_faktura_template(session["user_data"], faktura_id)
-	pdf = pdfkit.from_string(rendered, options=options, configuration=config)
+
+	if app.config["ENV"] == "development":
+		path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+		config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+		pdf = pdfkit.from_string(rendered, options=options, configuration=config)
+
+	else:
+		pdf = pdfkit.from_string(rendered, options=options)
 	return Response(pdf, mimetype="application/pdf",headers={"Content-Disposition":f"attachment;filename={get_firma_data_from_id(session['user_data'], faktura_data['dodavatel'])[0]}_{faktura_data['cislo_faktury']}.pdf"})
 
 

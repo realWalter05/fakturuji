@@ -1,6 +1,6 @@
 
 
-wsgi.py must look like this
+wsgi.py must look like this done
 
     import sys
     sys.path.insert(0, '/var/www/fakturuji')
@@ -8,7 +8,7 @@ wsgi.py must look like this
     from main import app as application
 
 
-wkhtmltopdf must have not set config with path
+wkhtmltopdf must have not set config with path done
 
     pdf = pdfkit.from_string(rendered, options=options)
 
@@ -23,7 +23,7 @@ wkhtmltopdf must have this install
     sudo mv wkhtmltox/bin/wkhtmlto* /usr/bin/
 
 
-css paths in faktura_template.html && faktura_template_qr.html must best absolute
+css paths in faktura_template.html && faktura_template_qr.html must best absolute done
 
     <link rel="stylesheet" href="/var/www/fakturuji/static/css/faktura.css" type="text/css">
 

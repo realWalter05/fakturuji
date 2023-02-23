@@ -1,20 +1,27 @@
-from flask import Flask, render_template, request, make_response, session, Response, redirect
-import json
 from dateutil.relativedelta import relativedelta
+import json
+from flask import Flask, render_template, request, session
+
+
+app = Flask(__name__)
+app.config.from_object("config.DevelopmentConfig")
+
+
 from python.database_handler import *
 from python.excel_handler import *
 from python.user_handler import *
 
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "I\x99\x1a\x88o\x95\xcdIr\xbe\xed\xa8\xbav\x82G1\x98\x17\xb5\x7f\rJ~"
-
 
 # Index
 @app.route("/")
 def index():
+	print(app.config)
 	if "user_data" in session:
 		faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], 0, 3), session["user_data"])
+		if not faktury:
+			return render_template("login.html", msg="database_timeout")
+
 		sablony = get_user_sablony_limit(session["user_data"], 0, 4)
 		get_ucetnictvi_data = {"from" : (datetime.now() - relativedelta(years=1)).strftime("%Y-%m-%d"), "to" : datetime.today().strftime("%Y-%m-%d")}
 		return render_template("prehled.html", faktury=faktury, sablony=sablony, get_ucetnictvi_data=get_ucetnictvi_data)

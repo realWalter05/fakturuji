@@ -2,6 +2,7 @@ import mysql.connector
 import bcrypt, secrets, string
 from python.user_handler import *
 from datetime import date
+from main import app
 
 
 def get_number(string_number):
@@ -26,10 +27,10 @@ def get_number(string_number):
 def execute_query(sql, data):
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 		cursor.execute(sql, data)
@@ -48,10 +49,10 @@ def select_data_prepared_query(sql, data):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -62,7 +63,6 @@ def select_data_prepared_query(sql, data):
 		return result
 
 	except mysql.connector.Error as error:
-		print(error)
 		return
 
 	finally:
@@ -97,10 +97,10 @@ def database_add_firma(user_data, firma):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -207,10 +207,10 @@ def database_add_popisek(user_data, popisek):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -289,11 +289,12 @@ def get_user_sablony_limit(user_data, from_sablona, to_sablona):
 	return result
 
 def get_user_full_faktury(faktury, user_data):
-	for faktura in faktury:
-		dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
-		odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
-		faktura["dodavatel"] = get_firma_data_from_id(user_data, dodavatel_id)[0] if dodavatel_id != None else ""
-		faktura["odberatel"] = get_firma_data_from_id(user_data, odberatel_id)[0] if odberatel_id != None else ""
+	if faktury:
+		for faktura in faktury:
+			dodavatel_id = int(faktura["dodavatel"]) if faktura["dodavatel"] else None
+			odberatel_id = int(faktura["odberatel"]) if faktura["odberatel"] else None
+			faktura["dodavatel"] = get_firma_data_from_id(user_data, dodavatel_id)[0] if dodavatel_id != None else ""
+			faktura["odberatel"] = get_firma_data_from_id(user_data, odberatel_id)[0] if odberatel_id != None else ""
 	return faktury
 
 
@@ -566,10 +567,10 @@ def post_faktura(user_data, args):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -593,10 +594,10 @@ def post_sablona_faktura(user_data, args):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -627,10 +628,10 @@ def register_user(username, email, password, password_repeat):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -669,10 +670,10 @@ def login_user(username, password):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -715,10 +716,10 @@ def get_polozky_by_faktura_id(user_data, faktury):
 	try:
 		# Get conn
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -779,10 +780,10 @@ def create_faktura_sablona_copy(user_data, faktura_id):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -808,10 +809,10 @@ def create_faktura_items_copy(user_data, faktura_id, new_sablona):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -840,10 +841,10 @@ def make_sablona_from_copy_id(user_data, faktura_id, sablona_name):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 
@@ -869,10 +870,10 @@ def make_sablona_from_id(user_data, sablona_faktury_id, sablona_name):
 	conn = None
 	try:
 		conn = mysql.connector.connect(
-		  host="localhost",
-		  user="root",
-		  password="",
-		  database="faktury"
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
 		)
 		cursor = conn.cursor(prepared=True)
 

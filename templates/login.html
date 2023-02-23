@@ -14,6 +14,8 @@
         <p class="text-danger text-center">Pro přístup na tuto stránku se musíte přihlásit.</p>
     {% elif msg == "error" %}
         <p class="text-danger text-center">Při zpracovávání požadavku nastalo nějaká chyba. Zkuste to prosím později.</p>
+    {% elif msg == "database_timeout" %}
+        <p class="text-danger text-center">Při zpracovávání požadavku nastala databázová chyba. Zkuste to prosím později.</p>
     {% endif %}
     <div class="form-group mb-2">
         <label for="login-username">Uživatelské jméno</label>
