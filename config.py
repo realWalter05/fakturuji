@@ -25,7 +25,7 @@ class DevelopmentConfig(Config):
 
     DB_HOST  = "localhost"
     DB_USERNAME  = "root"
-    DB_PASSWORD  = "fakturuji_db"
+    DB_PASSWORD  = "Fakturuji_db123"
     DB_DATABASE  = "faktury"
     DEBUG = True
 
