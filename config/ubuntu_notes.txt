@@ -1,29 +1,15 @@
 
-
-wsgi.py must look like this done
-
-    import sys
-    sys.path.insert(0, '/var/www/fakturuji')
-
-    from main import app as application
-
-
-wkhtmltopdf must have not set config with path done
-
-    pdf = pdfkit.from_string(rendered, options=options)
-
-
 wkhtmltopdf must have this install
 
     This straightforward solution (no need to install xvfb, neither compiling QT neither wkhtmltopdf) works like a charm on my Debian Jessie server :
 
+    mkdir mytmpfolder
     cd mytmpfolder
     wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
     sudo tar xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
     sudo mv wkhtmltox/bin/wkhtmlto* /usr/bin/
+    sudo rm -r mytempfolder
 
+python-dateutil
 
-css paths in faktura_template.html && faktura_template_qr.html must best absolute done
-
-    <link rel="stylesheet" href="/var/www/fakturuji/static/css/faktura.css" type="text/css">
-
+    sudo apt-get install python-dateutil
