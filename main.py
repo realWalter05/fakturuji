@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, session
 
 app = Flask(__name__)
 app.config.from_object("config.DevelopmentConfig")
+#app.config.from_object("config.ProductionConfig")
 
 
 from python.database_handler import *
@@ -16,7 +17,6 @@ from python.user_handler import *
 # Index
 @app.route("/")
 def index():
-	print(app.config)
 	if "user_data" in session:
 		faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], 0, 3), session["user_data"])
 		if not faktury:

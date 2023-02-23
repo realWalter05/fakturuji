@@ -30,9 +30,3 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
     FAKTURA_CSS_PATH = "C:/Users/zikav/dev/Python/fakturuji/static/css/faktura.css"
-
-
-class TestingConfig(Config):
-    ENV = "testing"
-
-    TESTING = True
