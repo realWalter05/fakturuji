@@ -279,6 +279,17 @@ def get_all_faktury_in_date(user_data, faktury, polozky, ucetnictvi_od, ucetnict
     return None
 
 
+def sort_all_faktury_by_cislo_faktury(faktury: list) -> list:
+    new_order = []
+    faktury_dict = {}
+    for faktura in faktury:
+        faktury_dict[faktura["cislo_faktury"]] = faktura
+
+    for key in sorted(faktury_dict):
+        new_order.append(faktury_dict[key])
+    return new_order
+
+
 def get_prices_polozky(polozky):
     for polozka in polozky:
         polozka["bez_dph"] = round((int(polozka["pocet"]) if polozka["pocet"] else 0) * (int(polozka["cena"]) if polozka["cena"] else 0), 2)

@@ -16,9 +16,12 @@ def get_ucetnictvi():
 	print(f"faktury {faktury}")
 	if not faktury:
 		return index()
-	polozky = get_polozky_by_faktura_id(session["user_data"], faktury)
 
-	excel = get_all_faktury_in_date(session["user_data"], faktury, polozky, ucetnictvi_od, ucetnictvi_do)
+	sorted_faktury = sort_all_faktury_by_cislo_faktury(faktury)
+	polozky = get_polozky_by_faktura_id(session["user_data"], sorted_faktury)
+
+	excel = get_all_faktury_in_date(session["user_data"], sorted_faktury, polozky, ucetnictvi_od, ucetnictvi_do)
+
 	if not excel:
 		return index()
 	output = make_response(excel.get_virtual_save())

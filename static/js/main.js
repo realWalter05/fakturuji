@@ -680,7 +680,7 @@ function HintFirmaFilter(firmy, parent) {
 		let a = document.createElement("a");
 		a.classList.add("dropdown-item");
 		a.classList.add("hint-element");
-		a.setAttribute("onclick", 'this.parentElement.parentElement.querySelector("input").value="'+value["id"]+'"; this.parentElement.parentElement.querySelectorAll("input")[1].value="'+value["nazev"]+'";');
+		a.setAttribute("onclick", 'this.parentElement.parentElement.querySelector("input").value="'+value["id"]+'"; this.parentElement.parentElement.querySelectorAll("input")[1].value="'+value["nazev"]+'"; GetNewFakturyFiltruj();');
 		a.textContent = value["nazev"];
 		hintMenu.appendChild(a);
 	});

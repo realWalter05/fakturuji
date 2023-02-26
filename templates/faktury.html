@@ -37,21 +37,21 @@
   <div class="w-50 p-5 col shadow-lg">
 	  <h2 class="display-3 text-center mb-3">Seznam faktur</h2>
 	  <div class="w-100">
-		<input type="text" class="form-control" id="faktury-filter" placeholder="Filtrujte faktury" oninput="GetNewFakturyFiltruj();">
+		<input type="text" class="form-control" id="faktury-filter" placeholder="Filtrujte podle čísla faktury" oninput="GetNewFakturyFiltruj();">
 		<div class="row">
 			<div class="col">
-				<div class="dropdown">
+				<div>
 					<input type="hidden" id="dodavatel-filter">
-					<input required class="form-control dropdown-toggle form-nazev" onclick="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 1, 0); GetNewFakturyFiltruj();"
-					oninput="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 1, 0); GetNewFakturyFiltruj();" autocomplete="off" placeholder="Pouze dodavatel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<div class="dropdown-menu hint-menu" aria-labelledby="dropdownMenuButton">
+					<input required class="form-control dropdown-toggle form-nazev" onclick="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 1, 0);"
+					oninput="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 1, 0);" autocomplete="off" placeholder="Vyberte dodavatele" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<div class="dropdown-menu dropdown hint-menu" aria-labelledby="dropdownMenuButton">
 					</div>
 				</div>
-				<div><div class="dropdown">
+				<div><div>
 					<input type="hidden" id="odberatel-filter">
-					<input required class="form-control dropdown-toggle form-nazev" onclick="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 0, 1); GetNewFakturyFiltruj();"
-					oninput="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 0, 1); GetNewFakturyFiltruj();" autocomplete="off" placeholder="Pouze odběratel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<div class="dropdown-menu hint-menu" aria-labelledby="dropdownMenuButton">
+					<input required class="form-control dropdown-toggle form-nazev" onclick="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 0, 1);"
+					oninput="GetHintFirmyFilter(this.value, this.parentElement.parentElement, 0, 1);" autocomplete="off" placeholder="Vyberte odběratele" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<div class="dropdown-menu dropdown hint-menu" aria-labelledby="dropdownMenuButton0">
 					</div>
 				</div></div>
 			</div>
