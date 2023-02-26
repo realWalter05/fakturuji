@@ -30,3 +30,5 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
     FAKTURA_CSS_PATH = "C:/Users/zikav/dev/Python/fakturuji/static/css/faktura.css"
+
+    SESSION_COOKIE_SECURE = False

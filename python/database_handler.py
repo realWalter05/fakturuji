@@ -45,6 +45,27 @@ def execute_query(sql, data):
 			conn.close()
 
 
+def check_connection():
+	conn = False
+	try:
+		conn = mysql.connector.connect(
+		  host=app.config["DB_HOST"],
+		  user=app.config["DB_USERNAME"],
+		  password=app.config["DB_PASSWORD"],
+		  database=app.config["DB_DATABASE"]
+		)
+
+		return conn
+
+	except mysql.connector.Error as error:
+		print(error)
+		return conn
+
+	finally:
+		if conn:
+			conn.close()
+
+
 def select_data_prepared_query(sql, data):
 	conn = None
 	try:
@@ -63,6 +84,7 @@ def select_data_prepared_query(sql, data):
 		return result
 
 	except mysql.connector.Error as error:
+		print(error)
 		return
 
 	finally:
@@ -287,6 +309,7 @@ def get_user_sablony_limit(user_data, from_sablona, to_sablona):
 	data = (user_data["id"], from_sablona, to_sablona)
 	result = select_data_prepared_query(sql, data)
 	return result
+
 
 def get_user_full_faktury(faktury, user_data):
 	if faktury:

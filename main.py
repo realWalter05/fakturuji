@@ -13,22 +13,22 @@ from python.excel_handler import *
 from python.user_handler import *
 
 
-
-# Index
-@app.route("/")
-def index():
-	if "user_data" in session:
-		faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], 0, 3), session["user_data"])
-		if not faktury:
+# Decorators
+def database_connected(func):
+	def wrapper():
+		print("Checking database")
+		if not check_connection():
+			print("Database not working")
 			return render_template("login.html", msg="database_timeout")
 
-		sablony = get_user_sablony_limit(session["user_data"], 0, 4)
-		get_ucetnictvi_data = {"from" : (datetime.now() - relativedelta(years=1)).strftime("%Y-%m-%d"), "to" : datetime.today().strftime("%Y-%m-%d")}
-		return render_template("prehled.html", faktury=faktury, sablony=sablony, get_ucetnictvi_data=get_ucetnictvi_data)
+		print("Database is connected")
+		return func()
 
-	return render_template("index.html")
+	wrapper.__name__ = func.__name__
+	return wrapper
 
-# Decorators
+
+
 def login_required(func):
 	def wrapper():
 		print("Checking login")
@@ -44,6 +44,21 @@ def login_required(func):
 		return func()
 	wrapper.__name__ = func.__name__
 	return wrapper
+
+
+# Index
+@app.route("/")
+@database_connected
+def index():
+	if "user_data" in session:
+		faktury = get_user_full_faktury(get_user_faktury_limit(session["user_data"], 0, 3), session["user_data"])
+
+		sablony = get_user_sablony_limit(session["user_data"], 0, 4)
+		get_ucetnictvi_data = {"from" : (datetime.now() - relativedelta(years=1)).strftime("%Y-%m-%d"), "to" : datetime.today().strftime("%Y-%m-%d")}
+		return render_template("prehled.html", faktury=faktury, sablony=sablony, get_ucetnictvi_data=get_ucetnictvi_data)
+
+	return render_template("index.html")
+
 
 # JSON
 @app.route('/get_ico_data', methods=['GET', 'POST'])

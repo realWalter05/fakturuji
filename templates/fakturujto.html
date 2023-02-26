@@ -185,7 +185,7 @@
             </div>
             <div class="row my-3 mx-1" id="checkboxes-faktura">
                 <div class="form-check col">
-                    <input class="form-check-input" type="checkbox" name="prenesena_dph" id="prenesena_dph">
+                    <input class="form-check-input" type="checkbox" name="prenesena_dph" id="prenesena_dph" {{ ('checked' if faktura_data["typ"] == 1 if faktura_data else "") if faktura_data else '' }}>
                     <label class="form-check-label" for="prenesena_dph">
                     Faktura vystavena v přeneseném DPH
                     </label>
