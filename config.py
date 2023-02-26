@@ -7,7 +7,7 @@ class Config(object):
 
     DB_HOST  = "localhost"
     DB_USERNAME  = "root"
-    DB_PASSWORD  = ""
+    DB_PASSWORD  = "Fakturuji_db123"
     DB_DATABASE  = "faktury"
 
     FAKTURA_CSS_PATH = "/var/www/fakturuji/static/css/faktura.css"
@@ -25,7 +25,7 @@ class DevelopmentConfig(Config):
 
     DB_HOST  = "localhost"
     DB_USERNAME  = "root"
-    DB_PASSWORD  = "Fakturuji_db123"
+    DB_PASSWORD  = ""
     DB_DATABASE  = "faktury"
     DEBUG = True
 
