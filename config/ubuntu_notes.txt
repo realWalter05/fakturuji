@@ -10,6 +10,8 @@ wkhtmltopdf must have this install
     sudo mv wkhtmltox/bin/wkhtmlto* /usr/bin/
     sudo rm -r mytempfolder
 
-python-dateutil
+server_downloads
 
     sudo apt-get install python-dateutil
+
+    sudo apt-get install libxrender1

@@ -93,7 +93,7 @@
         <tr class="big_row">
             <td colspan="5">Vedeno v: {{ dodavatel[8] }} {{ dodavatel[9] }}</td>
             <td colspan="2"></td>
-            <td colspan="5">{% if faktura_data["prenesena_dph"] %} Faktura vystavena v režimu přenesené daňové povinnosti. Daň odvede zákazník. {% endif %}</td>
+            <td colspan="5">{% if faktura_data["typ"] == 1 %} <strong>Faktura vystavena v režimu přenesené daňové povinnosti. Daň odvede zákazník.</strong> {% endif %}</td>
         </tr>
         <tr style="height: 1rem"></tr>
         <tr>
@@ -212,11 +212,11 @@
         <tr style="height: 0.5rem"></tr>
         <tr>
             <td colspan="8"></td>
-            <td colspan="4" class="celkem_s_dph cambria">CELKEM S DPH</td>
+            <td colspan="4" class="celkem_s_dph cambria">CELKEM{% if faktura_data["typ"] == 0 %} S DPH {% endif %}</td>
         </tr>
         <tr>
             <td colspan="8"></td>
-            <td colspan="4" class="full_price cambria">{{ faktura_data["total_s_dph"] }} {{ faktura_data["mena_ending"] }}</td>
+            <td colspan="4" class="full_price cambria">{% if faktura_data["typ"] == 1 %} {{ faktura_data["total_bez_dph"] }} {% else %} {{ faktura_data["total_s_dph"] }} {% endif %} {{ faktura_data["mena_ending"] }}</td>
         </tr>
         <tr style="height: 0.5rem"></tr>
         <tr>
