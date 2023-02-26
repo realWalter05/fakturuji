@@ -357,9 +357,6 @@ def get_user_faktury_filtrovano_limit(user_data, from_faktura, to_faktura, faktu
 
 	data = tuple(data_list)
 	result = select_data_prepared_query(sql, data)
-	print(sql)
-	print(data)
-	print(len(result))
 	return result
 
 
@@ -409,28 +406,33 @@ def get_database_popisky(user_data, search_text):
 
 
 def get_cislo_faktury(user_data, dodavatel_id):
-	# Get last number from database
+	# Get last faktura number from database
 	sql = "SELECT MAX(cislo_faktury) FROM `faktury` WHERE user_id=%s and dodavatel=%s"
 	data = (user_data["id"], dodavatel_id)
 	last_cislo_faktury = select_data_prepared_query(sql, data)[0]["MAX(cislo_faktury)"]
 
-	print("woww")
-	print(last_cislo_faktury)
-	# Set default number
 	if last_cislo_faktury and type(last_cislo_faktury) != int:
+		# There were already some faktura
 		try:
 			# Try to convert to int
-			cislo_int = int(last_cislo_faktury)
+			year_id = last_cislo_faktury[:6]
+			cislo_int = int(last_cislo_faktury[6:])
 			cislo_faktury = cislo_int + 1
+			return year_id + '%02d' % int(cislo_faktury)
+
 		except ValueError:
 			pass
-	# TODO
-	sql = "SELECT * FROM firmy WHERE user_id=%s AND je_dodavatel=1"
+
+	# This is a first faktura
+	sql = "SELECT id FROM firmy WHERE user_id=%s AND je_dodavatel=1"
 	data = (user_data["id"],)
 	data = select_data_prepared_query(sql, data)
-	dodavatel_relative_id = len(data) if data else 1
-	cislo_faktury = str(date.today().year)+ ('%02d' % int(dodavatel_relative_id if dodavatel_relative_id else 0)) + "01"
 
+	# Get sorted firma ids
+	firmy = [firma_dict["id"] for firma_dict in data]
+	dodavatel_relative_id = firmy.index(int(dodavatel_id))
+	default = str(date.today().year)+ ('%02d' % dodavatel_relative_id)
+	cislo_faktury = default + "01"
 	return cislo_faktury
 
 
@@ -519,7 +521,6 @@ def delete_popisek_by_id(user_data, popisek_id):
 		sql = "DELETE FROM popisky WHERE user_id=%s AND id=%s;"
 		data = (user_data["id"], popisek_id)
 		execute_query(sql, data)
-		print(f"deleting {popisek_id}")
 		return
 
 	sql = "UPDATE popisky SET smazano_uzivatelem=1 WHERE id=%s AND user_id=%s;"
@@ -534,7 +535,6 @@ def delete_firma_by_id(user_data, firma_id):
 	exists_row_count = len(select_data_prepared_query(sql, data))
 
 	if exists_row_count == 0:
-		print(f"deleting then {firma_id}")
 		sql = "DELETE FROM firmy WHERE id=%s AND user_id=%s;"
 		data = (firma_id, user_data["id"])
 		execute_query(sql, data)
@@ -546,7 +546,6 @@ def delete_firma_by_id(user_data, firma_id):
 
 
 def get_user_items(args):
-	print("posting to items table")
 	items = []
 	polozky = args.getlist("polozka")
 	count = args.getlist("count")
@@ -597,7 +596,6 @@ def post_faktura(user_data, args):
 		)
 		cursor = conn.cursor(prepared=True)
 
-		print(f" { args }")
 		je_sifrovano = 1 if args.get("je_sifrovano") == "on" else 0
 		post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, 0)
 		post_to_items_table(user_data, args, cursor, conn, cursor.lastrowid, je_sifrovano)
@@ -624,7 +622,6 @@ def post_sablona_faktura(user_data, args):
 		)
 		cursor = conn.cursor(prepared=True)
 
-		print(f" { args }")
 		je_sifrovano = 1 if args.get("je_sifrovano") == "on" else 0
 		post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, 1)
 		faktura_id = cursor.lastrowid
@@ -843,7 +840,6 @@ def create_faktura_items_copy(user_data, faktura_id, new_sablona):
 		sql = """INSERT INTO polozky (user_id,faktura_id,dodavka,dph,pocet,cena)
 			 SELECT user_id,%s,dodavka,dph,pocet,cena FROM polozky WHERE user_id=%s AND faktura_id=%s"""
 		data = (new_sablona, user_data["id"],faktura_id)
-		print("new items")
 		cursor.execute(sql, data)
 		conn.commit()
 		return cursor.lastrowid
@@ -860,7 +856,6 @@ def create_faktura_items_copy(user_data, faktura_id, new_sablona):
 
 def make_sablona_from_copy_id(user_data, faktura_id, sablona_name):
 	sablona_faktury_id = create_faktura_sablona_copy(user_data, faktura_id)
-	print(sablona_faktury_id)
 	conn = None
 	try:
 		conn = mysql.connector.connect(

@@ -13,7 +13,6 @@ def get_ucetnictvi():
 	ucetnictvi_do = request.args.get('ucetnictvi_do')
 
 	faktury = get_faktury_not_sablony_by_user(session["user_data"])
-	print(f"faktury {faktury}")
 	if not faktury:
 		return index()
 
@@ -143,7 +142,6 @@ def get_filtrovane_faktury():
 	only_odberatel = request.args.get("only_odberatel")
 	faktury_filter = request.args.get("faktury_filter")
 
-	print(faktury_filter, only_dodavatel, only_odberatel, faktury_do, faktury_od)
 	faktury = get_user_full_faktury(get_user_faktury_filtrovano_limit(session["user_data"], from_faktury, to_faktury, faktury_od, faktury_do, only_dodavatel, only_odberatel, faktury_filter), session["user_data"])
 	return json.dumps(faktury, indent=4, sort_keys=True, default=str)
 

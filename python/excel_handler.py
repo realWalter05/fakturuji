@@ -304,124 +304,100 @@ def change_date_format(date):
 
 def auto_fill(user_input, title):
    # Request to ares
-   if user_input:
-       user_ico = ""
-       if user_input.replace(" ", "").isnumeric():
-           user_ico = user_input.replace(" ", "")
-       else:
-           # If input is obchodni firma get its ico
-           firma_url = "https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_std.cgi?obchodni_firma=" + user_input
-           try:
-               xml_data = requests.get(firma_url)
-               response = ET.fromstring(xml_data.content)
-               firma_path = "{http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_answer/v_1.0.1}"
-               zaznam = response[0].find(firma_path + "Zaznam")
-               if zaznam:
-                   ico = zaznam.find(firma_path + "ICO")
-                   user_ico = ico.text
+    if user_input:
+        user_ico = ""
+        if user_input.replace(" ", "").isnumeric():
+            user_ico = user_input.replace(" ", "")
+        else:
+            # If input is obchodni firma get its ico
+            firma_url = "https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_std.cgi?obchodni_firma=" + user_input
+            xml_data = requests.get(firma_url)
+            response = ET.fromstring(xml_data.content)
+            firma_path = "{http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_answer/v_1.0.1}"
+            zaznam = response[0].find(firma_path + "Zaznam")
+            if zaznam:
+                ico = zaznam.find(firma_path + "ICO")
+                user_ico = ico.text
 
-           except requests.exceptions.ConnectionError:
-               print("no internet")
-
-       url = "http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=" + user_ico + "&adr_puv=true"
-       try:
-           xml_data = requests.get(url)
-
-           odpoved = ET.fromstring(xml_data.content)
-
-           path = "{http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_datatypes/v_1.0.3}"
-           # Getting the data
-           vbas = odpoved[0].find(path + "VBAS")
-           if vbas:
-               name = vbas.find(path + "OF").text if vbas.find(path + "OF") is not None else ""
-               ico = vbas.find(path + "ICO").text if vbas.find(path + "ICO") is not None else ""
-               dic = vbas.find(path + "DIC").text if vbas.find(path + "DIC") is not None else ""
-
-               zapis_place = ""
-               zapis_vlozka = ""
-               # Getting the zapis v rejstriku
-               if vbas.find(path + "ROR") is not None:
-                   zapis_parent = vbas.find(path + "ROR")
-                   if zapis_parent.find(path + "SZ") is not None:
-                       zapis = zapis_parent.find(path + "SZ")
-
-                       zapis_vlozka = zapis.find(path + "OV").text if zapis.find(path + "OV") is not None else ""
-                       if zapis.find(path + "SD") is not None:
-                           zapis_place_parent = zapis.find(path + "SD")
-                           zapis_place = zapis_place_parent.find(path + "T").text if zapis_place_parent.find(path + "T") is not None else ""
-
-               country = ""
-               street = ""
-               cislo_popisne = ""
-               psc = ""
-               city = ""
-               # Getting the geological information about the company
-               if vbas.find(path + "AD") is not None:
-                   geological_info = vbas.find(path + "AD")
-
-                   street = geological_info.find(path + "UC").text if geological_info.find(path + "UC") is not None else ""
-                   if street:
-                    cislo_popisne = street.split(" ")[-1]
-                    street = street.split(cislo_popisne)[0].strip()
-
-                   city = geological_info.find(path + "PB").text if geological_info.find(path + "PB") is not None else ""
-                   if city:
-                    psc = city.split(" ")[-1]
-                    city = city.split(psc)[0].strip()
-
-               # Getting the country
-               if vbas.find(path + "AA") is not None:
-                   country_parent = vbas.find(path + "AA")
-                   country = country_parent.find(path + "NS").text if country_parent.find(path + "NS") is not None else ""
-
-               # Creating the status msg
-               not_found = []
-               if not name:
-                   not_found.append("název firmy")
-               if not street:
-                   not_found.append("ulici")
-               if not city:
-                   not_found.append("město")
-               if not psc:
-                   not_found.append("město")
-               if not cislo_popisne:
-                   not_found.append("cislo popisne")
-               if not country:
-                   not_found.append("zemi")
-               if not ico:
-                   not_found.append("IČO")
-               if not dic:
-                   not_found.append("DIČ")
-               if not zapis_place:
-                   not_found.append("zápis v obchodním rejstříku")
-               not_found.append("telefoní číslo")
-               not_found.append("email")
-               not_found.append("web")
-
-               items = [name, ico, dic, street, cislo_popisne, city, psc, country, zapis_place, zapis_vlozka, '', '', '']
-               if title == "Dodavatelé":
-                   items = [name, ico, dic, street, cislo_popisne, city, psc, country, zapis_place, zapis_vlozka, '', '', '', '', '', '', '', '', '', '', '']
-                   not_found.append("bankovní údaje")
-
-               msg = "Ares nalezl a vyplnil všechny data."
-               if not_found:
-                   first_data = True
-                   msg = "Ares neposkytl data: "
-                   for item in not_found:
-                       if first_data:
-                           msg = msg + item
-                           first_data = False
-                           continue
-                       msg = msg + ", " + item
-
-               # Saving the new data from ares to dataframe
-               return items
-
-           else:
-               print("data nenalezena")
-
-       except requests.exceptions.ConnectionError:
-           print("no internet")
-
-   else:
-       print("data nenalezena")
+    url = "http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=" + user_ico + "&adr_puv=true"
+    xml_data = requests.get(url)
+    odpoved = ET.fromstring(xml_data.content)
+    path = "{http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_datatypes/v_1.0.3}"
+    # Getting the data
+    vbas = odpoved[0].find(path + "VBAS")
+    if vbas:
+        name = vbas.find(path + "OF").text if vbas.find(path + "OF") is not None else ""
+        ico = vbas.find(path + "ICO").text if vbas.find(path + "ICO") is not None else ""
+        dic = vbas.find(path + "DIC").text if vbas.find(path + "DIC") is not None else ""
+        zapis_place = ""
+        zapis_vlozka = ""
+        # Getting the zapis v rejstriku
+        if vbas.find(path + "ROR") is not None:
+            zapis_parent = vbas.find(path + "ROR")
+            if zapis_parent.find(path + "SZ") is not None:
+                zapis = zapis_parent.find(path + "SZ")
+                zapis_vlozka = zapis.find(path + "OV").text if zapis.find(path + "OV") is not None else ""
+                if zapis.find(path + "SD") is not None:
+                    zapis_place_parent = zapis.find(path + "SD")
+                    zapis_place = zapis_place_parent.find(path + "T").text if zapis_place_parent.find(path + "T") is not None else ""
+        country = ""
+        street = ""
+        cislo_popisne = ""
+        psc = ""
+        city = ""
+        # Getting the geological information about the company
+        if vbas.find(path + "AD") is not None:
+            geological_info = vbas.find(path + "AD")
+            street = geological_info.find(path + "UC").text if geological_info.find(path + "UC") is not None else ""
+            if street:
+             cislo_popisne = street.split(" ")[-1]
+             street = street.split(cislo_popisne)[0].strip()
+            city = geological_info.find(path + "PB").text if geological_info.find(path + "PB") is not None else ""
+            if city:
+             psc = city.split(" ")[-1]
+             city = city.split(psc)[0].strip()
+        # Getting the country
+        if vbas.find(path + "AA") is not None:
+            country_parent = vbas.find(path + "AA")
+            country = country_parent.find(path + "NS").text if country_parent.find(path + "NS") is not None else ""
+        # Creating the status msg
+        not_found = []
+        if not name:
+            not_found.append("název firmy")
+        if not street:
+            not_found.append("ulici")
+        if not city:
+            not_found.append("město")
+        if not psc:
+            not_found.append("město")
+        if not cislo_popisne:
+            not_found.append("cislo popisne")
+        if not country:
+            not_found.append("zemi")
+        if not ico:
+            not_found.append("IČO")
+        if not dic:
+            not_found.append("DIČ")
+        if not zapis_place:
+            not_found.append("zápis v obchodním rejstříku")
+        not_found.append("telefoní číslo")
+        not_found.append("email")
+        not_found.append("web")
+        items = [name, ico, dic, street, cislo_popisne, city, psc, country, zapis_place, zapis_vlozka, '', '', '']
+        if title == "Dodavatelé":
+            items = [name, ico, dic, street, cislo_popisne, city, psc, country, zapis_place, zapis_vlozka, '', '', '', '', '', '', '', '', '', '', '']
+            not_found.append("bankovní údaje")
+        msg = "Ares nalezl a vyplnil všechny data."
+        if not_found:
+            first_data = True
+            msg = "Ares neposkytl data: "
+            for item in not_found:
+                if first_data:
+                    msg = msg + item
+                    first_data = False
+                    continue
+                msg = msg + ", " + item
+        # Saving the new data from ares to dataframe
+        return items
+    else:
+        print("data nenalezena")

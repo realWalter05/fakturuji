@@ -20,8 +20,6 @@ def add_firma():
 def change_firma():
 	delete_firma_by_id(session["user_data"], request.form.get("id"))
 	firma = get_firma_dict(request.form)
-	print(request.form.get("id"))
-	print(firma)
 	msg = "error"
 	if firma and firma["name"]:
 		msg = database_add_firma(session["user_data"], firma)
@@ -48,5 +46,4 @@ def upravit_firmu():
 	firma_id = request.args.get("id")
 	firma = get_firma_data_from_id(session["user_data"], firma_id)
 	firmy = get_user_firmy_limit(session["user_data"], 0, 10)
-	print(firma)
 	return render_template("pridat_firmu.html", firmy=firmy, firma=firma, firma_id=firma_id)
