@@ -439,7 +439,7 @@ def get_cislo_faktury(user_data, dodavatel_id):
 
 	# Get sorted firma ids
 	firmy = [firma_dict["id"] for firma_dict in data]
-	dodavatel_relative_id = firmy.index(int(dodavatel_id))
+	dodavatel_relative_id = firmy.index(int(dodavatel_id))+1
 	default = str(date.today().year)+ ('%02d' % dodavatel_relative_id)
 	cislo_faktury = default + "01"
 	return cislo_faktury
