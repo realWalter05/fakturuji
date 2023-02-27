@@ -26,7 +26,7 @@ class DevelopmentConfig(Config):
     DB_HOST  = "localhost"
     DB_USERNAME  = "root"
     DB_PASSWORD  = ""
-    DB_DATABASE  = "sure"
+    DB_DATABASE  = "faktury"
     DEBUG = True
 
     FAKTURA_CSS_PATH = "C:/Users/zikav/dev/Python/fakturuji/static/css/faktura.css"
