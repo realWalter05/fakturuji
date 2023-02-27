@@ -406,10 +406,19 @@ def get_database_popisky(user_data, search_text):
 
 
 def get_cislo_faktury(user_data, dodavatel_id):
-	# Get last faktura number from database
-	sql = "SELECT MAX(cislo_faktury) FROM `faktury` WHERE user_id=%s and dodavatel=%s"
+	# Algorhitm for determining next cislo faktury in row (user can force a cislo faktury if he wants)
+	sql = "SELECT cislo_faktury FROM `faktury` WHERE user_id=%s and dodavatel=%s"
 	data = (user_data["id"], dodavatel_id)
-	last_cislo_faktury = select_data_prepared_query(sql, data)[0]["MAX(cislo_faktury)"]
+	cisla_faktur = select_data_prepared_query(sql, data)
+
+	cisla_faktur = sorted([cislo["cislo_faktury"] for cislo in cisla_faktur])
+	last_cislo_faktury = None
+	if cisla_faktur:
+		last_cislo_faktury = cisla_faktur[0]
+		for cislo in cisla_faktur:
+			if int(last_cislo_faktury) != int(cislo) - 1 and int(last_cislo_faktury) != int(cislo):
+				break
+			last_cislo_faktury = cislo
 
 	if last_cislo_faktury and type(last_cislo_faktury) != int:
 		# There were already some faktura

@@ -667,6 +667,11 @@ function HintFirma(firmy, parent, je_dodavatel) {
 }
 
 
+function escapeHtml(unsafe) {
+    return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '').replaceAll("'", '&#039;');
+}
+
+
 function HintFirmaFilter(firmy, parent) {
 	let hints = parent.querySelectorAll(".hint-element");
 	if (hints) {
@@ -680,7 +685,7 @@ function HintFirmaFilter(firmy, parent) {
 		let a = document.createElement("a");
 		a.classList.add("dropdown-item");
 		a.classList.add("hint-element");
-		a.setAttribute("onclick", 'this.parentElement.parentElement.querySelector("input").value="'+value["id"]+'"; this.parentElement.parentElement.querySelectorAll("input")[1].value="'+value["nazev"]+'"; GetNewFakturyFiltruj();');
+		a.setAttribute("onclick", 'this.parentElement.parentElement.querySelector("input").value="'+value["id"]+'"; this.parentElement.parentElement.querySelectorAll("input")[1].value="'+escapeHtml(value["nazev"])+'"; GetNewFakturyFiltruj();');
 		a.textContent = value["nazev"];
 		hintMenu.appendChild(a);
 	});
