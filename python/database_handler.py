@@ -473,13 +473,14 @@ def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, je_sablon
 	variable_title3 = args.get("variable_title3")
 	variable_data3 = args.get("variable_data3")
 
+	print(description_id)
 	if description_id == "" or description_id == None:
 		# Add firma THIS SHOULD BE FIXED ON UBUNTU IT DOESNT LIKE THE NULL VALUE TODO
 		sql_insert_query = """INSERT INTO faktury
 								(user_id,cislo_faktury,dodavatel,odberatel,typ,dodavatel_dph,
-								datum_vystaveni,datum_zdanpl,datum_splatnosti,description_id,mena,qr_platba,vystaveno,je_sifrovano,je_sablona,
+								datum_vystaveni,datum_zdanpl,datum_splatnosti,mena,qr_platba,vystaveno,je_sifrovano,je_sablona,
 								variable_title0, variable_data0, variable_title1, variable_data1, variable_title2, variable_data2, variable_title3, variable_data3)
-							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+							VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
 		# Encrypt the data
 		data = (user_data["id"], faktura_numbering, dodavatel_id, odberatel_id, typ_faktury, dodavatel_dph,
