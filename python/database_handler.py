@@ -473,7 +473,7 @@ def post_to_faktura_table(user_data, args, cursor, conn, je_sifrovano, je_sablon
 	variable_title3 = args.get("variable_title3")
 	variable_data3 = args.get("variable_data3")
 
-	print(description_id)
+	print(args)
 	if description_id == "" or description_id == None:
 		# Add firma THIS SHOULD BE FIXED ON UBUNTU IT DOESNT LIKE THE NULL VALUE TODO
 		sql_insert_query = """INSERT INTO faktury

@@ -3,12 +3,12 @@
 {% block main %}
 <div class="w-100" id="background-image-second">
     {% if sablona_sid %}
-    <form method="GET" class="p-4 w-75 m-auto" action="/process_upravit_sablonu">
+    <form method="GET" class="p-4 w-75 m-auto" action="/process_upravit_sablonu" id="fakturuji-div">
         <input type="hidden" name="faktura_id" id="faktura_id" value="{{ faktura_data['id'] if faktura_data else '' }}"/>
         <input type="hidden" name="sablona_sid" id="sablona_sid" value="{{ sablona_sid }}"/>
         <input type="hidden" name="sablona_name" id="sablona_name" value="{{ sablona_name }}"/>
     {% else%}
-    <form method="GET" class="p-4 w-75 m-auto" action="/process_upravit_fakturu">
+    <form method="GET" class="p-4 w-75 m-auto" action="/process_upravit_fakturu" id="fakturuji-div">
         <input type="hidden" name="faktura_id" id="faktura_id" value="{{ faktura_data['id'] if faktura_data else '' }}"/>
     {% endif %}
         <div class="row">
@@ -127,16 +127,16 @@
             {% endif %}
             <div onclick="CreateItem();" style="cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg></div>
         </div>
-        <div class="mt-5 mb-5">
+        <div class="mt-5 mb-5" id="popisek-nad-polozky-div">
             <h3 class="display-5">Popisek nad položky</h3>
             <div class="dropdown row" style="height: auto;">
                 <input class="form-control col dropdown-toggle" id="description_chooser" value="{{ popisek['nazev'] if popisek else '' }}" oninput="GetPopisky(this.value, this.parentElement.parentElement);" onclick="GetPopisky(this.value, this.parentElement.parentElement);"
                  autocomplete="off" placeholder="Vyberte si popisek již z vašich vybraných" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="dropdown-menu w-25" id="hint-menu" aria-labelledby="dropdownMenuButton">
                 </div>
-                <input class="form-control col-6 w-75" name="description" readonly placeholder="Popisek" value="{{ popisek['popisek'] if popisek else '' }}">
+                <input class="form-control col-6 w-75" name="description" readonly placeholder="Popisek" value="{{ (faktura_data['popisek'] if faktura_data['popisek'] else '') if faktura_data else '' }}">
             </div>
-            <input type="hidden" name="description_id" placeholder="Popisek" value="{{ faktura_data['description_id'] if faktura_data else '' }}"/>
+            <input type="hidden" name="description_id" placeholder="Popisek" value="{{ (faktura_data['description_id'] if faktura_data['description_id'] else '') if faktura_data else '' }}"/>
         </div>
         <div class="mt-5 mb-5">
             <h3 class="display-5">Variabilní data</h3>
@@ -222,7 +222,7 @@
                         <option value="gbp" {{ ('selected' if faktura_data["mena"] == 'gbp' else '') if faktura_data else '' }}>GBP</option>
                     </select>
                     </div>
-                    <input id="submit_btn" type="submit" class="btn-dark btn w-50 float-right form-control" value="FakturujTo v Excelu"/>
+                    <input id="submit_btn" type="submit" class="btn-dark btn w-50 float-right form-control" value="Fakturuji"/>
                 </div>
             </div>
         </div>
