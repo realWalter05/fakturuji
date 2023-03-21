@@ -39,6 +39,7 @@ function CreateSablona(faktura_id) {
 }
 
 function ShowFakturaPreview(faktura_id, element) {
+
 	document.querySelector("#upravit-fakturu-btn").setAttribute("href", "upravit_fakturu?id="+faktura_id);
 	if (document.querySelector("#sablona-fakturu-btn")) {
 		document.querySelector("#sablona-fakturu-btn").setAttribute("onclick", "CreateSablona("+faktura_id+")");
@@ -56,11 +57,12 @@ function ShowFakturaPreview(faktura_id, element) {
 		datatype: "text",
 		contentType : 'application/json',
 		success: function(content) {
-			document.getElementById("faktura_preview").innerHTML= content;
+			const fakturaPreview = document.getElementById("faktura_preview");
+			fakturaPreview.innerHTML= content;
 		},
 		error: function(xhr) {
 			console.log(xhr);
-		}});
+	}});
 }
 
 function ModifySablonaButton(faktura_id, sablona_sid) {

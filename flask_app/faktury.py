@@ -84,7 +84,8 @@ def upravit_fakturu():
 		popisek_list = get_popisek_by_id(session["user_data"], faktura_data[0]["description_id"])
 		if popisek_list:
 			popisek = popisek_list[0]
-
+	print(popisek)
+	print(faktura_data)
 	return render_template("upravit_fakturu.html", dodavatel=dodavatel, odberatel=odberatel, faktura_data=faktura_data[0], polozky=polozky, popisek=popisek)
 
 

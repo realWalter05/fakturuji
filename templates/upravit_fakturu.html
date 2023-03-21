@@ -134,7 +134,7 @@
                  autocomplete="off" placeholder="Vyberte si popisek již z vašich vybraných" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="dropdown-menu w-25" id="hint-menu" aria-labelledby="dropdownMenuButton">
                 </div>
-                <input class="form-control col-6 w-75" name="description" readonly placeholder="Popisek" value="{{ (faktura_data['popisek'] if faktura_data['popisek'] else '') if faktura_data else '' }}">
+                <input class="form-control col-6 w-75" name="description" readonly placeholder="Popisek" value="{{ (popisek['popisek'] if popisek else '') if faktura_data else '' }}">
             </div>
             <input type="hidden" name="description_id" placeholder="Popisek" value="{{ (faktura_data['description_id'] if faktura_data['description_id'] else '') if faktura_data else '' }}"/>
         </div>
